@@ -1,0 +1,39 @@
+<html>
+<head>
+    <title>Datastore viewer for emulator [Project: {{ project_name }}]</title>
+</head>
+<body>
+<h1>Datastore viewer for emulator [Project: {{ project_name }}]</h1>
+
+<form>
+    <select name="kind">
+        {% for kind in kinds %}
+            <option value="{{ kind }}" {% if kind ==current_kind %}selected{% endif %}>{{ kind }}</option>
+        {% endfor %}
+    </select>
+    <input type="submit" value="view">
+</form>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>Key</th>
+        {% for propery in current_kind_properties %}
+            <th>{{ propery }}</th>
+        {% endfor %}
+    </tr>
+    </thead>
+    <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td>{{ entity.key }}</td>
+                {% for propery in current_kind_properties %}
+                    <td>{{ entity[propery] }}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+</body>
+</html>

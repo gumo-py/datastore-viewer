@@ -1,4 +1,5 @@
 import flask.views
+import urllib.parse
 from collections import defaultdict
 from typing import Optional
 
@@ -58,24 +59,78 @@ class DatastoreViewerRepository:
 
         return properties_by_kind
 
+    def fetch_entities(self, kind: str, limit: int = 20):
+        query = self.datastore_client.query(kind=kind)
 
-class DatastoreViewer(flask.views.MethodView):
+        return list(query.fetch(limit=limit))
+
+
+class DashboardView(flask.views.MethodView):
     def get(self):
-        repository = DatastoreViewerRepository(
-            project_name='jiji-reform'
+        project_name = flask.request.args.get('project_name')
+        if project_name is not None and len(project_name) > 0:
+            return flask.redirect(f'/projects/{project_name}')
+
+        return flask.render_template(
+            'dashboard.html'
         )
-        return flask.jsonify({
-            'project': repository.fetch_project_name(),
-            'namespaces': repository.fetch_namespaces(),
-            'current_namespace': repository.current_namespace(),
-            'kinds': repository.fetch_kinds(),
-            'properties': repository.fetch_properties(),
-        })
+
+
+class ProjectView(flask.views.MethodView):
+    def _build_redirect_path(self, **kwargs):
+        doc = {}
+        for k, v in flask.request.args.items():
+            doc[k] = v
+        doc.update(kwargs)
+
+        return f'{flask.request.path}?{urllib.parse.urlencode(doc)}'
+
+    def get(self, project_name: str):
+        namespace = flask.request.args.get('namespace')
+        repository = DatastoreViewerRepository(
+            project_name=project_name,
+            namespace=namespace,
+        )
+
+        current_namespace = repository.current_namespace()
+        namespaces = repository.fetch_namespaces()
+        kinds = repository.fetch_kinds()
+        properties_by_kind = repository.fetch_properties()
+
+        current_kind = flask.request.args.get('kind')
+        if current_kind is None and len(kinds) > 0:
+            return flask.redirect(self._build_redirect_path(
+                kind=kinds[0],
+            ))
+
+        current_kind_properties = properties_by_kind[current_kind]
+
+        entities = repository.fetch_entities(
+            kind=current_kind,
+            limit=20
+        )
+
+        return flask.render_template(
+            'project_dashboard.html',
+            project_name=project_name,
+            namespaces=namespaces,
+            current_namespace=current_namespace,
+            kinds=kinds,
+            current_kind=current_kind,
+            current_kind_properties=current_kind_properties,
+            entities=entities,
+        )
 
 
 def register_views(blueprint):
     blueprint.add_url_rule(
         '/',
-        view_func=DatastoreViewer.as_view(name='dashboard'),
+        view_func=DashboardView.as_view(name='dashboard'),
+        methods=['GET']
+    )
+
+    blueprint.add_url_rule(
+        '/projects/<string:project_name>',
+        view_func=ProjectView.as_view(name='project_view'),
         methods=['GET']
     )
