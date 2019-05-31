@@ -1,0 +1,42 @@
+import setuptools
+
+
+name = 'datastore-viewer'
+version = '0.0.1'
+description = 'Datastore Viewer for emulator'
+dependencies = [
+    'gumo-core >= 0.0.30',
+    'gumo-datastore >= 0.0.15',
+    'Flask >= 1.0.2',
+    'flasgger >= 0.9.1',
+]
+
+with open("README.md", "r") as fh:
+    long_description = fh.read()
+
+packages = [
+    package for package in setuptools.find_packages()
+    if package.startswith('datastore_viewer')
+]
+
+namespaces = ['datastore_viewer']
+
+setuptools.setup(
+    name=name,
+    version=version,
+    author="Gumo Project Team",
+    author_email="gumo-py@googlegroups.com",
+    description=description,
+    long_description=long_description,
+    long_description_content_type="text/markdown",
+    url="https://github.com/gumo-py/datastore-viewer",
+    packages=packages,
+    namespaces=namespaces,
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
+    ],
+    install_requires=dependencies,
+    include_package_data=True,
+)
