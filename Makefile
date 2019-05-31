@@ -38,8 +38,6 @@ clean:
 .PHONY: pip_compile
 pip_compile:
 	pip-compile \
-		--upgrade-package gumo-core \
-		--upgrade-package gumo-datastore \
 		--output-file requirements.txt \
 		requirements.in
 	pip3 install --ignore-installed -r requirements.txt

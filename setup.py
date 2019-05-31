@@ -5,8 +5,7 @@ name = 'datastore-viewer'
 version = '0.0.1'
 description = 'Datastore Viewer for emulator'
 dependencies = [
-    'gumo-core >= 0.0.30',
-    'gumo-datastore >= 0.0.15',
+    'google-cloud-datastore >= 1.8.0',
     'Flask >= 1.0.2',
     'flasgger >= 0.9.1',
 ]
