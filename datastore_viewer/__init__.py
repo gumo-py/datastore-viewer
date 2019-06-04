@@ -17,8 +17,10 @@ class DatastoreViewer:
         if emulator_host is not None:
             os.environ['DATASTORE_EMULATOR_HOST'] = emulator_host
 
-        if 'DATASTORE_EMULATOR_HOST' not in os.environ:
+        if os.environ.get('DATASTORE_EMULATOR_HOST', '') == '':
             raise RuntimeError(f'Environment variable "DATASTORE_EMULATOR_HOST" is required.')
+
+        self._emulator_host = os.environ['DATASTORE_EMULATOR_HOST']
 
         self._app = self._app_init()
         self._app_load()
@@ -40,6 +42,7 @@ class DatastoreViewer:
             port: Optional[str] = None,
             debug: Optional[bool] = None,
     ):
+        logger.info(f'DatastoreViewer execute with DATASTORE_EMULATOR_HOST = {self._emulator_host}')
         return self._app.run(
             host=host,
             port=port,

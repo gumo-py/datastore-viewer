@@ -1,0 +1,11 @@
+#!/usr/bin/env python
+
+import os
+from datastore_viewer import DatastoreViewer
+
+
+if __name__ == '__main__':
+    DatastoreViewer().run(
+        host=os.environ.get('DATASTORE_VIEWER_HOST', '127.0.0.1'),
+        port=os.environ.get('DATASTORE_VIEWER_PORT', '8082'),
+    )
