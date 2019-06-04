@@ -1,1 +1,1 @@
-recursive-include datastore_viewer/presentation/template *
+recursive-include datastore_viewer *

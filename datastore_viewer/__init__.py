@@ -10,6 +10,11 @@ logger = logging.getLogger(__name__)
 
 
 class DatastoreViewer:
+    FALLBACK_GOOGLE_APPLICATION_CREDENTIALS = os.path.join(
+        os.path.dirname(__file__),
+        'dummy-service-account-credential.json'
+    )
+
     def __init__(
             self,
             emulator_host: Optional[str] = None,
@@ -19,6 +24,10 @@ class DatastoreViewer:
 
         if os.environ.get('DATASTORE_EMULATOR_HOST', '') == '':
             raise RuntimeError(f'Environment variable "DATASTORE_EMULATOR_HOST" is required.')
+
+        if 'GOOGLE_APPLICATION_CREDENTIALS' not in os.environ:
+            os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = self.FALLBACK_GOOGLE_APPLICATION_CREDENTIALS
+            logger.info('Environment variable "GOOGLE_APPLICATION_CREDENTIALS" is configured by fallback credentials.')
 
         self._emulator_host = os.environ['DATASTORE_EMULATOR_HOST']
 
