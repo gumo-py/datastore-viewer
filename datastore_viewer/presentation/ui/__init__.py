@@ -2,8 +2,14 @@ import flask.views
 import urllib.parse
 from collections import defaultdict
 from typing import Optional
+import json
+import base64
+import datetime
+from logging import getLogger
 
 from google.cloud import datastore
+
+logger = getLogger(__name__)
 
 
 class DatastoreViewerRepository:
@@ -18,6 +24,9 @@ class DatastoreViewerRepository:
     @property
     def datastore_client(self) -> datastore.Client:
         return self._datastore_client
+
+    def build_key_by_flat_path(self, key_path):
+        return self.datastore_client.key(*key_path)
 
     def fetch_project_name(self):
         return self.datastore_client.project
@@ -62,7 +71,16 @@ class DatastoreViewerRepository:
     def fetch_entities(self, kind: str, limit: int = 20):
         query = self.datastore_client.query(kind=kind)
 
-        return list(query.fetch(limit=limit))
+        entities = []
+        for entity in query.fetch(limit=limit):
+            entity._serialized_key = base64.b64encode(json.dumps(entity.key.flat_path).encode('utf-8')).decode('utf-8')
+            entities.append(entity)
+
+        return entities
+
+    def delete(self, key: datastore.Key):
+        self.datastore_client.delete(key=key)
+        logger.info(f'key = {key} is deleted.')
 
 
 class DashboardView(flask.views.MethodView):
@@ -121,6 +139,29 @@ class ProjectView(flask.views.MethodView):
             entities=entities,
         )
 
+    def post(self, project_name: str):
+        namespace = flask.request.args.get('namespace')
+        repository = DatastoreViewerRepository(
+            project_name=project_name,
+            namespace=namespace,
+        )
+
+        action = flask.request.form.get('action')
+        serialized_key = flask.request.form.get('key')
+        logger.info(f'action = {action}, key = {serialized_key}')
+        if action == 'delete' and serialized_key is not None:
+            self._delete_entity(
+                repository=repository,
+                serialized_key=serialized_key
+            )
+
+        return flask.redirect(self._build_redirect_path(t=datetime.datetime.utcnow().timestamp()))
+
+    def _delete_entity(self, repository, serialized_key: str):
+        key_path = json.loads(base64.b64decode(serialized_key))
+        key = repository.build_key_by_flat_path(key_path=key_path)
+        repository.delete(key)
+
 
 def register_views(blueprint):
     blueprint.add_url_rule(
@@ -132,5 +173,5 @@ def register_views(blueprint):
     blueprint.add_url_rule(
         '/projects/<string:project_name>',
         view_func=ProjectView.as_view(name='project_view'),
-        methods=['GET']
+        methods=['GET', 'POST']
     )

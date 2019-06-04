@@ -1,7 +1,12 @@
 import os
 import flask
+import logging
+import sys
 
 from typing import Optional
+
+logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 
 class DatastoreViewer:
