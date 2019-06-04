@@ -1,8 +1,8 @@
 import setuptools
-
+import os
 
 name = 'datastore-viewer'
-version = '0.0.1'
+version = '0.0.2'
 description = 'Datastore Viewer for emulator'
 dependencies = [
     'google-cloud-datastore >= 1.8.0',
@@ -20,6 +20,10 @@ packages = [
 
 namespaces = ['datastore_viewer']
 
+scripts = [
+    os.path.join('bin', 'datastore-viewer')
+]
+
 setuptools.setup(
     name=name,
     version=version,
@@ -36,6 +40,7 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
+    scripts=scripts,
     install_requires=dependencies,
     include_package_data=True,
 )
