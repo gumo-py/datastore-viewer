@@ -1,12 +1,11 @@
 import setuptools
-
+import os
 
 name = 'datastore-viewer'
-version = '0.0.1'
+version = '0.0.2'
 description = 'Datastore Viewer for emulator'
 dependencies = [
-    'gumo-core >= 0.0.30',
-    'gumo-datastore >= 0.0.15',
+    'google-cloud-datastore >= 1.8.0',
     'Flask >= 1.0.2',
     'flasgger >= 0.9.1',
 ]
@@ -20,6 +19,10 @@ packages = [
 ]
 
 namespaces = ['datastore_viewer']
+
+scripts = [
+    os.path.join('bin', 'datastore-viewer')
+]
 
 setuptools.setup(
     name=name,
@@ -37,6 +40,7 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
+    scripts=scripts,
     install_requires=dependencies,
     include_package_data=True,
 )

@@ -1,0 +1,48 @@
+<html>
+<head>
+    <title>Datastore viewer for emulator [Project: {{ project_name }}]</title>
+</head>
+<body>
+<h1>Datastore viewer for emulator [Project: {{ project_name }}]</h1>
+
+<form>
+    <select name="kind">
+        {% for kind in kinds %}
+            <option value="{{ kind }}" {% if kind ==current_kind %}selected{% endif %}>{{ kind }}</option>
+        {% endfor %}
+    </select>
+    <input type="submit" value="view">
+</form>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>Operation</th>
+        <th>Key</th>
+        {% for propery in current_kind_properties %}
+            <th>{{ propery }}</th>
+        {% endfor %}
+    </tr>
+    </thead>
+    <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td>
+                    <form method="post">
+                        <input type="hidden" name="key" value="{{ entity._serialized_key|e }}">
+                        <input type="hidden" name="kind" value="{{ current_kind }}">
+                        <input type="hidden" name="namespace" value="{{ current_namespace }}">
+                        <input type="submit" name="action" value="delete">
+                    </form>
+                </td>
+                <td>{{ entity.key }}</td>
+                {% for propery in current_kind_properties %}
+                    <td>{{ entity[propery] }}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+</body>
+</html>
