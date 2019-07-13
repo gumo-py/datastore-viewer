@@ -1,25 +1,56 @@
-import flask.views
-import urllib.parse
-from collections import defaultdict
-from typing import Optional
 import json
 import base64
 import datetime
+import os
+
+import requests
+import flask.views
+import urllib.parse
+
+from collections import defaultdict
+
+from typing import Optional
 from logging import getLogger
 
 from google.cloud import datastore
+import google.auth.credentials
 
 logger = getLogger(__name__)
+
+
+class EmulatorCreds(google.auth.credentials.Credentials):
+    def __init__(self):
+        self.token = b'secret'
+        self.expiry = None
+
+    @property
+    def valid(self):
+        return True
+
+    def refresh(self, _):
+        raise RuntimeError('Should never be refreshed.')
 
 
 class DatastoreViewerRepository:
     def __init__(self, project_name: str, namespace: Optional[str] = None):
         self._project_name = project_name
         self._namespace = namespace
-        self._datastore_client = datastore.Client(
-            project=self._project_name,
-            namespace=self._namespace
-        )
+        self._datastore_client = self._build_client()
+
+    def _build_client(self) -> datastore.Client:
+        if 'DATASTORE_EMULATOR_HOST' in os.environ:
+            emulator_credentials = EmulatorCreds()
+            return datastore.Client(
+                project=self._project_name,
+                namespace=self._namespace,
+                credentials=emulator_credentials,
+                _http=requests.Session(),
+            )
+        else:
+            return datastore.Client(
+                project=self._project_name,
+                namespace=self._namespace
+            )
 
     @property
     def datastore_client(self) -> datastore.Client:
