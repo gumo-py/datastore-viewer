@@ -31,10 +31,14 @@ class DatastoreViewer:
 
         return app
 
-    def _app_load(self):
+    def flask_blueprints(self):
         from datastore_viewer.presentation import blueprint
 
-        self._app.register_blueprint(blueprint)
+        return [blueprint]
+
+    def _app_load(self):
+        for blueprint in self.flask_blueprints():
+            self._app.register_blueprint(blueprint=blueprint)
 
     def run(
             self,
