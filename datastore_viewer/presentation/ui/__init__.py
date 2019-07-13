@@ -118,7 +118,7 @@ class DashboardView(flask.views.MethodView):
     def get(self):
         project_name = flask.request.args.get('project_name')
         if project_name is not None and len(project_name) > 0:
-            return flask.redirect(f'/projects/{project_name}')
+            return flask.redirect(f'/datastore_viewer/projects/{project_name}')
 
         return flask.render_template(
             'dashboard.html'
@@ -196,13 +196,13 @@ class ProjectView(flask.views.MethodView):
 
 def register_views(blueprint):
     blueprint.add_url_rule(
-        '/',
+        '/datastore_viewer',
         view_func=DashboardView.as_view(name='dashboard'),
         methods=['GET']
     )
 
     blueprint.add_url_rule(
-        '/projects/<string:project_name>',
+        '/datastore_viewer/projects/<string:project_name>',
         view_func=ProjectView.as_view(name='project_view'),
         methods=['GET', 'POST']
     )
