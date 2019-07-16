@@ -40,6 +40,10 @@ class DatastoreViewer:
         for blueprint in self.flask_blueprints():
             self._app.register_blueprint(blueprint=blueprint)
 
+        @self._app.route('/')
+        def root():
+            return flask.redirect('/datastore_viewer')
+
     def run(
             self,
             host: Optional[str] = None,
