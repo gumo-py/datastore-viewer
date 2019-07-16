@@ -2,10 +2,10 @@ import setuptools
 import os
 
 name = 'datastore-viewer'
-version = '0.0.6a0'
+version = '0.0.6'
 description = 'Datastore Viewer for emulator'
 dependencies = [
-    'google-cloud-datastore >= 1.8.0',
+    'google-cloud-datastore >=1.7.0, >= 1.8.0',
     'Flask >= 1.0.2',
     'flasgger >= 0.9.1',
 ]
