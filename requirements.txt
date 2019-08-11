@@ -9,7 +9,7 @@ certifi==2019.3.9         # via requests
 chardet==3.0.4            # via requests
 click==7.0                # via flask
 flasgger==0.9.3
-flask==1.0.3
+flask==1.1.1
 google-api-core[grpc]==1.11.1  # via google-cloud-core, google-cloud-datastore
 google-auth==1.6.3        # via google-api-core
 google-cloud-core==1.0.1  # via google-cloud-datastore
