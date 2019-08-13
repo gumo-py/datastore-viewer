@@ -1,6 +1,7 @@
 import json
 import base64
 import datetime
+import os
 
 import flask.views
 import urllib.parse
@@ -19,7 +20,8 @@ class DashboardView(flask.views.MethodView):
             return flask.redirect(f'/datastore_viewer/projects/{project_name}')
 
         return flask.render_template(
-            'dashboard.html'
+            'dashboard.html',
+            project_name=os.environ.get('GOOGLE_CLOUD_PROJECT', '')
         )
 
 
