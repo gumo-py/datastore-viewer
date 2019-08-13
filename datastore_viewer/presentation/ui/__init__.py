@@ -99,6 +99,20 @@ class DatastoreViewerRepository:
 
         return properties_by_kind
 
+    def fetch_parent_properties(self):
+        properties_by_kind = {}
+
+        for kind, props in self.fetch_properties().items():
+            result = []
+            for prop in props:
+                if prop.find('.') >= 0:
+                    result.append(prop.split('.')[0])
+                else:
+                    result.append(prop)
+            properties_by_kind[kind] = list(set(result))
+
+        return properties_by_kind
+
     def fetch_entities(self, kind: str, limit: int = 20):
         query = self.datastore_client.query(kind=kind)
 
@@ -144,7 +158,7 @@ class ProjectView(flask.views.MethodView):
         current_namespace = repository.current_namespace()
         namespaces = repository.fetch_namespaces()
         kinds = repository.fetch_kinds()
-        properties_by_kind = repository.fetch_properties()
+        properties_by_kind = repository.fetch_parent_properties()
 
         current_kind = flask.request.args.get('kind')
         if current_kind is None and len(kinds) > 0:

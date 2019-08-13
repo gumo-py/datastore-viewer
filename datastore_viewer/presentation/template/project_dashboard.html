@@ -37,7 +37,9 @@
                 </td>
                 <td>{{ entity.key }}</td>
                 {% for propery in current_kind_properties %}
-                    <td>{{ entity[propery] }}</td>
+                    <td>
+                        {{ entity[propery] }}
+                    </td>
                 {% endfor %}
             </tr>
         {% endfor %}
