@@ -123,6 +123,9 @@ class DatastoreViewerRepository:
 
         return entities
 
+    def fetch_entity(self, key: datastore.Key):
+        return self.datastore_client.get(key)
+
     def delete(self, key: datastore.Key):
         self.datastore_client.delete(key=key)
         logger.info(f'key = {key} is deleted.')
@@ -208,6 +211,26 @@ class ProjectView(flask.views.MethodView):
         repository.delete(key)
 
 
+class EntityView(flask.views.MethodView):
+    def get(self, project_name: str):
+        namespace = flask.request.args.get('namespace')
+        repository = DatastoreViewerRepository(
+            project_name=project_name,
+            namespace=namespace,
+        )
+
+        serialized_key = flask.request.args.get('key')
+        key_path = json.loads(base64.b64decode(serialized_key))
+        key = repository.build_key_by_flat_path(key_path=key_path)
+        entity = repository.fetch_entity(key=key)
+
+        return flask.jsonify({
+            'project_name': project_name,
+            'key':str(key),
+            'entity': str(entity)
+        })
+
+
 def register_views(blueprint):
     blueprint.add_url_rule(
         '/datastore_viewer',
@@ -219,4 +242,10 @@ def register_views(blueprint):
         '/datastore_viewer/projects/<string:project_name>',
         view_func=ProjectView.as_view(name='project_view'),
         methods=['GET', 'POST']
+    )
+
+    blueprint.add_url_rule(
+        '/datastore_viewer/projects/<string:project_name>/view_entity',
+        view_func=EntityView.as_view(name='entity_view'),
+        methods=['GET']
     )

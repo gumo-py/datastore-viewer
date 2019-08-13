@@ -28,6 +28,7 @@
         {% for entity in entities %}
             <tr>
                 <td>
+                    <a href="/datastore_viewer/projects/{{ project_name }}/view_entity?key={{ entity._serialized_key|e }}" target="_blank">Show</a>
                     <form method="post">
                         <input type="hidden" name="key" value="{{ entity._serialized_key|e }}">
                         <input type="hidden" name="kind" value="{{ current_kind }}">
