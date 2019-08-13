@@ -36,6 +36,7 @@ class ProjectView(flask.views.MethodView):
 
     def get(self, project_name: str):
         namespace = flask.request.args.get('namespace')
+        cursor = base64.b64decode(flask.request.args.get('cursor', '')).decode('utf-8')
         repository = DatastoreViewerRepository(
             project_name=project_name,
             namespace=namespace,
@@ -54,9 +55,10 @@ class ProjectView(flask.views.MethodView):
 
         current_kind_properties = properties_by_kind[current_kind]
 
-        entities = repository.fetch_entities(
+        entities, next_cursor = repository.fetch_entities(
             kind=current_kind,
-            limit=20
+            limit=20,
+            cursor=cursor,
         )
 
         return flask.render_template(
@@ -68,6 +70,7 @@ class ProjectView(flask.views.MethodView):
             current_kind=current_kind,
             current_kind_properties=current_kind_properties,
             entities=entities,
+            next_cursor=base64.b64encode(next_cursor).decode('ascii'),
         )
 
     def post(self, project_name: str):

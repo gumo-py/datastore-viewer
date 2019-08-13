@@ -107,15 +107,20 @@ class DatastoreViewerRepository:
 
         return properties_by_kind
 
-    def fetch_entities(self, kind: str, limit: int = 20):
+    def fetch_entities(self, kind: str, limit: int = 20, cursor=None):
         query = self.datastore_client.query(kind=kind)
+        query_iter = query.fetch(start_cursor=cursor, limit=limit)
 
         entities = []
-        for entity in query.fetch(limit=limit):
+        for entity in query_iter:
             entity._serialized_key = base64.b64encode(json.dumps(entity.key.flat_path).encode('utf-8')).decode('utf-8')
             entities.append(entity)
 
-        return entities
+        next_cursor = query_iter.next_page_token
+        if len(list(query.fetch(start_cursor=next_cursor, limit=1))) == 0:
+            next_cursor = b''
+
+        return (entities, next_cursor)
 
     def fetch_entity(self, key: datastore.Key):
         return self.datastore_client.get(key)

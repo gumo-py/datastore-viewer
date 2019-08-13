@@ -47,5 +47,12 @@
     </tbody>
 </table>
 
+{% if next_cursor %}
+    <p>
+        <a href="?kind={{ current_kind }}&cursor={{ next_cursor }}">Next Page</a> |
+        <a href="?kind={{ current_kind }}">First Page</a>
+    </p>
+{% endif %}
+
 </body>
 </html>
