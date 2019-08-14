@@ -10,10 +10,10 @@ chardet==3.0.4            # via requests
 click==7.0                # via flask
 flasgger==0.9.3
 flask==1.1.1
-google-api-core[grpc]==1.11.1  # via google-cloud-core, google-cloud-datastore
+google-api-core[grpc]==1.14.2  # via google-cloud-core, google-cloud-datastore
 google-auth==1.6.3        # via google-api-core
 google-cloud-core==1.0.1  # via google-cloud-datastore
-google-cloud-datastore==1.8.0
+google-cloud-datastore==1.9.0
 googleapis-common-protos==1.6.0  # via google-api-core
 grpcio==1.21.1            # via google-api-core
 idna==2.8                 # via requests
