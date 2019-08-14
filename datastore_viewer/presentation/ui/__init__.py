@@ -53,7 +53,7 @@ class ProjectView(flask.views.MethodView):
                 kind=kinds[0],
             ))
 
-        current_kind_properties = properties_by_kind[current_kind]
+        current_kind_properties = properties_by_kind.get(current_kind, [])
 
         entities, next_cursor = repository.fetch_entities(
             kind=current_kind,
@@ -70,11 +70,13 @@ class ProjectView(flask.views.MethodView):
             current_kind=current_kind,
             current_kind_properties=current_kind_properties,
             entities=entities,
+            has_entities=len(entities) > 0,
             next_cursor=base64.b64encode(next_cursor).decode('ascii'),
         )
 
     def post(self, project_name: str):
         namespace = flask.request.args.get('namespace')
+        current_kind = flask.request.args.get('kind')
         repository = DatastoreViewerRepository(
             project_name=project_name,
             namespace=namespace,
@@ -88,6 +90,8 @@ class ProjectView(flask.views.MethodView):
                 repository=repository,
                 serialized_key=serialized_key
             )
+        elif action == 'delete_all':
+            repository.delete_all(kind=current_kind)
 
         return flask.redirect(self._build_redirect_path(t=datetime.datetime.utcnow().timestamp()))
 

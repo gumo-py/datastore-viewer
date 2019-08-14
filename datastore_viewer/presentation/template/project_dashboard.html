@@ -14,6 +14,7 @@
     <input type="submit" value="view">
 </form>
 
+{% if has_entities > 0 %}
 <table border="1">
     <thead>
     <tr>
@@ -46,12 +47,23 @@
         {% endfor %}
     </tbody>
 </table>
+{% else %}
+    <p>Not found entities (kind = {{ current_kind }})</p>
+{% endif %}
 
 {% if next_cursor %}
     <p>
         <a href="?kind={{ current_kind }}&cursor={{ next_cursor }}">Next Page</a> |
         <a href="?kind={{ current_kind }}">First Page</a>
     </p>
+{% endif %}
+
+{% if has_entities > 0 %}
+<form method="post">
+    <input type="hidden" name="kind" value="{{ current_kind }}">
+    <input type="hidden" name="namespace" value="{{ current_namespace }}">
+    <input type="submit" name="action" value="delete_all">
+</form>
 {% endif %}
 
 </body>

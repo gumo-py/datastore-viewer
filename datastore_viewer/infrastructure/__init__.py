@@ -128,3 +128,15 @@ class DatastoreViewerRepository:
     def delete(self, key: datastore.Key):
         self.datastore_client.delete(key=key)
         logger.info(f'key = {key} is deleted.')
+
+    def delete_all(self, kind: str):
+        query = self.datastore_client.query(kind=kind)
+        query.keys_only()
+
+        while True:
+            keys = [d.key for d in query.fetch(limit=100)]
+            logger.info(keys)
+            if len(keys) == 0:
+                break
+            self.datastore_client.delete_multi(keys)
+            logger.info(f'kind={kind} keys ({len(keys)} items) deleted.')
