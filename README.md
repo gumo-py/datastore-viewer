@@ -19,8 +19,13 @@ or
 ```bash
 export DATASTORE_VIEWER_HOST=127.0.0.1
 export DATASTORE_VIEWER_PORT=8082
+export DATASTORE_EMULATOR_HOST=127.0.0.1:8081 # Please changee for your environment.
+
 datastore-viewer
 ```
+
+You should start the Cloud Datastore Emulator.
+See the following page for details: https://cloud.google.com/datastore/docs/tools/datastore-emulator?hl=en
 
 ## Running with docker-compose
 
