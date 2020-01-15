@@ -70,3 +70,40 @@ docker-compose up
 ```
 
 Please access to: [http://127.0.0.1:18081](http://127.0.0.1:18081)
+
+## for Developers
+
+### Setup
+
+Create new venv:
+
+```bash
+$ python -m venv venv
+$ source venv/bin/activate
+```
+
+Upgrade pip and install building tools:
+
+```bash
+$ pip install --upgrade pip
+$ pip install --ignore-installed twine wheel pytest pip-tools
+```
+
+Install dependency packages:
+
+```bash
+$ pip install -r requirements.txt
+```
+
+### Run
+
+```bash
+$ export DATASTORE_EMULATOR_HOST=127.0.0.1:8081
+$ make run
+```
+
+### Package Build
+
+```bash
+$ make build
+```
