@@ -1,13 +1,10 @@
 package_name = datastore-viewer
 
-export PATH := .venv/bin:$(shell echo ${PATH})
+export PATH := venv/bin:$(shell echo ${PATH})
 
-.PHONY: setup
-setup:
-	[ -d .venv ] || python3 -m venv .venv
-	@echo "Please execute: make pip_compile"
-	./.venv/bin/pip3 install --upgrade pip
-	./.venv/bin/pip3 install --ignore-installed twine wheel pytest pip-tools
+.PHONY: run
+run:
+	PYTHONPATH=. python datastore_viewer/__init__.py
 
 .PHONY: release
 release: clean build
