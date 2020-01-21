@@ -4,11 +4,12 @@
 #
 #    pip-compile --output-file=requirements.txt requirements.in
 #
+attrs==19.3.0             # via jsonschema
 cachetools==3.1.1         # via google-auth
 certifi==2019.3.9         # via requests
 chardet==3.0.4            # via requests
 click==7.0                # via flask
-flasgger==0.9.3
+flasgger==0.9.4
 flask==1.1.1
 google-api-core[grpc]==1.11.1  # via google-cloud-core, google-cloud-datastore
 google-auth==1.6.3        # via google-api-core
@@ -19,16 +20,17 @@ grpcio==1.21.1            # via google-api-core
 idna==2.8                 # via requests
 itsdangerous==1.1.0       # via flask
 jinja2==2.10.1            # via flask
-jsonschema==2.6.0         # via flasgger
+jsonschema==3.2.0         # via flasgger
 markupsafe==1.1.1         # via jinja2
 mistune==0.8.4            # via flasgger
 protobuf==3.8.0           # via google-api-core, googleapis-common-protos
 pyasn1-modules==0.2.5     # via google-auth
 pyasn1==0.4.5             # via pyasn1-modules, rsa
+pyrsistent==0.15.7        # via jsonschema
 pytz==2019.1              # via google-api-core
 pyyaml==5.1               # via flasgger
 requests==2.22.0          # via google-api-core
 rsa==4.0                  # via google-auth
-six==1.12.0               # via flasgger, google-api-core, google-auth, grpcio, protobuf
+six==1.12.0               # via flasgger, google-api-core, google-auth, grpcio, jsonschema, protobuf, pyrsistent
 urllib3==1.25.3           # via requests
 werkzeug==0.15.4          # via flask
