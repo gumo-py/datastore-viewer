@@ -20,8 +20,15 @@ const useStyles = makeStyles({
     }
 });
 
+interface EntityInfoProps {
+    namespace: string;
+    kind: string;
+    entityKey: string;
+    keyLiteral: string;
+    URLSafeKey: string;
+}
 
-export default function DenseTable() {
+export default function DenseTable(props: EntityInfoProps) {
   const classes = useStyles();
 
   return (
@@ -33,7 +40,7 @@ export default function DenseTable() {
                 {'名前空間'}
               </TableCell>
               <TableCell className={classes.tableCell} align="left">
-                  {'[デフォルト]'}
+                  {props.namespace}
               </TableCell>
             </TableRow>
             <TableRow key={'kind'}>
@@ -41,7 +48,7 @@ export default function DenseTable() {
                 {'Kind'}
               </TableCell>
               <TableCell className={classes.tableCell} align="left">
-                  {'Project'}
+                  {props.kind}
               </TableCell>
             </TableRow>
             <TableRow key={'key'}>
@@ -49,7 +56,7 @@ export default function DenseTable() {
                 {'キー'}
               </TableCell>
               <TableCell className={classes.tableCell} align="left">
-                  {'Project name:3exmxvfn2nbktklxerll7agmme'}
+                  {props.entityKey}
               </TableCell>
             </TableRow>
             <TableRow key={'keyLiteral'}>
@@ -57,7 +64,7 @@ export default function DenseTable() {
                 {'キーのリテラル'}
               </TableCell>
               <TableCell className={classes.tableCell} align="left">
-                  {'Key(Project, \'3exmxvfn2nbktklxerll7agmme\')'}
+                  {props.keyLiteral}
               </TableCell>
             </TableRow>
             <TableRow key={'URL'}>
@@ -65,7 +72,7 @@ export default function DenseTable() {
                 {'URL セーフキー'}
               </TableCell>
               <TableCell className={classes.tableCell} align="left">
-                  {'ahNufnRvZG8td2l0aG91dC1ndW1vcicLEgdQcm9qZWN0IhozZXhteHZmbjJuYmt0a2x4ZXJsbDdhZ21tZQw'}
+                  {props.URLSafeKey}
               </TableCell>
             </TableRow>
         </TableBody>

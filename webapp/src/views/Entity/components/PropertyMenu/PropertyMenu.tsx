@@ -1,4 +1,5 @@
 import React from 'react';
+import * as _ from "underscore";
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -16,15 +17,11 @@ import Card from '@material-ui/core/Card';
 import Button from '@material-ui/core/Button';
 import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from "@material-ui/core/IconButton";
-import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 
-interface MenuProps {
-
-}
 const useMenuItemStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
-            width: '100%',
+            outline: 'solid 1px lightgrey',
         },
         itemName: {
             fontSize: 14,
@@ -49,12 +46,46 @@ const useMenuItemStyles = makeStyles((theme: Theme) =>
         },
     }),
 );
-const PropertyItem: React.FC = (props: MenuProps) => {
+
+interface PropertyProps {
+    name: string;
+    type: string;
+    value: any;
+    DeleteHandler?: (name: string) => void;
+    SaveHandler?: (props: PropertyProps) => void;
+}
+
+const PropertyItem: React.FC<PropertyProps> = props => {
     const classes = useMenuItemStyles();
-    const [open, setOpen] = React.useState(true);
-    const [type, setType] = React.useState('');
+    const [open, setOpen] = React.useState(false);
+    const [type, setType] = React.useState(props.type);
+    const [name, setName] = React.useState(props.name);
+    const [value, setValue] = React.useState(props.value);
     const [checkState, setCheckState] = React.useState(false);
+
     const handleClick = () => {
+        setOpen(!open);
+    };
+    const handleDeleteButton = () => {
+        if(props.DeleteHandler) {
+            props.DeleteHandler(name);
+        }
+    };
+    const handleSave = () => {
+        if(props.SaveHandler) {
+            const newProperty = {
+                name: name,
+                type: type,
+                value: value,
+            };
+            props.SaveHandler(newProperty);
+            setOpen(!open);
+        }
+    };
+    const handleCancel = () => {
+        setName(props.name);
+        setType(props.type);
+        setValue(props.value);
         setOpen(!open);
     };
     const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
@@ -63,20 +94,118 @@ const PropertyItem: React.FC = (props: MenuProps) => {
     const handleCheckBoxChange = (event: React.ChangeEvent<{ value: unknown }>) => {
         setCheckState(!checkState);
     };
+    const handleFormValueChange = (event: React.ChangeEvent<{ value: any }>) => {
+        setValue(event.target.value);
+    };
+    const handleNameChange = (event: React.ChangeEvent<{ value: any }>) => {
+        setName(event.target.value);
+    };
+
+    const formAdjuster = (type: string) => {
+        switch (type){
+            case 'String':
+                return (
+                    <TextField
+                        required
+                        value={value}
+                        onChange={handleFormValueChange}
+                        size={'small'}
+                        multiline={true}
+                        InputLabelProps={{ shrink: true }}
+                        InputProps={{ classes: { input: classes.inputFont } }}
+                        className={classes.textField}
+                        label={"値"}
+                        variant="outlined" /> );
+
+            case 'Date':
+                return (
+                    <TextField
+                        required
+                        value={value}
+                        onChange={handleFormValueChange}
+                        type="datetime-local"
+                        size={'small'}
+                        InputLabelProps={{ shrink: true }}
+                        InputProps={{ classes: { input: classes.inputFont } }}
+                        className={classes.textField}
+                        label={"値"}
+                        variant="outlined" />);
+
+            case 'Integer':
+                return (
+                    <TextField
+                        required
+                        value={value}
+                        onChange={handleFormValueChange}
+                        size={'small'}
+                        InputLabelProps={{ shrink: true }}
+                        InputProps={{ classes: { input: classes.inputFont } }}
+                        className={classes.textField}
+                        label={"値"}
+                        variant="outlined" /> );
+
+            case 'Float':
+                return (
+                    <TextField
+                        required
+                        value={value}
+                        onChange={handleFormValueChange}
+                        size={'small'}
+                        InputLabelProps={{ shrink: true }}
+                        InputProps={{ classes: { input: classes.inputFont } }}
+                        className={classes.textField}
+                        label={"値"}
+                        variant="outlined" /> );
+
+            case 'Boolean':
+                return (
+                    <TextField
+                        required
+                        select
+                        className={classes.textField}
+                        SelectProps={{ classes: { select: classes.select } }}
+                        InputLabelProps={{ shrink: true }}
+                        InputProps={{ classes: { input: classes.inputSelect } }}
+                        value={value}
+                        label={"値"}
+                        variant="outlined"
+                        onChange={handleFormValueChange}>
+                        <MenuItem className={classes.inputFont} value={'true'}>{'真'}</MenuItem>
+                        <MenuItem className={classes.inputFont} value={'false'}>{'偽'}</MenuItem>
+                    </TextField>
+                );
+
+            case 'Key':
+                return (
+                    <TextField
+                        required
+                        value={value}
+                        onChange={handleFormValueChange}
+                        size={'small'}
+                        InputLabelProps={{ shrink: true }}
+                        InputProps={{ classes: { input: classes.inputFont } }}
+                        className={classes.textField}
+                        label={"値"}
+                        variant="outlined" /> );
+
+            case 'Null':
+                return;
+        }
+    };
 
     return (
-        <div>
+        <div className={classes.root}>
             <ListItem button onClick={handleClick}>
                 <ListItemText
                     classes={{
                         primary: classes.itemName,
                         secondary: classes.inputFont
                     }}
-                    primary={"name: testProject2"}
+                    primary={`${name}: ${value}`}
                     secondary={"インデックス登録"}
                 />
                 {open &&
-                    <IconButton aria-label="delete">
+                    <IconButton onClick={handleDeleteButton} aria-label="delete">
                         <DeleteIcon fontSize="inherit" />
                     </IconButton>
                 }
@@ -90,6 +219,8 @@ const PropertyItem: React.FC = (props: MenuProps) => {
                                 <TextField
                                     required
                                     size={'small'}
+                                    value={name}
+                                    onChange={handleNameChange}
                                     InputProps={{ classes: { input: classes.inputFont } }}
                                     InputLabelProps={{ shrink: true }}
                                     className={classes.textField}
@@ -114,18 +245,11 @@ const PropertyItem: React.FC = (props: MenuProps) => {
                                     <MenuItem className={classes.inputFont} value={'Float'}>{'浮動小数点数'}</MenuItem>
                                     <MenuItem className={classes.inputFont} value={'Boolean'}>{'ブール値'}</MenuItem>
                                     <MenuItem className={classes.inputFont} value={'Key'}>{'鍵'}</MenuItem>
-                                    <MenuItem className={classes.inputFont} value={'Array'}>{'配列'}</MenuItem>
                                     <MenuItem className={classes.inputFont} value={'Null'}>{'Null'}</MenuItem>
                                 </TextField>
                             </ListItem>
                             <ListItem>
-                                <TextField
-                                    size={'small'}
-                                    InputLabelProps={{ shrink: true }}
-                                    InputProps={{ classes: { input: classes.inputFont } }}
-                                    className={classes.textField}
-                                    label={"値"}
-                                    variant="outlined" />
+                                { formAdjuster(type) }
                             </ListItem>
                             <ListItem>
                                 <FormControlLabel
@@ -146,10 +270,10 @@ const PropertyItem: React.FC = (props: MenuProps) => {
                         </List>
                     </CardContent>
                     <CardActions>
-                        <Button size="small" color="primary">
+                        <Button onClick={handleSave} size="small" color="primary">
                             {"完了"}
                         </Button>
-                        <Button size="small" color="primary">
+                        <Button onClick={handleCancel} size="small" color="primary">
                             {"キャンセル"}
                         </Button>
                     </CardActions>
@@ -175,18 +299,65 @@ const useStyles = makeStyles((theme: Theme) =>
             fontSize: 20,
             textAlign: 'left',
 
-        }
+        },
+        addProperty: {
+            fontSize: 14,
+            color: '#4169e1',
+        },
+        addPropertyButton: {
+            outline: 'solid 1px lightgrey',
+        },
     }),
 );
 
-export default function PropertyMenu() {
+interface MenuProps {
+    properties: Array<PropertyProps>;
+}
+
+export default function PropertyMenu(props: MenuProps) {
     const classes = useStyles();
+    const [properties, setProperties] = React.useState(props.properties);
+    const handleClickAddProperty = () => {
+        const newProperties = properties.slice();
+        newProperties.push({
+            name: '',
+            type: '',
+            value: '',
+        });
+        setProperties(newProperties);
+    };
+    const deleteProperty = (name: string) => {
+        const newProperties = properties.slice();
+        const position = _.findIndex(newProperties, props => { return props.name === name });
+        newProperties.splice(position, 1);
+        setProperties(newProperties);
+    };
+
+    const updateProperty = (prop: PropertyProps) => {
+        const newProperties = properties.slice();
+        const position = _.findIndex(newProperties, props => { return props.name === prop.name });
+        newProperties[position] = prop;
+        setProperties(newProperties);
+    };
 
     return (
         <div className={classes.root}>
             <div className={classes.title}>プロパティ</div>
             <List className={classes.list}>
-                <PropertyItem />
+                { properties.map( property =>
+                    <PropertyItem
+                        name={property.name}
+                        type={property.type}
+                        value={property.value}
+                        DeleteHandler={deleteProperty}
+                        SaveHandler={updateProperty}/> )
+                }
+                <ListItem button onClick={handleClickAddProperty} className={classes.addPropertyButton}>
+                <ListItemText
+                    classes={{ primary: classes.addProperty }}
+                    primary={'プロパティを追加'}
+                />
+            </ListItem>
             </List>
         </div>
     )
