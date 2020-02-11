@@ -1,4 +1,5 @@
 import React from 'react';
+import { useParams } from "react-router-dom";
 import { MenuBar } from "./components/MenuBar";
 import { EntityInfo } from "./components/EntityInfo";
 import { PropertyMenu } from "./components/PropertyMenu";
@@ -39,6 +40,8 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export default function Entity() {
+    let { entity_id } = useParams();
+    console.log(entity_id);
     const classes = useStyles();
     return (
         <div className={'Entity'}>

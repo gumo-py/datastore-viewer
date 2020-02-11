@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from "react-router-dom";
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
@@ -37,9 +38,11 @@ export default function MenuBar() {
     const classes = useStyles();
     return (
         <div className={classes.root}>
-            <IconButton aria-label="back" className={classes.iconButton}>
-                <ArrowBackIcon fontSize="inherit" />
-            </IconButton>
+            <Link to={'/'}>
+                <IconButton aria-label="back" className={classes.iconButton}>
+                    <ArrowBackIcon fontSize="inherit" />
+                </IconButton>
+            </Link>
             <div className={classes.title}>エンティティの編集</div>
             <Button startIcon={<RefreshIcon/>} className={classes.button}>
                 { "更新" }
