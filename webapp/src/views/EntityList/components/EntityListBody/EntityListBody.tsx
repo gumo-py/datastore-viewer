@@ -1,4 +1,5 @@
 import React from 'react';
+import * as _ from "underscore";
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -10,11 +11,9 @@ import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
+import { Link } from "react-router-dom";
 
 const dummyData = {
-
-  "batch": {
-    "entityResultType": "FULL",
     "entityResults": [
       {
         "entity": {
@@ -30,15 +29,14 @@ const dummyData = {
             ]
           },
           "properties": {
+            "name": {
+              "stringValue": "testProject2"
+            },
             "created_at": {
               "timestampValue": "2020-01-13T06:55:44.712535Z"
             },
-            "name": {
-              "stringValue": "testProject2"
-            }
           }
         },
-        "cursor": "CkQSPmoTbn50b2RvLXdpdGhvdXQtZ3Vtb3InCxIHUHJvamVjdCIaM2V4bXh2Zm4ybmJrdGtseGVybGw3YWdtbWUMGAAgAA==",
         "version": "1578898544746000"
       },
       {
@@ -63,7 +61,6 @@ const dummyData = {
             }
           }
         },
-        "cursor": "CkQSPmoTbn50b2RvLXdpdGhvdXQtZ3Vtb3InCxIHUHJvamVjdCIaYWY2NWYyZHhvamJxcGhnYWNvZGo1bm40dWEMGAAgAA==",
         "version": "1580135402557000"
       },
       {
@@ -80,15 +77,15 @@ const dummyData = {
             ]
           },
           "properties": {
+            "name": {
+              "stringValue": "testProject1"
+            },
             "created_at": {
               "timestampValue": "2020-01-13T06:55:38.115756Z"
             },
-            "name": {
-              "stringValue": "testProject1"
-            }
+
           }
         },
-        "cursor": "CkQSPmoTbn50b2RvLXdpdGhvdXQtZ3Vtb3InCxIHUHJvamVjdCIaaHN3cjJuZWZ6YmZpbm5raHlyMnRzazNscXkMGAAgAA==",
         "version": "1578898538149000"
       },
       {
@@ -113,7 +110,6 @@ const dummyData = {
             }
           }
         },
-        "cursor": "CkQSPmoTbn50b2RvLXdpdGhvdXQtZ3Vtb3InCxIHUHJvamVjdCIabGtic2M1NDYyamFzaGU0NnhxYnlzM2R3eXkMGAAgAA==",
         "version": "1580135393092000"
       },
       {
@@ -130,15 +126,14 @@ const dummyData = {
             ]
           },
           "properties": {
+            "name": {
+              "stringValue": "testProject5"
+            },
             "created_at": {
               "timestampValue": "2020-01-27T14:30:14.320762Z"
             },
-            "name": {
-              "stringValue": "testProject5"
-            }
           }
         },
-        "cursor": "CkQSPmoTbn50b2RvLXdpdGhvdXQtZ3Vtb3InCxIHUHJvamVjdCIabHRkaTR3NXJoamg1bGx1dm13Mm1sbjZncG0MGAAgAA==",
         "version": "1580135414366000"
       },
       {
@@ -163,84 +158,59 @@ const dummyData = {
             }
           }
         },
-        "cursor": "CkQSPmoTbn50b2RvLXdpdGhvdXQtZ3Vtb3InCxIHUHJvamVjdCIaczJvaHNrb2VhYmRvanBrbHd6c3hpbm9idWEMGAAgAA==",
         "version": "1580135424355000"
       }
     ],
-    "endCursor": "CkQSPmoTbn50b2RvLXdpdGhvdXQtZ3Vtb3InCxIHUHJvamVjdCIaczJvaHNrb2VhYmRvanBrbHd6c3hpbm9idWEMGAAgAA==",
-    "moreResults": "NO_MORE_RESULTS"
-  }
 };
 
-interface Data {
+interface HeadCell {
   id: string;
-  created_at: string;
-  name: string;
+  label: string;
+}
+
+function convertData(entities: any) {
+  const headCells: HeadCell[] = [ { id: 'id', label: '名前/ID' } ];
+  Object.keys(entities[0].entity.properties).forEach(function (key) {
+    headCells.push({ id: key, label: key });
+  });
+
+  const rows: Data[] = [];
+
+  for(let data of entities) {
+    const name_id: string = data.entity.key.path[data.entity.key.path.length-1].name;
+    const properties: { [key:string] : any } = {};
+    Object.keys(data.entity.properties).map( value => {
+        properties[value] = Object.values(data.entity.properties[value]);
+    });
+    rows.push(createData(name_id, properties));
+  }
+
+  return { headCells, rows }
+}
+
+const { headCells, rows } = convertData(dummyData.entityResults);
+
+interface Data {
+  name_id: string;
+  properties: {
+    [key: string]: any
+  };
 }
 
 function createData(
-  id: string,
-  created_at: string,
-  name: string,
+    name_id: string,
+    properties: any
 ): Data {
-  return { id, created_at, name };
-}
-
-const rows = [
-  createData('hswr2nefzbfinnkhyr2tsk3lqy', '2020-01-13T06:55:38.115756Z', 'testProject1'),
-  createData('3exmxvfn2nbktklxerll7agmme', '2020-01-13T06:55:44.712535Z', 'testProject2'),
-  createData('lkbsc5462jashe46xqbys3dwyy', '2020-01-27T14:29:52.927667Z', 'testProject3'),
-  createData('af65f2dxojbqphgacodj5nn4ua', '2020-01-27T14:30:02.521096Z', 'testProject4'),
-  createData('ltdi4w5rhjh5lluvmw2mln6gpm', '2020-01-27T14:30:14.320762Z', 'testProject5'),
-  createData('s2ohskoeabdojpklwzsxinobua', '2020-01-27T14:30:24.288051Z', 'testProject6'),
-];
-
-function desc<T>(a: T, b: T, orderBy: keyof T) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
-
-function stableSort<T>(array: T[], cmp: (a: T, b: T) => number) {
-  const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
-  stabilizedThis.sort((a, b) => {
-    const order = cmp(a[0], b[0]);
-    if (order !== 0) return order;
-    return a[1] - b[1];
-  });
-  return stabilizedThis.map(el => el[0]);
+  return {name_id, properties};
 }
 
 type Order = 'asc' | 'desc';
 
-function getSorting<K extends keyof any>(
-  order: Order,
-  orderBy: K,
-): (a: { [key in K]: number | string }, b: { [key in K]: number | string }) => number {
-  return order === 'desc' ? (a, b) => desc(a, b, orderBy) : (a, b) => -desc(a, b, orderBy);
-}
-
-interface HeadCell {
-  disablePadding: boolean;
-  id: keyof Data;
-  label: string;
-  numeric: boolean;
-}
-
-const headCells: HeadCell[] = [
-  { id: 'id', numeric: false, disablePadding: true, label: '名前/ID' },
-  { id: 'created_at', numeric: false, disablePadding: false, label: 'created_at' },
-  { id: 'name', numeric: false, disablePadding: false, label: 'name' },
-];
 
 interface EnhancedTableProps {
   classes: ReturnType<typeof useStyles>;
   numSelected: number;
-  onRequestSort: (event: React.MouseEvent<unknown>, property: keyof Data) => void;
+  onRequestSort: (event: React.MouseEvent<unknown>, property: string) => void;
   onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => void;
   order: Order;
   orderBy: string;
@@ -249,7 +219,7 @@ interface EnhancedTableProps {
 
 function EnhancedTableHead(props: EnhancedTableProps) {
   const { classes, onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
-  const createSortHandler = (property: keyof Data) => (event: React.MouseEvent<unknown>) => {
+  const createSortHandler = (property: string) => (event: React.MouseEvent<unknown>) => {
     onRequestSort(event, property);
   };
 
@@ -267,8 +237,8 @@ function EnhancedTableHead(props: EnhancedTableProps) {
         {headCells.map(headCell => (
           <TableCell
             key={headCell.id}
-            align={headCell.numeric ? 'right' : 'left'}
-            padding={headCell.disablePadding ? 'none' : 'default'}
+            align={'left'}
+            padding={'default'}
             sortDirection={orderBy === headCell.id ? order : false}
             style={{fontWeight:'bolder'}}
           >
@@ -290,7 +260,6 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     </TableHead>
   );
 }
-
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -321,12 +290,28 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function EnhancedTable() {
   const classes = useStyles();
   const [order, setOrder] = React.useState<Order>('asc');
-  const [orderBy, setOrderBy] = React.useState<keyof Data>('id');
+  const [orderBy, setOrderBy] = React.useState<string>('id');
   const [selected, setSelected] = React.useState<string[]>([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
-  const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof Data) => {
+  const stableSort = (order: Order) => {
+    if(order === 'asc') {
+      if(orderBy !== 'name_id') {
+        return _.sortBy(rows, (row) => {return row.properties[orderBy]});
+      }else {
+        return _.sortBy(rows, (row) => {return row[orderBy]});
+      }
+    } else {
+      if(orderBy !== 'name_id') {
+        return _.sortBy(rows, (row) => {return row.properties[orderBy]}).reverse();
+      }else {
+        return _.sortBy(rows, (row) => {return row[orderBy]}).reverse();
+      }
+    }
+  };
+
+  const handleRequestSort = (event: React.MouseEvent<unknown>, property: string) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
@@ -334,7 +319,7 @@ export default function EnhancedTable() {
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelecteds = rows.map(n => n.id);
+      const newSelecteds = rows.map(n => n.name_id);
       setSelected(newSelecteds);
       return;
     }
@@ -394,20 +379,20 @@ export default function EnhancedTable() {
               rowCount={rows.length}
             />
             <TableBody>
-              {stableSort(rows, getSorting(order, orderBy))
+              {stableSort(order)
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.id);
+                  const isItemSelected = isSelected(row.name_id);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
                     <TableRow
                       hover
-                      onClick={event => handleClick(event, row.id)}
+                      onClick={event => handleClick(event, row.name_id)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.id}
+                      key={row.name_id}
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
@@ -417,10 +402,13 @@ export default function EnhancedTable() {
                         />
                       </TableCell>
                       <TableCell component="th" id={labelId} scope="row" padding="none">
-                        {row.id}
+                        <Link to={`/edit/${row.name_id}`}>{row.name_id}</Link>
                       </TableCell>
-                      <TableCell align="left">{row.created_at}</TableCell>
-                      <TableCell align="left">{row.name}</TableCell>
+                      {
+                        Object.keys(row.properties).map( value => {
+                          return <TableCell key={value} align="left">{ row.properties[value] }</TableCell>
+                        })
+                      }
                     </TableRow>
                   );
                 })}
