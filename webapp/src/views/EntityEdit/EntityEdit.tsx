@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-export default function Entity() {
+export default function EntityEdit() {
     let { entity_id } = useParams();
     console.log(entity_id);
     const classes = useStyles();
