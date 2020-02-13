@@ -11,7 +11,7 @@ import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const dummyData = {
     "entityResults": [
@@ -284,6 +284,9 @@ const useStyles = makeStyles((theme: Theme) =>
       top: 20,
       width: 1,
     },
+    link: {
+      color: 'black',
+    },
   }),
 );
 
@@ -402,7 +405,7 @@ export default function EnhancedTable() {
                         />
                       </TableCell>
                       <TableCell component="th" id={labelId} scope="row" padding="none">
-                        <Link to={`/edit/${row.name_id}`}>{row.name_id}</Link>
+                        <NavLink className={classes.link} to={`/edit/update/${row.name_id}`} >{row.name_id}</NavLink>
                       </TableCell>
                       {
                         Object.keys(row.properties).map( value => {

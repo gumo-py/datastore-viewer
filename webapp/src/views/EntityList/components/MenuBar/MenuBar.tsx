@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from "react-router-dom";
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import AddBoxIcon from '@material-ui/icons/AddBox';
@@ -40,7 +41,7 @@ export default function MenuBar() {
         <div className={classes.root}>
             <div className={classes.title}>エンティティ</div>
             <Button startIcon={<AddBoxIcon/>} className={classes.button}>
-                { "エンティティを作成" }
+                <Link to={'/edit/new'} style={{ textDecoration: 'none', color: '#4169e1' }}  > { "エンティティを作成" }</Link>
             </Button>
             <Button startIcon={<GetAppIcon/>} className={classes.button}>
                 { "インポート" }
