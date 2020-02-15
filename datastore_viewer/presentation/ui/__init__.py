@@ -121,6 +121,282 @@ class EntityView(flask.views.MethodView):
         })
 
 
+class ProjectAPIView(flask.views.MethodView):
+    def get(self, project_name: str, kind: str):
+        return flask.jsonify({
+            "entityResults": [
+                {
+                    "entity": {
+                        "key": {
+                            "partitionId": {
+                                "projectId": "todo-without-gumo"
+                            },
+                            "path": [
+                                {
+                                    "kind": "Project",
+                                    "name": "3exmxvfn2nbktklxerll7agmme"
+                                }
+                            ]
+                        },
+                        "properties": [
+                            {
+                                "property_name": "name",
+                                "value_type": "string",
+                                "value": "testProject2",
+                                "index": True,
+                            },
+                            {
+                                "property_name": "created_at",
+                                "value_type": "timestamp",
+                                "value": "2020-01-13T06:55:44.712535Z",
+                                "index": True,
+                            },
+
+                        ],
+                    },
+                    "version": "1578898544746000"
+                },
+                {
+                    "entity": {
+                        "key": {
+                            "partitionId": {
+                                "projectId": "todo-without-gumo"
+                            },
+                            "path": [
+                                {
+                                    "kind": "Project",
+                                    "name": "af65f2dxojbqphgacodj5nn4ua"
+                                }
+                            ]
+                        },
+                        "properties": [
+                            {
+                                "property_name": "name",
+                                "value_type": "string",
+                                "value": "testProject4",
+                                "index": True,
+                            },
+                            {
+                                "property_name": "created_at",
+                                "value_type": "timestamp",
+                                "value": "2020-01-27T14:30:02.521096Z",
+                                "index": True,
+                            },
+
+                        ],
+                    },
+                    "version": "1580135402557000"
+                },
+                {
+                    "entity": {
+                        "key": {
+                            "partitionId": {
+                                "projectId": "todo-without-gumo"
+                            },
+                            "path": [
+                                {
+                                    "kind": "Project",
+                                    "name": "hswr2nefzbfinnkhyr2tsk3lqy"
+                                }
+                            ]
+                        },
+                        "properties": [
+                            {
+                                "property_name": "name",
+                                "value_type": "string",
+                                "value": "testProject1",
+                                "index": True,
+                            },
+                            {
+                                "property_name": "created_at",
+                                "value_type": "timestamp",
+                                "value": "2020-01-13T06:55:38.115756Z",
+                                "index": True,
+                            },
+
+                        ],
+                    },
+                    "version": "1578898538149000"
+                },
+                {
+                    "entity": {
+                        "key": {
+                            "partitionId": {
+                                "projectId": "todo-without-gumo"
+                            },
+                            "path": [
+                                {
+                                    "kind": "Project",
+                                    "name": "lkbsc5462jashe46xqbys3dwyy"
+                                }
+                            ]
+                        },
+                        "properties": [
+                            {
+                                "property_name": "name",
+                                "value_type": "string",
+                                "value": "testProject3",
+                                "index": True,
+                            },
+                            {
+                                "property_name": "created_at",
+                                "value_type": "timestamp",
+                                "value": "2020-01-27T14:29:52.927667Z",
+                                "index": True,
+                            },
+
+                        ],
+                    },
+                    "version": "1580135393092000"
+                },
+                {
+                    "entity": {
+                        "key": {
+                            "partitionId": {
+                                "projectId": "todo-without-gumo"
+                            },
+                            "path": [
+                                {
+                                    "kind": "Project",
+                                    "name": "ltdi4w5rhjh5lluvmw2mln6gpm"
+                                }
+                            ]
+                        },
+                        "properties": [
+                            {
+                                "property_name": "name",
+                                "value_type": "string",
+                                "value": "testProject5",
+                                "index": True,
+                            },
+                            {
+                                "property_name": "created_at",
+                                "value_type": "timestamp",
+                                "value": "2020-01-27T14:30:14.320762Z",
+                                "index": True,
+                            },
+
+                        ],
+                    },
+                    "version": "1580135414366000"
+                },
+                {
+                    "entity": {
+                        "key": {
+                            "partitionId": {
+                                "projectId": "todo-without-gumo"
+                            },
+                            "path": [
+                                {
+                                    "kind": "Project",
+                                    "name": "s2ohskoeabdojpklwzsxinobua"
+                                }
+                            ]
+                        },
+                        "properties": [
+                            {
+                                "property_name": "name",
+                                "value_type": "string",
+                                "value": "testProject6",
+                                "index": True,
+                            },
+                            {
+                                "property_name": "created_at",
+                                "value_type": "timestamp",
+                                "value": "2020-01-27T14:30:24.288051Z",
+                                "index": True,
+                            },
+
+                        ],
+                    },
+                    "version": "1580135424355000"
+                }
+            ],
+        })
+
+
+class EntityAPIView(flask.views.MethodView):
+    def get(self, project_name: str, encoded_key: str):
+        return flask.jsonify({
+                "entityResult": {
+                    "entity": {
+                        "key": {
+                            "partitionId": {
+                                "projectId": "todo-without-gumo"
+                            },
+                            "path": [
+                                {
+                                    "kind": "Project",
+                                    "name": "3exmxvfn2nbktklxerll7agmme"
+                                }
+                            ]
+                        },
+                        "properties": [
+                            {
+                                "property_name": "name",
+                                "value_type": "string",
+                                "value": "testProject2",
+                                "index": True,
+                            },
+                            {
+                                "property_name": "created_at",
+                                "value_type": "timestamp",
+                                "value": "2020-01-13T06:55:44.712535Z",
+                                "index": True,
+                            },
+
+                        ],
+                    },
+                    "version": "1578898544746000"
+                },
+            })
+
+
+class KindAPIView(flask.views.MethodView):
+    def get(self, project_name: str):
+        return flask.jsonify({
+            "kindResults": [
+                {
+                    "kind": "Project",
+                    "indexed_properties": [
+                        {
+                            "property_name": "name",
+                            "value_type": "string",
+                        },
+                        {
+                            "property_name": "created_at",
+                            "value_type": "timestamp",
+                        },
+                    ]
+                },
+                {
+                    "kind": "Task",
+                    "indexed_properties": [
+                        {
+                            "property_name": "name",
+                            "value_type": "string",
+                        },
+                        {
+                            "property_name": "created_at",
+                            "value_type": "timestamp",
+                        },
+                    ]
+                }
+            ]
+        })
+
+
+class ProjectListAPIView(flask.views.MethodView):
+    def get(self):
+        return flask.jsonify({
+            "projectResults": [
+                {
+                    "project_name": "todo-without-gumo"
+                },
+            ]
+        })
+
+
 def register_views(blueprint):
     blueprint.add_url_rule(
         '/datastore_viewer',
@@ -137,5 +413,29 @@ def register_views(blueprint):
     blueprint.add_url_rule(
         '/datastore_viewer/projects/<string:project_name>/view_entity',
         view_func=EntityView.as_view(name='entity_view'),
+        methods=['GET']
+    )
+
+    blueprint.add_url_rule(
+        '/datastore_viewer/api/projects/<string:project_name>/kind/<string:kind>/entities',
+        view_func=ProjectAPIView.as_view(name='project_api_view'),
+        methods=['GET']
+    )
+
+    blueprint.add_url_rule(
+        '/datastore_viewer/api/projects/<string:project_name>/entity/<string:encoded_key>',
+        view_func=EntityAPIView.as_view(name='entity_api_view'),
+        methods=['GET']
+    )
+
+    blueprint.add_url_rule(
+        '/datastore_viewer/api/projects/<string:project_name>/kinds',
+        view_func=KindAPIView.as_view(name='kind_api_view'),
+        methods=['GET']
+    )
+
+    blueprint.add_url_rule(
+        '/datastore_viewer/api/projects',
+        view_func=ProjectListAPIView.as_view(name='project_list_api_view'),
         methods=['GET']
     )
