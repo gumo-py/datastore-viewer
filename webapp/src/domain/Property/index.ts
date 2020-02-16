@@ -4,7 +4,7 @@ import BooleanProperty from './BooleanProperty'
 import DateProperty from './DateProperty'
 import KeyProperty from './KeyProperty'
 
-export default {
+export {
     IntegerProperty,
     FloatProperty,
     BooleanProperty,

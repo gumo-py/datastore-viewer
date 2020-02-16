@@ -3,11 +3,9 @@ import { Key } from '../Key';
 
 export default class KeyProperty implements Property<Key> {
     readonly value: Key;
-    readonly index: boolean;
 
-    constructor(value: any, index: boolean) {
-        this.value = new Key(value);
-        this.index = index;
+    constructor(value: any) {
+        this.value = new Key(value.path);
     }
 
     toString(): string {
