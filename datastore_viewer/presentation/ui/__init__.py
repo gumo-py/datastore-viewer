@@ -154,7 +154,7 @@ class ProjectAPIView(flask.views.MethodView):
 
                         ],
                     },
-                    "version": "1578898544746000"
+                    "version": 1578898544746000
                 },
                 {
                     "entity": {
@@ -185,7 +185,7 @@ class ProjectAPIView(flask.views.MethodView):
 
                         ],
                     },
-                    "version": "1580135402557000"
+                    "version": 1580135402557000
                 },
                 {
                     "entity": {
@@ -216,7 +216,7 @@ class ProjectAPIView(flask.views.MethodView):
 
                         ],
                     },
-                    "version": "1578898538149000"
+                    "version": 1578898538149000
                 },
                 {
                     "entity": {
@@ -247,7 +247,7 @@ class ProjectAPIView(flask.views.MethodView):
 
                         ],
                     },
-                    "version": "1580135393092000"
+                    "version": 1580135393092000
                 },
                 {
                     "entity": {
@@ -278,7 +278,7 @@ class ProjectAPIView(flask.views.MethodView):
 
                         ],
                     },
-                    "version": "1580135414366000"
+                    "version": 1580135414366000
                 },
                 {
                     "entity": {
@@ -309,7 +309,7 @@ class ProjectAPIView(flask.views.MethodView):
 
                         ],
                     },
-                    "version": "1580135424355000"
+                    "version": 1580135424355000
                 }
             ],
         })
@@ -347,7 +347,7 @@ class EntityAPIView(flask.views.MethodView):
 
                         ],
                     },
-                    "version": "1578898544746000"
+                    "version": 1578898544746000
                 },
             })
 

@@ -3,11 +3,12 @@ import { Key, KeyObject } from '../../domain/Key'
 import {
     IntegerProperty, FloatProperty,
     BooleanProperty, DateProperty,
-    KeyProperty
+    KeyProperty, StringProperty
 } from '../../domain/Property'
+import { EntityInterface, Property } from "../EntityInterface"
 
 
-function makeProperty(propertyJson: any){
+function makeProperty(propertyJson: Property){
     switch (propertyJson.value_type) {
         case 'integer':
             return  {
@@ -45,13 +46,19 @@ function makeProperty(propertyJson: any){
                 index: propertyJson.index,
                 value: null
             };
+        case 'string':
+            return  {
+                name: propertyJson.property_name,
+                index: propertyJson.index,
+                value: new StringProperty(propertyJson.value)
+            };
     }
 }
 
-export default function entityFactory(entityJson: any) {
+export default function entityFactory(entityJson: EntityInterface) {
     const projectId: string = entityJson.entity.key.partitionId.projectId;
     const version: number = entityJson.version;
-    const key: KeyObject = new Key(entityJson.entity.path);
+    const key: KeyObject = new Key(entityJson.entity.key.path);
     const properties: Array<any> = [];
 
     for(let property of entityJson.entity.properties) {
