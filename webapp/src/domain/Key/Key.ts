@@ -1,7 +1,7 @@
 interface Path {
     readonly kind: string;
-    readonly name: string;
-    readonly id: number;
+    readonly name?: string;
+    readonly id?: number;
     getIdOrName(): string | number;
     toString(): string;
     toLiteral(): string;
@@ -19,7 +19,7 @@ class KeyPath implements Path {
     }
 
     getIdOrName(): string | number {
-        if (name) {
+        if (this.name) {
             return this.name;
         } else {
             return this.id;
