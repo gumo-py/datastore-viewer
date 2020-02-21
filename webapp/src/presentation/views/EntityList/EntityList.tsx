@@ -5,6 +5,7 @@ import { EntityListBody } from './components/EntityListBody';
 
 
 export default function EntityList() {
+
     return (
         <div className={'EntityList'}>
             <MenuBar/>
