@@ -47,6 +47,8 @@ export interface KeyObject {
     _paths: Array<Path>;
     toString(): string;
     toLiteral(): string;
+    getParent(): Array<Path>;
+    getIdOrName(): string | number;
 }
 
 export class Key implements KeyObject {
@@ -56,6 +58,17 @@ export class Key implements KeyObject {
         for(let path of keyObject) {
             this._paths.push(new KeyPath(path));
         }
+    }
+
+    getIdOrName(): string | number {
+        const key = this._paths.slice(-1)[0];
+        return key.getIdOrName();
+    }
+
+    getParent(): Array<Path> {
+        const keys = this._paths.slice();
+        keys.pop();
+        return keys;
     }
 
     toString(): string {

@@ -1,14 +1,31 @@
-import { Entity } from '../../domain/Entity'
-import { Key, KeyObject } from '../../domain/Key'
+import Entity from './Entity'
+import { Key, KeyObject } from '../Key'
 import {
     IntegerProperty, FloatProperty,
     BooleanProperty, DateProperty,
     KeyProperty, StringProperty
-} from '../../domain/Property'
-import { EntityInterface, Property } from "../EntityInterface"
+} from '../Property'
 
+export interface EntityJson {
+    entity: {
+        key: {
+            partitionId: { projectId: string };
+            path: Array<{ kind: string, name:string }>;
+        };
+        properties: Array<PropertyJson>;
+    };
 
-function makeProperty(propertyJson: Property){
+    version: number;
+}
+
+export interface PropertyJson {
+    index: boolean;
+    property_name: string;
+    value: string;
+    value_type: string;
+}
+
+function makeProperty(propertyJson: PropertyJson){
     switch (propertyJson.value_type) {
         case 'integer':
             return  {
@@ -55,7 +72,7 @@ function makeProperty(propertyJson: Property){
     }
 }
 
-export default function entityFactory(entityJson: EntityInterface) {
+export default function entityFactory(entityJson: EntityJson) {
     const projectId: string = entityJson.entity.key.partitionId.projectId;
     const version: number = entityJson.version;
     const key: KeyObject = new Key(entityJson.entity.key.path);
