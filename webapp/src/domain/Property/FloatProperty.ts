@@ -1,5 +1,3 @@
-import Property from "./Property";
-
 export default class FloatProperty implements Property<number> {
     readonly value: number;
 

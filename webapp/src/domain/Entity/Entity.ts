@@ -1,13 +1,3 @@
-import Property from "../Property/Property";
-import { KeyObject } from "../Key";
-
-interface EntityObject {
-    projectId: string;
-    version: number;
-    key: KeyObject;
-    properties: Array<any>;
-}
-
 export default class Entity implements EntityObject{
     readonly projectId: string;
     readonly version: number;

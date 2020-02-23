@@ -1,4 +1,3 @@
-import Property from "./Property";
 import { Key } from '../Key';
 
 export default class KeyProperty implements Property<Key> {
