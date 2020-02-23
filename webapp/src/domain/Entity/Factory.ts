@@ -1,29 +1,10 @@
 import Entity from './Entity'
-import { Key, KeyObject } from '../Key'
+import { Key } from '../Key'
 import {
     IntegerProperty, FloatProperty,
     BooleanProperty, DateProperty,
     KeyProperty, StringProperty
 } from '../Property'
-
-export interface EntityJson {
-    entity: {
-        key: {
-            partitionId: { projectId: string };
-            path: Array<{ kind: string, name:string }>;
-        };
-        properties: Array<PropertyJson>;
-    };
-
-    version: number;
-}
-
-export interface PropertyJson {
-    index: boolean;
-    property_name: string;
-    value: string;
-    value_type: string;
-}
 
 function makeProperty(propertyJson: PropertyJson){
     switch (propertyJson.value_type) {

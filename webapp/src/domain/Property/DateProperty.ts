@@ -1,4 +1,3 @@
-import Property from "./Property";
 import moment from "moment";
 
 export default class DateProperty implements Property<Date> {

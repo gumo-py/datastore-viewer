@@ -1,5 +1,3 @@
-import Property from "./Property";
-
 export default class StringProperty implements Property<string> {
     readonly value: string;
 

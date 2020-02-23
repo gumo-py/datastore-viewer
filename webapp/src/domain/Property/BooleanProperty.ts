@@ -1,5 +1,3 @@
-import Property from "./Property";
-
 export default class BooleanProperty implements Property<boolean> {
     readonly value: boolean;
 

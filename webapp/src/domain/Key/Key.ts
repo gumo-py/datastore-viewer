@@ -1,12 +1,3 @@
-interface Path {
-    readonly kind: string;
-    readonly name?: string;
-    readonly id?: number;
-    getIdOrName(): string | number;
-    toString(): string;
-    toLiteral(): string;
-}
-
 class KeyPath implements Path {
     readonly kind: string;
     readonly name: string;
@@ -43,15 +34,7 @@ class KeyPath implements Path {
     }
 }
 
-export interface KeyObject {
-    _paths: Array<Path>;
-    toString(): string;
-    toLiteral(): string;
-    getParent(): Array<Path>;
-    getIdOrName(): string | number;
-}
-
-export class Key implements KeyObject {
+export default class Key implements KeyObject {
     _paths: Array<Path> = [];
 
     constructor(keyObject: any) {
