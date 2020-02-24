@@ -1,12 +1,13 @@
-import moment from "moment";
+import {Moment} from 'moment';
+import moment from 'moment-timezone';
 
 export default class DateProperty implements Property {
-    value: Date;
+    value: Moment;
     name: string;
     index: boolean;
 
     constructor(value: string, name: string, index: boolean) {
-        this.value = new Date(value);
+        this.value = moment(value).tz(moment.tz.guess());
         this.name = name;
         this.index = index;
     }
@@ -16,6 +17,6 @@ export default class DateProperty implements Property {
     }
 
     toStr(): string {
-        return moment(this.value).format();
+        return this.value.format('YYYY-MM-DD (hh:mm:ss.SSS) z');
     }
 }
