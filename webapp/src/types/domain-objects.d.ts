@@ -3,7 +3,7 @@ declare interface EntityObject {
     projectId: string;
     version: number;
     key: KeyObject;
-    properties: Array<any>;
+    properties: Array<Property>;
 }
 
 
@@ -23,10 +23,14 @@ declare interface KeyObject {
     toLiteral(): string;
     getParent(): Array<Path>;
     getIdOrName(): string | number;
+    getKind(): string;
 }
 
 // Property
-declare interface Property<T> {
-    toString(): string;
-    readonly value: T;
+declare interface Property {
+    value: any;
+    name: string;
+    index: boolean;
+    toStr(): string;
+    getType(): string;
 }

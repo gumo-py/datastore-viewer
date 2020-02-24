@@ -1,11 +1,19 @@
-export default class StringProperty implements Property<string> {
-    readonly value: string;
+export default class StringProperty implements Property {
+    value: string;
+    name: string;
+    index: boolean;
 
-    constructor(value: string) {
+    constructor(value: string, name: string, index: boolean) {
         this.value = value;
+        this.name = name;
+        this.index = index;
     }
 
-    toString(): string {
+    getType(): string {
+        return 'String';
+    }
+
+    toStr(): string {
         return this.value;
     }
 }
