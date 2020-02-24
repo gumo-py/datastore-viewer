@@ -25,12 +25,14 @@ declare interface EntityResult {
 }
 
 declare interface KindResults {
-    kindResults: Array<{
-        kind: string;
-        indexed_properties: Array<{
-            property_name: string;
-            value_type: string;
-        }>;
+    kindResults: Array<KindResult>;
+}
+
+declare interface KindResult {
+    kind: string;
+    indexed_properties: Array<{
+        property_name: string;
+        value_type: string;
     }>;
 }
 

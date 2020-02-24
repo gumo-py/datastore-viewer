@@ -4,6 +4,7 @@ import BooleanProperty from './BooleanProperty'
 import DateProperty from './DateProperty'
 import KeyProperty from './KeyProperty'
 import StringProperty from './StringProperty'
+import NullProperty from './NullProperty'
 
 export {
     IntegerProperty,
@@ -11,5 +12,6 @@ export {
     BooleanProperty,
     DateProperty,
     KeyProperty,
-    StringProperty
+    StringProperty,
+    NullProperty
 }

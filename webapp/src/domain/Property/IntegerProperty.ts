@@ -1,11 +1,19 @@
-export default class IntegerProperty implements Property<number> {
-    readonly value: number;
+export default class IntegerProperty implements Property {
+    value: number;
+    name: string;
+    index: boolean;
 
-    constructor(value: string) {
+    constructor(value: string, name: string, index: boolean) {
         this.value = parseInt(value);
+        this.name = name;
+        this.index = index;
     }
 
-    toString(): string {
+    getType(): string {
+        return 'Integer';
+    }
+
+    toStr(): string {
         return String(this.value);
     }
 }

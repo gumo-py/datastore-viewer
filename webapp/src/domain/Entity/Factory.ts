@@ -1,55 +1,60 @@
 import Entity from './Entity'
 import { Key } from '../Key'
 import {
-    IntegerProperty, FloatProperty,
-    BooleanProperty, DateProperty,
-    KeyProperty, StringProperty
+    IntegerProperty, FloatProperty, BooleanProperty,
+    DateProperty, KeyProperty, StringProperty,
+    NullProperty
 } from '../Property'
 
-function makeProperty(propertyJson: PropertyJson){
+function makeProperty(propertyJson: PropertyJson) {
     switch (propertyJson.value_type) {
         case 'integer':
-            return  {
-                name: propertyJson.property_name,
-                index: propertyJson.index,
-                value: new IntegerProperty(propertyJson.value)
-            };
+            return new IntegerProperty(
+                propertyJson.value,
+                propertyJson.property_name,
+                propertyJson.index
+            );
+
         case 'float':
-            return  {
-                name: propertyJson.property_name,
-                index: propertyJson.index,
-                value: new FloatProperty(propertyJson.value)
-            };
+            return new FloatProperty(
+                propertyJson.value,
+                propertyJson.property_name,
+                propertyJson.index
+            );
+
         case 'boolean':
-            return  {
-                name: propertyJson.property_name,
-                index: propertyJson.index,
-                value: new BooleanProperty(propertyJson.value)
-            };
+            return new BooleanProperty(
+                propertyJson.value,
+                propertyJson.property_name,
+                propertyJson.index
+            );
+
         case 'timestamp':
-            return  {
-                name: propertyJson.property_name,
-                index: propertyJson.index,
-                value: new DateProperty(propertyJson.value)
-            };
+            return new DateProperty(
+                propertyJson.value,
+                propertyJson.property_name,
+                propertyJson.index
+            );
+
         case 'key':
-            return  {
-                name: propertyJson.property_name,
-                index: propertyJson.index,
-                value: new KeyProperty(propertyJson.value)
-            };
-        case 'null':
-            return  {
-                name: propertyJson.property_name,
-                index: propertyJson.index,
-                value: null
-            };
+            return new KeyProperty(
+                propertyJson.value,
+                propertyJson.property_name,
+                propertyJson.index
+            );
+
         case 'string':
-            return  {
-                name: propertyJson.property_name,
-                index: propertyJson.index,
-                value: new StringProperty(propertyJson.value)
-            };
+            return new StringProperty(
+                propertyJson.value,
+                propertyJson.property_name,
+                propertyJson.index
+            );
+
+        case 'null':
+            return new NullProperty(
+                propertyJson.property_name,
+                propertyJson.index
+            );
     }
 }
 
@@ -57,10 +62,13 @@ export default function entityFactory(entityJson: EntityJson) {
     const projectId: string = entityJson.entity.key.partitionId.projectId;
     const version: number = entityJson.version;
     const key: KeyObject = new Key(entityJson.entity.key.path);
-    const properties: Array<any> = [];
+    const properties: Array<Property> = [];
 
     for(let property of entityJson.entity.properties) {
-        properties.push(makeProperty(property));
+        const attachedProperty = makeProperty(property);
+        if(attachedProperty) {
+            properties.push(attachedProperty);
+        }
     }
 
     return new Entity(projectId, version, key, properties);
