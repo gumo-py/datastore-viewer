@@ -11,8 +11,8 @@ export async function getEntityList(projectName: string, kind: string) {
     return EntityList;
 }
 
-export async function getEntity(projectName: string, encoded_key: string) {
-    const url = `http://127.0.0.1:48080/datastore_viewer/api/projects/${projectName}/entity/${encoded_key}`;
+export async function getEntity(projectName: string, kind: string, nameId: string) {
+    const url = `http://127.0.0.1:48080/datastore_viewer/api/projects/${projectName}/kind/${kind}/entity/${nameId}`;
     const res = await axios.get<EntityResult>(url);
     return entityFactory(res.data.entityResult);
 }

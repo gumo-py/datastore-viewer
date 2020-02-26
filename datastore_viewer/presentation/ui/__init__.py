@@ -316,7 +316,7 @@ class ProjectAPIView(flask.views.MethodView):
 
 
 class EntityAPIView(flask.views.MethodView):
-    def get(self, project_name: str, encoded_key: str):
+    def get(self, project_name: str, kind: str, nameId: str):
         return flask.jsonify({
                 "entityResult": {
                     "entity": {
@@ -423,7 +423,7 @@ def register_views(blueprint):
     )
 
     blueprint.add_url_rule(
-        '/datastore_viewer/api/projects/<string:project_name>/entity/<string:encoded_key>',
+        '/datastore_viewer/api/projects/<string:project_name>/kind/<string:kind>/entity/<string:nameId>',
         view_func=EntityAPIView.as_view(name='entity_api_view'),
         methods=['GET']
     )

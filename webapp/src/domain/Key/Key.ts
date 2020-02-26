@@ -43,6 +43,11 @@ export default class Key implements KeyObject {
         }
     }
 
+    getKind(): string {
+        const key = this._paths.slice(-1)[0];
+        return key.kind;
+    }
+
     getIdOrName(): string | number {
         const key = this._paths.slice(-1)[0];
         return key.getIdOrName();
