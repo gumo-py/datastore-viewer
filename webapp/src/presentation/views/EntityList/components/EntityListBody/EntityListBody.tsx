@@ -13,185 +13,24 @@ import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
 import { NavLink } from "react-router-dom";
 
-const dummyData = {
-    "entityResults": [
-      {
-        "entity": {
-          "key": {
-            "partitionId": {
-              "projectId": "todo-without-gumo"
-            },
-            "path": [
-              {
-                "kind": "Project",
-                "name": "3exmxvfn2nbktklxerll7agmme"
-              }
-            ]
-          },
-          "properties": {
-            "name": {
-              "stringValue": "testProject2"
-            },
-            "created_at": {
-              "timestampValue": "2020-01-13T06:55:44.712535Z"
-            },
-          }
-        },
-        "version": "1578898544746000"
-      },
-      {
-        "entity": {
-          "key": {
-            "partitionId": {
-              "projectId": "todo-without-gumo"
-            },
-            "path": [
-              {
-                "kind": "Project",
-                "name": "af65f2dxojbqphgacodj5nn4ua"
-              }
-            ]
-          },
-          "properties": {
-            "name": {
-              "stringValue": "testProject4"
-            },
-            "created_at": {
-              "timestampValue": "2020-01-27T14:30:02.521096Z"
-            }
-          }
-        },
-        "version": "1580135402557000"
-      },
-      {
-        "entity": {
-          "key": {
-            "partitionId": {
-              "projectId": "todo-without-gumo"
-            },
-            "path": [
-              {
-                "kind": "Project",
-                "name": "hswr2nefzbfinnkhyr2tsk3lqy"
-              }
-            ]
-          },
-          "properties": {
-            "name": {
-              "stringValue": "testProject1"
-            },
-            "created_at": {
-              "timestampValue": "2020-01-13T06:55:38.115756Z"
-            },
-
-          }
-        },
-        "version": "1578898538149000"
-      },
-      {
-        "entity": {
-          "key": {
-            "partitionId": {
-              "projectId": "todo-without-gumo"
-            },
-            "path": [
-              {
-                "kind": "Project",
-                "name": "lkbsc5462jashe46xqbys3dwyy"
-              }
-            ]
-          },
-          "properties": {
-            "name": {
-              "stringValue": "testProject3"
-            },
-            "created_at": {
-              "timestampValue": "2020-01-27T14:29:52.927667Z"
-            }
-          }
-        },
-        "version": "1580135393092000"
-      },
-      {
-        "entity": {
-          "key": {
-            "partitionId": {
-              "projectId": "todo-without-gumo"
-            },
-            "path": [
-              {
-                "kind": "Project",
-                "name": "ltdi4w5rhjh5lluvmw2mln6gpm"
-              }
-            ]
-          },
-          "properties": {
-            "name": {
-              "stringValue": "testProject5"
-            },
-            "created_at": {
-              "timestampValue": "2020-01-27T14:30:14.320762Z"
-            },
-          }
-        },
-        "version": "1580135414366000"
-      },
-      {
-        "entity": {
-          "key": {
-            "partitionId": {
-              "projectId": "todo-without-gumo"
-            },
-            "path": [
-              {
-                "kind": "Project",
-                "name": "s2ohskoeabdojpklwzsxinobua"
-              }
-            ]
-          },
-          "properties": {
-            "name": {
-              "stringValue": "testProject6"
-            },
-            "created_at": {
-              "timestampValue": "2020-01-27T14:30:24.288051Z"
-            }
-          }
-        },
-        "version": "1580135424355000"
-      }
-    ],
-};
 
 interface HeadCell {
   id: string;
   label: string;
 }
 
-function convertData(entities: any) {
+function makeHeadCells(kindObj: KindResult) {
   const headCells: HeadCell[] = [ { id: 'id', label: '名前/ID' } ];
-  Object.keys(entities[0].entity.properties).forEach(function (key) {
-    headCells.push({ id: key, label: key });
+  kindObj.indexed_properties.forEach( (key) => {
+    headCells.push({ id: key.property_name, label: key.property_name });
   });
 
-  const rows: Data[] = [];
-
-  for(let data of entities) {
-    const name_id: string = data.entity.key.path[data.entity.key.path.length-1].name;
-    const properties: { [key:string] : any } = {};
-    Object.keys(data.entity.properties).map( value => {
-        properties[value] = Object.values(data.entity.properties[value]);
-    });
-    rows.push(createData(name_id, properties));
-  }
-
-  return { headCells, rows }
+  return headCells;
 }
-
-const { headCells, rows } = convertData(dummyData.entityResults);
 
 interface Data {
   name_id: string;
+  kind: string;
   properties: {
     [key: string]: any
   };
@@ -199,13 +38,29 @@ interface Data {
 
 function createData(
     name_id: string,
+    kind: string,
     properties: any
 ): Data {
-  return {name_id, properties};
+  return {name_id, kind, properties};
+}
+
+function convertData(entities: Array<EntityObject>) {
+  const rows: Data[] = [];
+
+  for(let entity of entities) {
+    const name_id: string = String(entity.key.getIdOrName());
+    const kind: string = entity.key.getKind();
+    const properties: { [key:string] : any } = {};
+
+    for(let property of entity.properties) {
+      if(property.index) properties[property.name] = property.toStr();
+    }
+    rows.push(createData(name_id, kind, properties));
+  }
+  return rows;
 }
 
 type Order = 'asc' | 'desc';
-
 
 interface EnhancedTableProps {
   classes: ReturnType<typeof useStyles>;
@@ -215,6 +70,7 @@ interface EnhancedTableProps {
   order: Order;
   orderBy: string;
   rowCount: number;
+  headCells: HeadCell[];
 }
 
 function EnhancedTableHead(props: EnhancedTableProps) {
@@ -234,7 +90,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
             inputProps={{ 'aria-label': 'select all desserts' }}
           />
         </TableCell>
-        {headCells.map(headCell => (
+        {props.headCells.map(headCell => (
           <TableCell
             key={headCell.id}
             align={'left'}
@@ -290,15 +146,24 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
+interface Props {
+  entities: Array<EntityObject>;
+  kindObj: KindResult | undefined;
+}
 
-
-export default function EnhancedTable() {
+export default function EnhancedTable(props: Props) {
   const classes = useStyles();
   const [order, setOrder] = React.useState<Order>('asc');
   const [orderBy, setOrderBy] = React.useState<string>('id');
   const [selected, setSelected] = React.useState<string[]>([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const rows = convertData(props.entities);
+
+  let headCell: HeadCell[] = [];
+  if(props.kindObj) {
+     headCell = makeHeadCells(props.kindObj);
+  }
 
   const stableSort = (order: Order) => {
     if(order === 'asc') {
@@ -382,6 +247,7 @@ export default function EnhancedTable() {
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
               rowCount={rows.length}
+              headCells={headCell}
             />
             <TableBody>
               {stableSort(order)
@@ -407,7 +273,7 @@ export default function EnhancedTable() {
                         />
                       </TableCell>
                       <TableCell component="th" id={labelId} scope="row" padding="none">
-                        <NavLink className={classes.link} to={`/edit/update/${row.name_id}`} >{row.name_id}</NavLink>
+                        <NavLink className={classes.link} to={`/edit/update/${row.kind}/${row.name_id}`} >{row.name_id}</NavLink>
                       </TableCell>
                       {
                         Object.keys(row.properties).map( value => {

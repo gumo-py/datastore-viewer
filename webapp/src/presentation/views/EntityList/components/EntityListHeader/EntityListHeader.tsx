@@ -35,13 +35,31 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-export default function MenuBar() {
+interface Props {
+    kinds: KindResults | undefined;
+    kindHandler: ((kind: KindResult) => void);
+}
+
+export default function MenuBar(props: Props) {
     const classes = useStyles();
-    const [entity, setEntity] = React.useState('');
+    const [entity, setEntity] = React.useState<string>('');
+    let kinds: Array<KindResult> = [];
+    if(props.kinds) {
+        kinds = props.kinds.kindResults;
+    }
 
     const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
         setEntity(event.target.value as string);
     };
+
+    React.useEffect(() => {
+        if(props.kinds) setEntity(kinds[0].kind);
+    }, [kinds, props.kinds]);
+
+    React.useEffect(() => {
+        const kind = kinds.find(kind => kind.kind === entity);
+        if(kind) props.kindHandler(kind);
+    }, [entity, kinds, props]);
 
     return (
         <div className={classes.root}>
@@ -54,8 +72,15 @@ export default function MenuBar() {
                     input={<OutlinedInput classes={{ input: classes.input }} />}
                 >
                     <MenuItem className={classes.listItem} value="" disabled>{'種類'}</MenuItem>
-                    <MenuItem className={classes.listItem} value={10}>{'Project'}</MenuItem>
-                    <MenuItem className={classes.listItem} value={20}>{'Task'}</MenuItem>
+                    {
+                        kinds.map( obj => {
+                            return (
+                                <MenuItem className={classes.listItem} key={obj.kind} value={obj.kind} >
+                                    {obj.kind}
+                                </MenuItem>
+                            );
+                        })
+                    }
                 </Select>
             </FormControl>
             <Button startIcon={<FilterListIcon/>} className={classes.button}>

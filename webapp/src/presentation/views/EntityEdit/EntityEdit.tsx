@@ -5,6 +5,7 @@ import { EntityInfo } from "./components/EntityInfo";
 import { PropertyMenu } from "./components/PropertyMenu";
 import Button from "@material-ui/core/Button";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
+import { getEntity } from "../../../infrastructure/APIClient";
 
 const testEntity = {
     namespace: '[デフォルト]',
@@ -25,8 +26,6 @@ const testEntity = {
         }]
 };
 
-
-
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         saveMenu: {
@@ -40,20 +39,28 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export default function EntityEdit() {
-    let { entity_id } = useParams();
-    console.log(entity_id);
+    let { kind, entity_id } = useParams();
+    const [entity, setEntity] = React.useState<EntityObject>();
+    if(!entity && kind && entity_id) {
+        getEntity('gumo-example', kind, entity_id)
+            .then(res => setEntity(res));
+    }
+
+    React.useEffect(() => {
+        console.log(entity);
+    }, [entity]);
+
     const classes = useStyles();
     return (
         <div className={'Entity'}>
             <MenuBar />
-            <EntityInfo
-                namespace={testEntity.namespace}
-                kind={testEntity.kind}
-                entityKey={testEntity.entityKey}
-                keyLiteral={testEntity.keyLiteral}
-                URLSafeKey={testEntity.URLSafeKey}
-            />
-            <PropertyMenu properties={testEntity.property}/>
+            { entity && <EntityInfo
+                kind={entity.key.getKind()}
+                entityKey={entity.key.toString()}
+                keyLiteral={entity.key.toLiteral()}
+                />
+            }
+            { entity && <PropertyMenu properties={entity.properties}/> }
             <div className={classes.saveMenu}>
                 <Button className={classes.button} variant="contained" color="primary">
                     {"保存"}

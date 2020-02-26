@@ -21,11 +21,9 @@ const useStyles = makeStyles({
 });
 
 interface EntityInfoProps {
-    namespace: string;
     kind: string;
     entityKey: string;
     keyLiteral: string;
-    URLSafeKey: string;
 }
 
 export default function DenseTable(props: EntityInfoProps) {
@@ -35,14 +33,6 @@ export default function DenseTable(props: EntityInfoProps) {
     <TableContainer className={classes.table}>
       <Table size="small" aria-label="a dense table">
         <TableBody>
-            <TableRow key={'nameSpace'}>
-              <TableCell className={classes.tableHeader} component="th" scope="row">
-                {'名前空間'}
-              </TableCell>
-              <TableCell className={classes.tableCell} align="left">
-                  {props.namespace}
-              </TableCell>
-            </TableRow>
             <TableRow key={'kind'}>
               <TableCell className={classes.tableHeader} component="th" scope="row">
                 {'Kind'}
@@ -65,14 +55,6 @@ export default function DenseTable(props: EntityInfoProps) {
               </TableCell>
               <TableCell className={classes.tableCell} align="left">
                   {props.keyLiteral}
-              </TableCell>
-            </TableRow>
-            <TableRow key={'URL'}>
-              <TableCell className={classes.tableHeader} component="th" scope="row">
-                {'URL セーフキー'}
-              </TableCell>
-              <TableCell className={classes.tableCell} align="left">
-                  {props.URLSafeKey}
               </TableCell>
             </TableRow>
         </TableBody>

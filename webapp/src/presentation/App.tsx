@@ -13,7 +13,7 @@ const App: React.FC = () => {
           <Router>
             <Header />
             <Route exact path="/" component={EntityList} />
-            <Route path="/edit/update/:entity_id" component={EntityEdit} />
+            <Route path="/edit/update/:kind/:entity_id" component={EntityEdit} />
             <Route path="/edit/new" component={NewEntityEdit} />
           </Router>
       </div>

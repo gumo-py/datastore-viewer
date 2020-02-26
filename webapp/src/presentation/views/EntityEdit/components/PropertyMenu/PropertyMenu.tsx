@@ -1,5 +1,6 @@
 import React from 'react';
 import * as _ from "underscore";
+import moment from 'moment-timezone';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -17,6 +18,7 @@ import Card from '@material-ui/core/Card';
 import Button from '@material-ui/core/Button';
 import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from "@material-ui/core/IconButton";
+
 
 const useMenuItemStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -51,6 +53,7 @@ interface PropertyProps {
     name: string;
     type: string;
     value: any;
+    index: boolean;
     DeleteHandler?: (name: string) => void;
     SaveHandler?: (props: PropertyProps) => void;
 }
@@ -61,7 +64,7 @@ const PropertyItem: React.FC<PropertyProps> = props => {
     const [type, setType] = React.useState(props.type);
     const [name, setName] = React.useState(props.name);
     const [value, setValue] = React.useState(props.value);
-    const [checkState, setCheckState] = React.useState(false);
+    const [checkState, setCheckState] = React.useState(props.index);
 
     const handleClick = () => {
         setOpen(!open);
@@ -77,6 +80,7 @@ const PropertyItem: React.FC<PropertyProps> = props => {
                 name: name,
                 type: type,
                 value: value,
+                index: checkState,
             };
             props.SaveHandler(newProperty);
             setOpen(!open);
@@ -100,6 +104,12 @@ const PropertyItem: React.FC<PropertyProps> = props => {
     const handleNameChange = (event: React.ChangeEvent<{ value: any }>) => {
         setName(event.target.value);
     };
+
+    React.useEffect(() => {
+        if(type === 'Date') {
+            setValue(moment(value).format('YYYY-MM-DDThh:mm'));
+        }
+    }, [value, type]);
 
     const formAdjuster = (type: string) => {
         switch (type){
@@ -311,21 +321,30 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface MenuProps {
-    properties: Array<PropertyProps>;
+    properties: Array<any>;
 }
 
 export default function PropertyMenu(props: MenuProps) {
     const classes = useStyles();
-    const [properties, setProperties] = React.useState(props.properties);
+
+    const convertData = (properties: Array<Property>) => {
+        return properties.map( property => {
+            return {
+                name: property.name,
+                type: property.getType(),
+                value: property.value,
+                index: property.index,
+            }})
+    };
+
+    const [properties, setProperties] = React.useState(convertData(props.properties));
+
     const handleClickAddProperty = () => {
         const newProperties = properties.slice();
-        newProperties.push({
-            name: '',
-            type: '',
-            value: '',
-        });
+        newProperties.push({ name: '', type: '', value: '', index: false });
         setProperties(newProperties);
     };
+
     const deleteProperty = (name: string) => {
         const newProperties = properties.slice();
         const position = _.findIndex(newProperties, props => { return props.name === name });
@@ -349,6 +368,7 @@ export default function PropertyMenu(props: MenuProps) {
                         name={property.name}
                         type={property.type}
                         value={property.value}
+                        index={property.index}
                         DeleteHandler={deleteProperty}
                         SaveHandler={updateProperty}/> )
                 }
