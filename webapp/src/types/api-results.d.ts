@@ -6,6 +6,7 @@ declare interface EntityJson {
         };
         properties: Array<PropertyJson>;
     };
+    URLSafeKey: string;
     version: number;
 }
 

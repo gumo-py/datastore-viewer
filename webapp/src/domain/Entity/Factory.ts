@@ -61,6 +61,7 @@ function makeProperty(propertyJson: PropertyJson) {
 export default function entityFactory(entityJson: EntityJson) {
     const projectId: string = entityJson.entity.key.partitionId.projectId;
     const version: number = entityJson.version;
+    const URLSafeKey: string = entityJson.URLSafeKey;
     const key: KeyObject = new Key(entityJson.entity.key.path);
     const properties: Array<Property> = [];
 
@@ -71,6 +72,6 @@ export default function entityFactory(entityJson: EntityJson) {
         }
     }
 
-    return new Entity(projectId, version, key, properties);
+    return new Entity(projectId, version, URLSafeKey, key, properties);
 }
 

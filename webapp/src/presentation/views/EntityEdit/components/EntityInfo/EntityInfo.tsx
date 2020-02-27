@@ -24,6 +24,7 @@ interface EntityInfoProps {
     kind: string;
     entityKey: string;
     keyLiteral: string;
+    URLSafeKey: string;
 }
 
 export default function DenseTable(props: EntityInfoProps) {
@@ -55,6 +56,14 @@ export default function DenseTable(props: EntityInfoProps) {
               </TableCell>
               <TableCell className={classes.tableCell} align="left">
                   {props.keyLiteral}
+              </TableCell>
+            </TableRow>
+            <TableRow key={'URLSafeKey'}>
+              <TableCell className={classes.tableHeader} component="th" scope="row">
+                {'URLセーフキー'}
+              </TableCell>
+              <TableCell className={classes.tableCell} align="left">
+                  {props.URLSafeKey}
               </TableCell>
             </TableRow>
         </TableBody>

@@ -2,6 +2,7 @@
 declare interface EntityObject {
     projectId: string;
     version: number;
+    URLSafeKey: string;
     key: KeyObject;
     properties: Array<Property>;
 }
