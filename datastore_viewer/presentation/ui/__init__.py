@@ -397,7 +397,12 @@ class ProjectListAPIView(flask.views.MethodView):
         return flask.jsonify({
             "projectResults": [
                 {
-                    "project_name": "todo-without-gumo"
+                    "project_name": "todo-without-gumo",
+                    "project_id": "todo-without-gumo"
+                },
+                {
+                    "project_name": "test",
+                    "project_id": "test"
                 },
             ]
         })

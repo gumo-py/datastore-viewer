@@ -4,27 +4,37 @@ import { EntityListHeader } from './components/EntityListHeader';
 import { EntityListBody } from './components/EntityListBody';
 import { getEntityList, getKindList } from "../../../infrastructure/APIClient";
 
+interface Props {
+    projectName: string;
+}
 
-export default function EntityList() {
+
+export default function EntityList(props: Props) {
     const [kinds, setKinds] = React.useState< KindResults | undefined >();
     const [kindObj, setKindObj] = React.useState<KindResult>();
     const [entities, setEntities] = React.useState< Array<EntityObject> >([]);
 
+
+
     if(!kinds){
-        getKindList('gumo-example')
+        getKindList(props.projectName)
             .then( res => setKinds(res) );
     }
 
-    React.useEffect(() => {
+    const updateEntities = React.useCallback(() => {
         if(kindObj){
-            getEntityList('gumo-example', kindObj.kind)
+            getEntityList(props.projectName, kindObj.kind)
                 .then( res => setEntities(res) );
         }
-    },[kindObj]);
+    }, [kindObj]);
+
+    React.useEffect(() => {
+        updateEntities();
+    },[kindObj, updateEntities]);
 
     return (
         <div className={'EntityList'}>
-            <MenuBar/>
+            <MenuBar refreash={updateEntities}/>
             <EntityListHeader kinds={kinds} kindHandler={setKindObj}/>
             <EntityListBody kindObj={kindObj} entities={entities}/>
         </div>

@@ -24,13 +24,17 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-export default function EntityEdit() {
+interface Props {
+    projectName: string;
+}
+
+export default function EntityEdit(props: Props) {
     let { kind, entity_id } = useParams();
     const [entity, setEntity] = React.useState<EntityObject>();
 
     const updateEntity = () => {
         if(kind && entity_id) {
-            getEntity('gumo-example', kind, entity_id)
+            getEntity(props.projectName, kind, entity_id)
                 .then(res => setEntity(res));
         }
     };

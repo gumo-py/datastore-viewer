@@ -35,8 +35,17 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-export default function MenuBar() {
+interface Props {
+    refreash(): void;
+}
+
+export default function MenuBar(props: Props) {
     const classes = useStyles();
+
+    const handleClickRefreashEntity = () => {
+        props.refreash();
+    };
+
     return (
         <div className={classes.root}>
             <div className={classes.title}>エンティティ</div>
@@ -52,7 +61,7 @@ export default function MenuBar() {
             <Button startIcon={<DeleteIcon/>} className={classes.button} disabled>
                 { "削除" }
             </Button>
-            <IconButton aria-label="delete" className={classes.iconButton}>
+            <IconButton aria-label="refreash" onClick={handleClickRefreashEntity} className={classes.iconButton}>
                 <RefreshIcon fontSize="inherit" />
             </IconButton>
         </div>

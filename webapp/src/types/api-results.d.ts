@@ -37,8 +37,12 @@ declare interface KindResult {
     }>;
 }
 
-declare interface ProjectResults {
-    projectResults: Array<{
-        project_name: string;
-    }>;
+declare interface Project {
+    project_name: string;
+    project_id: string;
 }
+
+declare interface ProjectResults {
+    projectResults: Array<Project>;
+}
+
