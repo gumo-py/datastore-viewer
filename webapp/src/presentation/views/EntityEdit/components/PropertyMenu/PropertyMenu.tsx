@@ -90,6 +90,7 @@ const PropertyItem: React.FC<PropertyProps> = props => {
         setName(props.name);
         setType(props.type);
         setValue(props.value);
+        setCheckState(props.index);
         setOpen(!open);
     };
     const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
@@ -103,6 +104,19 @@ const PropertyItem: React.FC<PropertyProps> = props => {
     };
     const handleNameChange = (event: React.ChangeEvent<{ value: any }>) => {
         setName(event.target.value);
+    };
+    const makeTitle = () => {
+        if(!name) {
+            return '空白';
+        } else if(!value) {
+            if(type === "Null") {
+                return `${name}`;
+            }else {
+                return `${name}: 空白`;
+            }
+        } else {
+            return `${name}: ${value}`;
+        }
     };
 
     React.useEffect(() => {
@@ -211,7 +225,7 @@ const PropertyItem: React.FC<PropertyProps> = props => {
                         primary: classes.itemName,
                         secondary: classes.inputFont
                     }}
-                    primary={`${name}: ${value}`}
+                    primary={ makeTitle() }
                     secondary={"インデックス登録"}
                 />
                 {open &&
@@ -365,6 +379,7 @@ export default function PropertyMenu(props: MenuProps) {
             <List className={classes.list}>
                 { properties.map( property =>
                     <PropertyItem
+                        key={property.name}
                         name={property.name}
                         type={property.type}
                         value={property.value}

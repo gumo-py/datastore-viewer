@@ -34,8 +34,17 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-export default function MenuBar() {
+interface Props {
+    refreash(): void;
+}
+
+export default function MenuBar(props: Props) {
     const classes = useStyles();
+
+    const handleClickRefreashEntity = () => {
+        props.refreash();
+    };
+
     return (
         <div className={classes.root}>
             <Link to={'/'}>
@@ -44,7 +53,7 @@ export default function MenuBar() {
                 </IconButton>
             </Link>
             <div className={classes.title}>エンティティの編集</div>
-            <Button startIcon={<RefreshIcon/>} className={classes.button}>
+            <Button startIcon={<RefreshIcon/>} onClick={handleClickRefreashEntity} className={classes.button}>
                 { "更新" }
             </Button>
             <Button startIcon={<DeleteIcon/>} className={classes.button}>
