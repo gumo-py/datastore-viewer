@@ -35,14 +35,10 @@ interface Props {
 
 export default function DenseTable(props: Props) {
   const classes = useStyles();
-  const [nameSpace, setNameSpace] = React.useState('default');
   const [kind, setKind] = React.useState('Project');
   const [keyType, setKeyType] = React.useState('Number');
   const [customKey, setCustomKey] = React.useState('');
 
-  const handleNameSpaceChange = (event: React.ChangeEvent<{ value: any }>) => {
-        setNameSpace(event.target.value);
-  };
   const handleKindChange = (event: React.ChangeEvent<{ value: any }>) => {
         setKind(event.target.value);
   };
@@ -54,20 +50,6 @@ export default function DenseTable(props: Props) {
   };
   return (
     <List className={classes.root}>
-        <ListItem>
-            <TextField
-                select
-                size={'small'}
-                value={nameSpace}
-                onChange={handleNameSpaceChange}
-                InputProps={{ classes: { input: classes.inputFont } }}
-                InputLabelProps={{ shrink: true }}
-                className={classes.textField}
-                label={"名前空間"}
-                variant="outlined" >
-                <MenuItem className={classes.inputFont} value={'default'}>{'[デフォルト]'}</MenuItem>
-            </TextField>
-        </ListItem>
         <ListItem>
             <TextField
                 select
