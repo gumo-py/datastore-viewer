@@ -59,7 +59,7 @@ export default function HeaderAppBar(props: Props) {
 
   React.useEffect(() => {
       props.setProjectName(projectName);
-  }, [projectName]);
+  }, [projectName, props]);
 
 
   const handleOpen = () => {
