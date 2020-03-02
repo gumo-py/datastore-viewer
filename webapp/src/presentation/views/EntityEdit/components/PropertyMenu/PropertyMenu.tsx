@@ -293,14 +293,14 @@ const PropertyItem: React.FC<PropertyProps> = props => {
                             </ListItem>
                         </List>
                     </CardContent>
-                    <CardActions>
-                        <Button onClick={handleSave} size="small" color="primary">
-                            {"完了"}
-                        </Button>
-                        <Button onClick={handleCancel} size="small" color="primary">
-                            {"キャンセル"}
-                        </Button>
-                    </CardActions>
+                    {/*<CardActions>*/}
+                    {/*    <Button onClick={handleSave} size="small" color="primary">*/}
+                    {/*        {"完了"}*/}
+                    {/*    </Button>*/}
+                    {/*    <Button onClick={handleCancel} size="small" color="primary">*/}
+                    {/*        {"キャンセル"}*/}
+                    {/*    </Button>*/}
+                    {/*</CardActions>*/}
                 </Card>
             </Collapse>
         </div>
@@ -387,12 +387,12 @@ export default function PropertyMenu(props: MenuProps) {
                         DeleteHandler={deleteProperty}
                         SaveHandler={updateProperty}/> )
                 }
-                <ListItem button onClick={handleClickAddProperty} className={classes.addPropertyButton}>
-                <ListItemText
-                    classes={{ primary: classes.addProperty }}
-                    primary={'プロパティを追加'}
-                />
-            </ListItem>
+                {/*<ListItem button onClick={handleClickAddProperty} className={classes.addPropertyButton}>*/}
+                {/*    <ListItemText*/}
+                {/*        classes={{ primary: classes.addProperty }}*/}
+                {/*        primary={'プロパティを追加'}*/}
+                {/*    />*/}
+                {/*</ListItem>*/}
             </List>
         </div>
     )

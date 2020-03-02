@@ -55,15 +55,14 @@ export default function EntityEdit(props: Props) {
                 />
             }
             { entity && <PropertyMenu properties={entity.properties}/> }
-            <div className={classes.saveMenu}>
-                <Button className={classes.button} variant="contained" color="primary">
-                    {"保存"}
-                </Button>
-                <Button className={classes.button} color="primary">
-                    <NavLink className={classes.link} to={'/'}>{"キャンセル"}</NavLink>
-                </Button>
-
-            </div>
+            {/*<div className={classes.saveMenu}>*/}
+            {/*    <Button className={classes.button} variant="contained" color="primary">*/}
+            {/*        {"保存"}*/}
+            {/*    </Button>*/}
+            {/*    <Button className={classes.button} color="primary">*/}
+            {/*        <NavLink className={classes.link} to={'/'}>{"キャンセル"}</NavLink>*/}
+            {/*    </Button>*/}
+            {/*</div>*/}
         </div>
     )
 }

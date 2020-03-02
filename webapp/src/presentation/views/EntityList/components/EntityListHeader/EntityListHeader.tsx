@@ -83,9 +83,9 @@ export default function MenuBar(props: Props) {
                     }
                 </Select>
             </FormControl>
-            <Button startIcon={<FilterListIcon/>} className={classes.button}>
-                { "エンティティをフィルタ" }
-            </Button>
+            {/*<Button startIcon={<FilterListIcon/>} className={classes.button}>*/}
+            {/*    { "エンティティをフィルタ" }*/}
+            {/*</Button>*/}
         </div>
     )
 }

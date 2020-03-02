@@ -49,15 +49,15 @@ export default function MenuBar(props: Props) {
     return (
         <div className={classes.root}>
             <div className={classes.title}>エンティティ</div>
-            <Button startIcon={<AddBoxIcon/>} className={classes.button}>
-                <Link to={'/edit/new'} style={{ textDecoration: 'none', color: '#4169e1' }}  > { "エンティティを作成" }</Link>
-            </Button>
-            <Button startIcon={<GetAppIcon/>} className={classes.button}>
-                { "インポート" }
-            </Button>
-            <Button startIcon={<PublishIcon/>} className={classes.button}>
-                { "エクスポート" }
-            </Button>
+            {/*<Button startIcon={<AddBoxIcon/>} className={classes.button}>*/}
+            {/*    <Link to={'/edit/new'} style={{ textDecoration: 'none', color: '#4169e1' }}  > { "エンティティを作成" }</Link>*/}
+            {/*</Button>*/}
+            {/*<Button startIcon={<GetAppIcon/>} className={classes.button}>*/}
+            {/*    { "インポート" }*/}
+            {/*</Button>*/}
+            {/*<Button startIcon={<PublishIcon/>} className={classes.button}>*/}
+            {/*    { "エクスポート" }*/}
+            {/*</Button>*/}
             <Button startIcon={<DeleteIcon/>} className={classes.button} disabled>
                 { "削除" }
             </Button>
