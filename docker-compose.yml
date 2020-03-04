@@ -13,7 +13,7 @@ services:
     # command: start-datastore --no-store-on-disk --consistency=1.0
 
   datastore_viewer:
-    image: python:3.7.2-stretch
+    image: quay.io/gumo/datastore-viewer
     environment:
       DATASTORE_VIEWER_HOST: 0.0.0.0
       DATASTORE_VIEWER_PORT: 18081
@@ -21,11 +21,6 @@ services:
       DATASTORE_EMULATOR_HOST: datastore_emulator:8081
     depends_on:
       - datastore_emulator
-    command: |
-      bash -ex -c "
-      pip install --upgrade datastore-viewer
-      datastore-viewer
-      "
     ports:
       - "18081:18081"
 
