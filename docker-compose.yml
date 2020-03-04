@@ -13,16 +13,25 @@ services:
     # command: start-datastore --no-store-on-disk --consistency=1.0
 
   datastore_viewer:
-    image: quay.io/gumo/datastore-viewer
+    image: quay.io/gumo/datastore-viewer:develop
     environment:
       DATASTORE_VIEWER_HOST: 0.0.0.0
       DATASTORE_VIEWER_PORT: 18081
       GOOGLE_CLOUD_PROJECT: test-project
       DATASTORE_EMULATOR_HOST: datastore_emulator:8081
+      PYTHONPATH: /app
+      DEBUG: "true"
     depends_on:
       - datastore_emulator
     ports:
       - "18081:18081"
+    volumes:
+      - .:/app
+    command: |
+      bash -ex -c "
+      pip install -r requirements.txt
+      ./bin/datastore-viewer
+      "
 
 volumes:
   datastore-emulator-storage:
