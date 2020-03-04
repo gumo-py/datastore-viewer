@@ -26,7 +26,7 @@ services:
     ports:
       - "18081:18081"
     volumes:
-      - .:/app
+      - .:/app:cached
     command: |
       bash -ex -c "
       pip install -r requirements.txt
@@ -38,7 +38,7 @@ services:
       context: webapp
       dockerfile: Dockerfile
     volumes:
-      - .:/app
+      - .:/app:cached
       - webapp-yarn-cache:/usr/local/share/.cache/yarn
     working_dir: /app/webapp
     ports:
@@ -48,8 +48,14 @@ services:
     environment:
       HOST: "0.0.0.0"
       PORT: "3000"
-      PROXY_URL: http://datastore_viewer:18081
-    command: bash -exc 'yarn install && yarn run start'
+      # PROXY_URL: http://datastore_viewer:18081  # TODO: Configure in webapp/package.json
+    command: |
+      bash -ex -c "
+      sleep 1
+      ls node_modules/
+      yarn install
+      yarn run start
+      "
 
 volumes:
   datastore-emulator-storage:
