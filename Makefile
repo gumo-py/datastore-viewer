@@ -38,3 +38,8 @@ pip_compile:
 		--output-file requirements.txt \
 		requirements.in
 	pip3 install --ignore-installed -r requirements.txt
+
+.PHONY: docker-build-develop
+docker-build-develop:
+	docker build . --file=Dockerfile.develop -t quay.io/gumo/datastore-viewer:develop
+	docker push quay.io/gumo/datastore-viewer:develop
