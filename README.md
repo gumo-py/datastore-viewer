@@ -2,32 +2,7 @@
 
 datastore-viewer is a simple viewer of Google Cloud Datastore Emulator.
 
-## Installing
-
-```bash
-$ pip install --upgrade datastore-viewer
-```
-
-## Running
-
-```bash
-datastore-viewer
-```
-
-or
-
-```bash
-export DATASTORE_VIEWER_HOST=127.0.0.1
-export DATASTORE_VIEWER_PORT=8082
-export DATASTORE_EMULATOR_HOST=127.0.0.1:8081 # Please changee for your environment.
-
-datastore-viewer
-```
-
-You should start the Cloud Datastore Emulator.
-See the following page for details: https://cloud.google.com/datastore/docs/tools/datastore-emulator?hl=en
-
-## Running with docker-compose
+## Quickstart using docker-compose
 
 A example of docker-compose.yml:
 
@@ -61,7 +36,6 @@ services:
 volumes:
   datastore-emulator-storage:
     driver: local
-
 ```
 
 Execute docker containers:
@@ -87,7 +61,7 @@ Upgrade pip and install building tools:
 
 ```bash
 $ pip install --upgrade pip
-$ pip install --ignore-installed twine wheel pytest pip-tools
+$ pip install twine wheel pytest pip-tools
 ```
 
 Install dependency packages:
