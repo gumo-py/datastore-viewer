@@ -98,18 +98,18 @@ function EnhancedTableHead(props: EnhancedTableProps) {
             sortDirection={orderBy === headCell.id ? order : false}
             style={{fontWeight:'bolder'}}
           >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : 'asc'}
-              onClick={createSortHandler(headCell.id)}
-            >
+            {/*<TableSortLabel*/}
+            {/*  active={orderBy === headCell.id}*/}
+            {/*  direction={orderBy === headCell.id ? order : 'asc'}*/}
+            {/*  onClick={createSortHandler(headCell.id)}*/}
+            {/*>*/}
               {headCell.label}
-              {orderBy === headCell.id ? (
-                <span className={classes.visuallyHidden}>
-                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                </span>
-              ) : null}
-            </TableSortLabel>
+            {/*  {orderBy === headCell.id ? (*/}
+            {/*    <span className={classes.visuallyHidden}>*/}
+            {/*      {order === 'desc' ? 'sorted descending' : 'sorted ascending'}*/}
+            {/*    </span>*/}
+            {/*  ) : null}*/}
+            {/*</TableSortLabel>*/}
           </TableCell>
         ))}
       </TableRow>
@@ -157,7 +157,7 @@ export default function EnhancedTable(props: Props) {
   const [orderBy, setOrderBy] = React.useState<string>('id');
   const [selected, setSelected] = React.useState<string[]>([]);
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const rowsPerPage = 25;
   const rows = convertData(props.entities);
 
   let headCell: HeadCell[] = [];
@@ -220,14 +220,7 @@ export default function EnhancedTable(props: Props) {
     setPage(newPage);
   };
 
-  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-
   const isSelected = (name: string) => selected.indexOf(name) !== -1;
-
-  const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
   return (
     <div className={classes.root}>
@@ -283,22 +276,16 @@ export default function EnhancedTable(props: Props) {
                     </TableRow>
                   );
                 })}
-              {emptyRows > 0 && (
-                <TableRow style={{ height: 33 * emptyRows }}>
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
             </TableBody>
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPageOptions={[]}
           component="div"
           count={rows.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onChangePage={handleChangePage}
-          onChangeRowsPerPage={handleChangeRowsPerPage}
         />
       </Paper>
     </div>
