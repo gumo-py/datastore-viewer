@@ -428,13 +428,13 @@ def register_views(blueprint):
     )
 
     blueprint.add_url_rule(
-        '/datastore_viewer/api/projects/<string:project_name>/kind/<string:kind>/entities',
+        '/datastore_viewer/api/projects/<string:project_name>/kinds/<string:kind>/entities',
         view_func=ProjectAPIView.as_view(name='project_api_view'),
         methods=['GET']
     )
 
     blueprint.add_url_rule(
-        '/datastore_viewer/api/projects/<string:project_name>/kind/<string:kind>/entity/<string:nameId>',
+        '/datastore_viewer/api/projects/<string:project_name>/kinds/<string:kind>/entities/<string:nameId>',
         view_func=EntityAPIView.as_view(name='entity_api_view'),
         methods=['GET']
     )
