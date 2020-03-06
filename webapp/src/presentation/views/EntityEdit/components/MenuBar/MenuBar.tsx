@@ -56,9 +56,9 @@ export default function MenuBar(props: Props) {
             <Button startIcon={<RefreshIcon/>} onClick={handleClickRefreashEntity} className={classes.button}>
                 { "更新" }
             </Button>
-            <Button startIcon={<DeleteIcon/>} className={classes.button}>
-                { "削除" }
-            </Button>
+            {/*<Button startIcon={<DeleteIcon/>} className={classes.button}>*/}
+            {/*    { "削除" }*/}
+            {/*</Button>*/}
         </div>
     )
 }
