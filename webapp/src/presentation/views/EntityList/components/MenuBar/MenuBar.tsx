@@ -58,9 +58,9 @@ export default function MenuBar(props: Props) {
             {/*<Button startIcon={<PublishIcon/>} className={classes.button}>*/}
             {/*    { "エクスポート" }*/}
             {/*</Button>*/}
-            <Button startIcon={<DeleteIcon/>} className={classes.button} disabled>
-                { "削除" }
-            </Button>
+            {/*<Button startIcon={<DeleteIcon/>} className={classes.button} disabled>*/}
+            {/*    { "削除" }*/}
+            {/*</Button>*/}
             <IconButton aria-label="refreash" onClick={handleClickRefreashEntity} className={classes.iconButton}>
                 <RefreshIcon fontSize="inherit" />
             </IconButton>
