@@ -19,8 +19,10 @@ interface HeadCell {
   label: string;
 }
 
-function makeHeadCells(kindObj: KindResult) {
+function makeHeadCells(kindObj: KindResult, hasParent: boolean) {
   const headCells: HeadCell[] = [ { id: 'id', label: '名前/ID' } ];
+  if(hasParent) headCells.push({ id: 'parent', label: '親'});
+
   kindObj.indexed_properties.forEach( (key) => {
     headCells.push({ id: key.property_name, label: key.property_name });
   });
@@ -31,6 +33,7 @@ function makeHeadCells(kindObj: KindResult) {
 interface Data {
   name_id: string;
   kind: string;
+  parent?: any;
   properties: {
     [key: string]: any
   };
@@ -39,9 +42,10 @@ interface Data {
 function createData(
     name_id: string,
     kind: string,
+    parent: string,
     properties: any
 ): Data {
-  return {name_id, kind, properties};
+  return {name_id, kind, parent, properties};
 }
 
 function convertData(entities: Array<EntityObject>) {
@@ -50,12 +54,13 @@ function convertData(entities: Array<EntityObject>) {
   for(let entity of entities) {
     const name_id: string = String(entity.key.getIdOrName());
     const kind: string = entity.key.getKind();
+    const parent: string = entity.key.getParent().toString();
     const properties: { [key:string] : any } = {};
 
     for(let property of entity.properties) {
       if(property.index) properties[property.name] = property.toStr();
     }
-    rows.push(createData(name_id, kind, properties));
+    rows.push(createData(name_id, kind, parent, properties));
   }
   return rows;
 }
@@ -161,8 +166,8 @@ export default function EnhancedTable(props: Props) {
   const rows = convertData(props.entities);
 
   let headCell: HeadCell[] = [];
-  if(props.kindObj) {
-     headCell = makeHeadCells(props.kindObj);
+  if(props.kindObj && rows.length) {
+     headCell = makeHeadCells(props.kindObj, rows[0].parent);
   }
 
   const stableSort = (order: Order) => {
@@ -268,6 +273,7 @@ export default function EnhancedTable(props: Props) {
                       <TableCell component="th" id={labelId} scope="row" padding="none">
                         <NavLink className={classes.link} to={`/edit/update/${row.kind}/${row.name_id}`} >{row.name_id}</NavLink>
                       </TableCell>
+                      {row.parent === " " && <TableCell key={row.parent} align="left">{ row.parent }</TableCell>}
                       {
                         Object.keys(row.properties).map( value => {
                           return <TableCell key={value} align="left">{ row.properties[value] }</TableCell>
