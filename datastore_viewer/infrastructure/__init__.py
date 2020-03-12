@@ -123,7 +123,9 @@ class DatastoreViewerRepository:
         return (entities, next_cursor)
 
     def fetch_entity(self, key: datastore.Key):
-        return self.datastore_client.get(key)
+        entity = self.datastore_client.get(key)
+        entity._serialized_key = base64.b64encode(json.dumps(entity.key.flat_path).encode('utf-8')).decode('utf-8')
+        return entity
 
     def delete(self, key: datastore.Key):
         self.datastore_client.delete(key=key)

@@ -11,8 +11,8 @@ export async function getEntityList(projectName: string, kind: string) {
     return EntityList;
 }
 
-export async function getEntity(projectName: string, kind: string, nameId: string) {
-    const url = `/datastore_viewer/api/projects/${projectName}/kinds/${kind}/entities/${nameId}`;
+export async function getEntity(projectName: string, kind: string, urlSafeKey: string) {
+    const url = `/datastore_viewer/api/projects/${projectName}/kinds/${kind}/entities/${urlSafeKey}`;
     const res = await axios.get<EntityResult>(url);
     return entityFactory(res.data.entityResult);
 }
