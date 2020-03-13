@@ -196,41 +196,66 @@ class ProjectAPIView(flask.views.MethodView):
 
 
 class EntityAPIView(flask.views.MethodView):
-    def get(self, project_name: str, kind: str, nameId: str):
-        return flask.jsonify({
-                "entityResult": {
-                    "entity": {
-                        "key": {
-                            "partitionId": {
-                                "projectId": "todo-without-gumo"
-                            },
-                            "path": [
-                                {
-                                    "kind": "Project",
-                                    "name": "3exmxvfn2nbktklxerll7agmme"
-                                }
-                            ]
-                        },
-                        "properties": [
-                            {
-                                "property_name": "name",
-                                "value_type": "string",
-                                "value": "testProject2",
-                                "index": True,
-                            },
-                            {
-                                "property_name": "created_at",
-                                "value_type": "timestamp",
-                                "value": "2020-01-13T06:55:44.712535Z",
-                                "index": True,
-                            },
+    def _property_type_checker(self, prop):
+        if isinstance(prop, str):
+            return "string"
+        elif isinstance(prop, int):
+            return "integer"
+        elif isinstance(prop, float):
+            return "float"
+        elif isinstance(prop, bool):
+            return "boolean"
+        elif isinstance(prop, datetime.datetime):
+            return "timestamp"
+        elif isinstance(prop, datastore.Key):
+            return "key"
+        else:
+            return "null"
 
-                        ],
+    def _build_entity_json(self, entity, properties):
+        entity_dict = {
+            "entity": {
+                "key": {
+                    "partitionId": {
+                        "projectId": entity.key.project
                     },
-                    "URLSafeKey": "ahNufnRvZG8td2l0aG91dC1ndW1vcicLEgdQcm9qZWN0IhozZXhteHZmbjJuYmt0a2x4ZXJsbDdhZ21tZQw",
-                    "version": 1578898544746000
+                    "path": entity.key.path
                 },
-            })
+                "properties": [],
+            },
+            "URLSafeKey": entity._serialized_key
+        }
+
+        for property in properties:
+            if self._property_type_checker(entity[property]) == "key":
+                value = entity[property].path
+            else:
+                value = entity[property]
+
+            entity_dict['entity']['properties'].append(
+                {
+                    "property_name": property,
+                    "value_type": self._property_type_checker(entity[property]),
+                    "value": value,
+                    "index": True,
+                },
+            )
+
+        return entity_dict
+
+    def get(self, project_name: str, kind: str, url_safe_key: str):
+        repository = DatastoreViewerRepository(project_name=project_name)
+        key_path = json.loads(base64.b64decode(url_safe_key))
+        key = repository.build_key_by_flat_path(key_path=key_path)
+        entity = repository.fetch_entity(key=key)
+
+        properties_by_kind = repository.fetch_parent_properties()
+        current_kind = kind
+        current_kind_properties = properties_by_kind.get(current_kind, [])
+
+        return flask.jsonify({
+            "entityResult": self._build_entity_json(entity, current_kind_properties)
+        })
 
 
 class KindAPIView(flask.views.MethodView):
@@ -293,7 +318,7 @@ def register_views(blueprint):
     )
 
     blueprint.add_url_rule(
-        '/datastore_viewer/api/projects/<string:project_name>/kinds/<string:kind>/entities/<string:nameId>',
+        '/datastore_viewer/api/projects/<string:project_name>/kinds/<string:kind>/entities/<string:url_safe_key>',
         view_func=EntityAPIView.as_view(name='entity_api_view'),
         methods=['GET']
     )

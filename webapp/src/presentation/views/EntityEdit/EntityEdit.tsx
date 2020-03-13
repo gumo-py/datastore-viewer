@@ -29,12 +29,12 @@ interface Props {
 }
 
 export default function EntityEdit(props: Props) {
-    let { kind, entity_id } = useParams();
+    let { kind, urlSafeKey } = useParams();
     const [entity, setEntity] = React.useState<EntityObject>();
 
     const updateEntity = () => {
-        if(kind && entity_id) {
-            getEntity(props.projectName, kind, entity_id)
+        if(kind && urlSafeKey) {
+            getEntity(props.projectName, kind, urlSafeKey)
                 .then(res => setEntity(res));
         }
     };

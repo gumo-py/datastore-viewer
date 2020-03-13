@@ -33,7 +33,8 @@ function makeHeadCells(kindObj: KindResult, hasParent: boolean) {
 interface Data {
   name_id: string;
   kind: string;
-  parent?: any;
+  urlSafeKey: string;
+  parent: any;
   properties: {
     [key: string]: any
   };
@@ -42,10 +43,11 @@ interface Data {
 function createData(
     name_id: string,
     kind: string,
-    parent: string,
+    parent: any,
+    urlSafeKey: string,
     properties: any
 ): Data {
-  return {name_id, kind, parent, properties};
+  return {name_id, kind, parent, urlSafeKey, properties};
 }
 
 function convertData(entities: Array<EntityObject>) {
@@ -55,12 +57,13 @@ function convertData(entities: Array<EntityObject>) {
     const name_id: string = String(entity.key.getIdOrName());
     const kind: string = entity.key.getKind();
     const parent: string = entity.key.getParent().toString();
+    const urlSafeKey: string = entity.URLSafeKey;
     const properties: { [key:string] : any } = {};
 
     for(let property of entity.properties) {
       if(property.index) properties[property.name] = property.toStr();
     }
-    rows.push(createData(name_id, kind, parent, properties));
+    rows.push(createData(name_id, kind, parent, urlSafeKey, properties));
   }
   return rows;
 }
@@ -271,7 +274,7 @@ export default function EnhancedTable(props: Props) {
                         />
                       </TableCell>
                       <TableCell component="th" id={labelId} scope="row" padding="none">
-                        <NavLink className={classes.link} to={`/edit/update/${row.kind}/${row.name_id}`} >{row.name_id}</NavLink>
+                        <NavLink className={classes.link} to={`/edit/update/${row.kind}/${row.urlSafeKey}`} >{row.name_id}</NavLink>
                       </TableCell>
                       {row.parent === " " && <TableCell key={row.parent} align="left">{ row.parent }</TableCell>}
                       {
