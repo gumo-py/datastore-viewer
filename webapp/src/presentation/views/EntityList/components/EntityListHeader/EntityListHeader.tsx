@@ -53,7 +53,9 @@ export default function MenuBar(props: Props) {
     };
 
     React.useEffect(() => {
-        if(props.kinds) setEntity(kinds[0].kind);
+        if(props.kinds && props.kinds.kindResults.length) {
+            setEntity(kinds[0].kind);
+        }
     }, [kinds, props.kinds]);
 
     React.useEffect(() => {

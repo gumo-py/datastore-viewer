@@ -6,7 +6,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import MenuIcon from '@material-ui/icons/Menu';
 import TextField from '@material-ui/core/TextField';
-import { getProjectList } from "../../../infrastructure/APIClient";
+import { getProject } from "../../../infrastructure/APIClient";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -45,19 +45,19 @@ interface Props {
 
 export default function HeaderAppBar(props: Props) {
   const classes = useStyles();
-  const [projectList, setProjectList] = React.useState<Array<Project>>();
+  const [project, setProject] = React.useState<Project>();
   const [projectName, setProjectName] = React.useState<string>('');
 
-  if(!projectList) {
-      getProjectList().then( res => setProjectList(res.projectResults) );
+  if(!project) {
+      getProject().then( res => setProject(res.projectResult) );
   }
 
   React.useEffect(() => {
-      if(projectList) {
-          const defaultProjectName = projectList[0].project_name;
+      if(project) {
+          const defaultProjectName = project.project_name;
           setProjectName(defaultProjectName);
       }
-  }, [projectList]);
+  }, [project]);
 
   React.useEffect(() => {
       props.setProjectName(projectName);

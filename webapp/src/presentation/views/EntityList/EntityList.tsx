@@ -14,7 +14,7 @@ export default function EntityList(props: Props) {
     const [kindObj, setKindObj] = React.useState<KindResult>();
     const [entities, setEntities] = React.useState< Array<EntityObject> >([]);
 
-    if(!kinds && props.projectName){
+    if(!kinds?.kindResults.length && props.projectName){
         getKindList(props.projectName)
             .then( res => setKinds(res) );
     }
@@ -29,6 +29,10 @@ export default function EntityList(props: Props) {
     React.useEffect(() => {
         updateEntities();
     },[kindObj, updateEntities]);
+
+    React.useEffect(() => {
+        console.log(entities);
+    },[entities]);
 
     return (
         <div className={'EntityList'}>

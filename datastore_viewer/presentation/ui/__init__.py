@@ -278,17 +278,15 @@ class KindAPIView(flask.views.MethodView):
 
 class ProjectListAPIView(flask.views.MethodView):
     def get(self):
+        if os.environ['GOOGLE_CLOUD_PROJECT']:
+            project_name = os.environ['GOOGLE_CLOUD_PROJECT']
+        else:
+            project_name = ''
+
         return flask.jsonify({
-            "projectResults": [
-                {
-                    "project_name": "gumo-sample",
-                    "project_id": "gumo-sample"
-                },
-                {
-                    "project_name": "test",
-                    "project_id": "test"
-                },
-            ]
+            "projectResult": {
+                "project_name": project_name
+            }
         })
 
 
