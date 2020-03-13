@@ -5,8 +5,8 @@ export default class KeyProperty implements Property {
     name: string;
     index: boolean;
 
-    constructor(value: any, name: string, index: boolean) {
-        this.value = new Key(value.path);
+    constructor(value: string, name: string, index: boolean) {
+        this.value = new Key(value);
         this.name = name;
         this.index = index;
     }

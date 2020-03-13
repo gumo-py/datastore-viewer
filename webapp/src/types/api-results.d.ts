@@ -7,7 +7,6 @@ declare interface EntityJson {
         properties: Array<PropertyJson>;
     };
     URLSafeKey: string;
-    version: number;
 }
 
 declare interface PropertyJson {
@@ -33,7 +32,6 @@ declare interface KindResult {
     kind: string;
     indexed_properties: Array<{
         property_name: string;
-        value_type: string;
     }>;
 }
 
