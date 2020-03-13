@@ -4,8 +4,11 @@ import BooleanProperty from './BooleanProperty'
 import DateProperty from './DateProperty'
 import KeyProperty from './KeyProperty'
 import StringProperty from './StringProperty'
+import BlobProperty from './BlobProperty'
+import UnknownProperty from './UnknownProperty'
 import NullProperty from './NullProperty'
 
+// TODO: Handling Geographical points, Array, Object
 export {
     IntegerProperty,
     FloatProperty,
@@ -13,5 +16,7 @@ export {
     DateProperty,
     KeyProperty,
     StringProperty,
+    BlobProperty,
+    UnknownProperty,
     NullProperty
 }

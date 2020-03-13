@@ -125,6 +125,7 @@ class EntityView(flask.views.MethodView):
 
 class DataStoreEntityJSONEncoder:
     def _property_type_checker(self, prop):
+        # TODO: Handling Geographical points, Array, Object
         if isinstance(prop, str):
             return "string"
         elif isinstance(prop, int):
@@ -161,6 +162,8 @@ class DataStoreEntityJSONEncoder:
         for property in properties:
             if self._property_type_checker(entity[property]) == "key":
                 value = entity[property].path
+            elif self._property_type_checker(entity[property]) == "blob":
+                value = base64.b64encode(entity[property]).decode('utf-8')
             else:
                 value = entity[property]
 

@@ -3,7 +3,7 @@ import { Key } from '../Key'
 import {
     IntegerProperty, FloatProperty, BooleanProperty,
     DateProperty, KeyProperty, StringProperty,
-    NullProperty
+    NullProperty, BlobProperty, UnknownProperty
 } from '../Property'
 
 function makeProperty(propertyJson: PropertyJson) {
@@ -50,8 +50,22 @@ function makeProperty(propertyJson: PropertyJson) {
                 propertyJson.index
             );
 
+        case 'blob':
+            return new BlobProperty(
+                propertyJson.value,
+                propertyJson.property_name,
+                propertyJson.index
+            );
+
         case 'null':
             return new NullProperty(
+                propertyJson.property_name,
+                propertyJson.index
+            );
+
+        default:
+            return new UnknownProperty(
+                propertyJson.value,
                 propertyJson.property_name,
                 propertyJson.index
             );
