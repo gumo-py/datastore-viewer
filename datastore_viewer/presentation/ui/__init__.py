@@ -123,7 +123,7 @@ class EntityView(flask.views.MethodView):
         })
 
 
-class ProjectAPIView(flask.views.MethodView):
+class DataStoreEntityJSONEncoder:
     def _property_type_checker(self, prop):
         if isinstance(prop, str):
             return "string"
@@ -137,10 +137,14 @@ class ProjectAPIView(flask.views.MethodView):
             return "timestamp"
         elif isinstance(prop, datastore.Key):
             return "key"
-        else:
+        elif isinstance(prop, bytes):
+            return "blob"
+        elif isinstance(prop, type(None)):
             return "null"
+        else:
+            return "unknown"
 
-    def _build_entity_json(self, entity, properties):
+    def encode(self, entity, properties):
         entity_dict = {
             "entity": {
                 "key": {
@@ -171,7 +175,10 @@ class ProjectAPIView(flask.views.MethodView):
 
         return entity_dict
 
+
+class ProjectAPIView(flask.views.MethodView):
     def get(self, project_name: str, kind: str):
+        encoder = DataStoreEntityJSONEncoder()
         cursor = base64.b64decode(flask.request.args.get('cursor', '')).decode('utf-8')
         repository = DatastoreViewerRepository(project_name=project_name)
 
@@ -187,7 +194,12 @@ class ProjectAPIView(flask.views.MethodView):
 
         entities_array = []
         for entity in entities:
-            entities_array.append(self._build_entity_json(entity, current_kind_properties))
+            entities_array.append(
+                encoder.encode(
+                    entity=entity,
+                    properties=current_kind_properties
+                )
+            )
 
         entities_json = defaultdict(list)
         entities_json['entityResults'] = entities_array
@@ -196,54 +208,8 @@ class ProjectAPIView(flask.views.MethodView):
 
 
 class EntityAPIView(flask.views.MethodView):
-    def _property_type_checker(self, prop):
-        if isinstance(prop, str):
-            return "string"
-        elif isinstance(prop, int):
-            return "integer"
-        elif isinstance(prop, float):
-            return "float"
-        elif isinstance(prop, bool):
-            return "boolean"
-        elif isinstance(prop, datetime.datetime):
-            return "timestamp"
-        elif isinstance(prop, datastore.Key):
-            return "key"
-        else:
-            return "null"
-
-    def _build_entity_json(self, entity, properties):
-        entity_dict = {
-            "entity": {
-                "key": {
-                    "partitionId": {
-                        "projectId": entity.key.project
-                    },
-                    "path": entity.key.path
-                },
-                "properties": [],
-            },
-            "URLSafeKey": entity._serialized_key
-        }
-
-        for property in properties:
-            if self._property_type_checker(entity[property]) == "key":
-                value = entity[property].path
-            else:
-                value = entity[property]
-
-            entity_dict['entity']['properties'].append(
-                {
-                    "property_name": property,
-                    "value_type": self._property_type_checker(entity[property]),
-                    "value": value,
-                    "index": True,
-                },
-            )
-
-        return entity_dict
-
     def get(self, project_name: str, kind: str, url_safe_key: str):
+        encoder = DataStoreEntityJSONEncoder()
         repository = DatastoreViewerRepository(project_name=project_name)
         key_path = json.loads(base64.b64decode(url_safe_key))
         key = repository.build_key_by_flat_path(key_path=key_path)
@@ -254,7 +220,11 @@ class EntityAPIView(flask.views.MethodView):
         current_kind_properties = properties_by_kind.get(current_kind, [])
 
         return flask.jsonify({
-            "entityResult": self._build_entity_json(entity, current_kind_properties)
+            "entityResult":
+                encoder.encode(
+                    entity=entity,
+                    properties=current_kind_properties
+                )
         })
 
 
