@@ -37,10 +37,9 @@ declare interface KindResult {
 
 declare interface Project {
     project_name: string;
-    project_id: string;
 }
 
-declare interface ProjectResults {
-    projectResults: Array<Project>;
+declare interface ProjectResult {
+    projectResult: Project;
 }
 

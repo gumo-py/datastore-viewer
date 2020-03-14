@@ -23,8 +23,8 @@ export async function getKindList(projectName: string) {
     return res.data;
 }
 
-export async function getProjectList() {
+export async function getProject() {
     const url = `/datastore_viewer/api/projects`;
-    const res = await axios.get<ProjectResults>(url);
+    const res = await axios.get<ProjectResult>(url);
     return res.data;
 }

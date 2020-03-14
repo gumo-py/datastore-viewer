@@ -1,1 +1,1 @@
-export  { getEntity, getEntityList, getKindList, getProjectList } from './APIClient'
+export  { getEntity, getEntityList, getKindList, getProject } from './APIClient'

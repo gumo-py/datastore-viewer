@@ -5,35 +5,38 @@ import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import MenuIcon from '@material-ui/icons/Menu';
-import Button from '@material-ui/core/Button';
-import Modal from '@material-ui/core/Modal';
-import Fade from '@material-ui/core/Fade';
-import Backdrop from '@material-ui/core/Backdrop';
-import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
-import { getProjectList } from "../../../infrastructure/APIClient";
-import { ProjectListModal } from './components/ProjectListModal';
-
+import TextField from '@material-ui/core/TextField';
+import { getProject } from "../../../infrastructure/APIClient";
 
 const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    grow: {
-      flexGrow: 1,
-    },
-    menuButton: {
-      marginRight: theme.spacing(2),
-    },
-    title: {
-      display: 'none',
-      [theme.breakpoints.up('sm')]: {
-        display: 'block',
-      },
-    },
-    button: {
-      marginLeft: theme.spacing(3),
-      textTransform: 'none',
-      color: 'white',
-    },
-  }),
+    createStyles({
+        grow: {
+            flexGrow: 1,
+        },
+        menuButton: {
+            marginRight: theme.spacing(2),
+        },
+        title: {
+            display: 'none',
+            marginRight: theme.spacing(2),
+            [theme.breakpoints.up('sm')]: {
+                display: 'block',
+            },
+        },
+        textField: {
+            margin: theme.spacing(0.5),
+            width: 250,
+            borderColor: 'white'
+        },
+        notchedOutline: {
+            borderWidth: "1px",
+            borderColor: "white !important"
+        },
+        input: {
+            height: 5,
+            color: 'white',
+        },
+    }),
 );
 
 interface Props {
@@ -42,32 +45,26 @@ interface Props {
 
 export default function HeaderAppBar(props: Props) {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
-  const [projectList, setProjectList] = React.useState<Array<Project>>();
+  const [project, setProject] = React.useState<Project>();
   const [projectName, setProjectName] = React.useState<string>('');
 
-  if(!projectList) {
-      getProjectList().then( res => setProjectList(res.projectResults) );
+  if(!project) {
+      getProject().then( res => setProject(res.projectResult) );
   }
 
   React.useEffect(() => {
-      if(projectList) {
-          const defaultProjectName = projectList[0].project_name;
+      if(project) {
+          const defaultProjectName = project.project_name;
           setProjectName(defaultProjectName);
       }
-  }, [projectList]);
+  }, [project]);
 
   React.useEffect(() => {
       props.setProjectName(projectName);
   }, [projectName, props]);
 
-
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setProjectName(event.target.value);
   };
 
   return (
@@ -85,30 +82,19 @@ export default function HeaderAppBar(props: Props) {
                   <Typography className={classes.title} variant="h6" noWrap>
                       Datastore-Viewer
                   </Typography>
-                  <Button
-                      color="inherit"
-                      endIcon={<ArrowDropDownIcon/>}
-                      className={classes.button}
-                      onClick={handleOpen}
-                  >
-                      { projectName }
-                  </Button>
-                  <Modal
-                      open={open}
-                      onClose={handleClose}
-                      BackdropComponent={Backdrop}
-                      BackdropProps={{
-                          timeout: 500,
+                  <TextField
+                      color={'primary'}
+                      className={classes.textField}
+                      InputProps={{
+                          classes: {
+                              input: classes.input,
+                              notchedOutline: classes.notchedOutline
+                          }
                       }}
-                  >
-                      <Fade in={open}>
-                          <ProjectListModal
-                              ProjectList={projectList}
-                              setModalState={setOpen}
-                              setProjectName={setProjectName}
-                          />
-                      </Fade>
-                  </Modal>
+                      onChange={handleChange}
+                      value={projectName}
+                      variant={"outlined"}
+                  />
               </Toolbar>
           </AppBar>
       </div>
