@@ -6,6 +6,14 @@ declare interface EntityObject {
     properties: Array<Property>;
 }
 
+declare interface EntityCollectionObject {
+    projectId: string;
+    kind: string;
+    entities: Array<EntityObject>;
+    totalCount: number;
+    nextCursor?: string;
+}
+
 
 // Key
 declare interface Path {

@@ -1,14 +1,21 @@
 import axios from "axios"
-import { Entity, entityFactory } from '../../domain/Entity'
+import { Entity, entityFactory, EntityCollection } from '../../domain/Entity'
 
 export async function getEntityList(projectName: string, kind: string) {
     const url = `/datastore_viewer/api/projects/${projectName}/kinds/${kind}/entities`;
     const res = await axios.get<EntityResults>(url);
-    const EntityList: Array<Entity> = res.data.entityResults.map(
+    const entities: Array<Entity> = res.data.entityResults.map(
             entityResult => { return entityFactory(entityResult) }
         );
+    const entityCollection: EntityCollection = new EntityCollection(
+        projectName,
+        kind,
+        entities,
+        res.data.totalCount,
+        res.data.nextCursor
+    );
 
-    return EntityList;
+    return entityCollection;
 }
 
 export async function getEntity(projectName: string, kind: string, urlSafeKey: string) {

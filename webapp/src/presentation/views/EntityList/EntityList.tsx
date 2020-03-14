@@ -22,7 +22,7 @@ export default function EntityList(props: Props) {
     const updateEntities = React.useCallback(() => {
         if(kindObj){
             getEntityList(props.projectName, kindObj.kind)
-                .then( res => setEntities(res) );
+                .then( res => setEntities(res.entities) );
         }
     }, [kindObj, props.projectName]);
 
