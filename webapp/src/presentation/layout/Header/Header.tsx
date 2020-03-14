@@ -61,7 +61,7 @@ export default function HeaderAppBar(props: Props) {
   const classes = useStyles();
   const [project, setProject] = React.useState<Project>();
   const [projectName, setProjectName] = React.useState<string>('');
-  const [lang, setLang] = React.useState<string>('ja');
+  const [lang, setLang] = React.useState<string>('en');
 
   if(!project) {
       getProject().then( res => setProject(res.projectResult) );

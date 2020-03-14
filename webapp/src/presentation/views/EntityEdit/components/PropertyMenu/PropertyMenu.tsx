@@ -1,6 +1,7 @@
 import React from 'react';
 import * as _ from "underscore";
 import moment from 'moment-timezone';
+import { useTranslation } from 'react-i18next';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -54,6 +55,7 @@ interface PropertyProps {
     type: string;
     value: any;
     index: boolean;
+    lang?: string;
     DeleteHandler?: (name: string) => void;
     SaveHandler?: (props: PropertyProps) => void;
 }
@@ -65,6 +67,11 @@ const PropertyItem: React.FC<PropertyProps> = props => {
     const [name, setName] = React.useState(props.name);
     const [value, setValue] = React.useState(props.value);
     const [checkState, setCheckState] = React.useState(props.index);
+    const [t, i18n] = useTranslation();
+
+    React.useEffect(() => {
+        if(props.lang) i18n.changeLanguage(props.lang);
+    }, [props.lang, i18n]);
 
     const handleClick = () => {
         setOpen(!open);
@@ -107,12 +114,12 @@ const PropertyItem: React.FC<PropertyProps> = props => {
     };
     const makeTitle = () => {
         if(!name) {
-            return '空白';
+            return t('EntityEdit.PropertyMenu.PropertyItem.empty');
         } else if(!value) {
             if(type === "Null") {
                 return `${name}`;
             }else {
-                return `${name}: 空白`;
+                return `${name}: ${t('EntityEdit.PropertyMenu.PropertyItem.empty')}`;
             }
         } else {
             return `${name}: ${value}`;
@@ -138,7 +145,7 @@ const PropertyItem: React.FC<PropertyProps> = props => {
                         InputLabelProps={{ shrink: true }}
                         InputProps={{ classes: { input: classes.inputFont } }}
                         className={classes.textField}
-                        label={"値"}
+                        label={t('EntityEdit.PropertyMenu.PropertyItem.value')}
                         variant="outlined" /> );
 
             case 'Date':
@@ -152,7 +159,7 @@ const PropertyItem: React.FC<PropertyProps> = props => {
                         InputLabelProps={{ shrink: true }}
                         InputProps={{ classes: { input: classes.inputFont } }}
                         className={classes.textField}
-                        label={"値"}
+                        label={t('EntityEdit.PropertyMenu.PropertyItem.value')}
                         variant="outlined" />);
 
             case 'Integer':
@@ -165,7 +172,7 @@ const PropertyItem: React.FC<PropertyProps> = props => {
                         InputLabelProps={{ shrink: true }}
                         InputProps={{ classes: { input: classes.inputFont } }}
                         className={classes.textField}
-                        label={"値"}
+                        label={t('EntityEdit.PropertyMenu.PropertyItem.value')}
                         variant="outlined" /> );
 
             case 'Float':
@@ -178,7 +185,7 @@ const PropertyItem: React.FC<PropertyProps> = props => {
                         InputLabelProps={{ shrink: true }}
                         InputProps={{ classes: { input: classes.inputFont } }}
                         className={classes.textField}
-                        label={"値"}
+                        label={t('EntityEdit.PropertyMenu.PropertyItem.value')}
                         variant="outlined" /> );
 
             case 'Boolean':
@@ -191,11 +198,11 @@ const PropertyItem: React.FC<PropertyProps> = props => {
                         InputLabelProps={{ shrink: true }}
                         InputProps={{ classes: { input: classes.inputSelect } }}
                         value={value}
-                        label={"値"}
+                        label={t('EntityEdit.PropertyMenu.PropertyItem.value')}
                         variant="outlined"
                         onChange={handleFormValueChange}>
-                        <MenuItem className={classes.inputFont} value={'true'}>{'真'}</MenuItem>
-                        <MenuItem className={classes.inputFont} value={'false'}>{'偽'}</MenuItem>
+                        <MenuItem className={classes.inputFont} value={'true'}>{t('EntityEdit.PropertyMenu.PropertyItem.boolItem.true')}</MenuItem>
+                        <MenuItem className={classes.inputFont} value={'false'}>{t('EntityEdit.PropertyMenu.PropertyItem.boolItem.false')}</MenuItem>
                     </TextField>
                 );
 
@@ -209,7 +216,7 @@ const PropertyItem: React.FC<PropertyProps> = props => {
                         InputLabelProps={{ shrink: true }}
                         InputProps={{ classes: { input: classes.inputFont } }}
                         className={classes.textField}
-                        label={"値"}
+                        label={t('EntityEdit.PropertyMenu.PropertyItem.value')}
                         variant="outlined" /> );
 
             case 'Null':
@@ -226,7 +233,7 @@ const PropertyItem: React.FC<PropertyProps> = props => {
                         secondary: classes.inputFont
                     }}
                     primary={ makeTitle() }
-                    secondary={"インデックス登録"}
+                    secondary={t('EntityEdit.PropertyMenu.PropertyItem.subTitle')}
                 />
                 {open &&
                     <IconButton onClick={handleDeleteButton} aria-label="delete">
@@ -248,7 +255,7 @@ const PropertyItem: React.FC<PropertyProps> = props => {
                                     InputProps={{ classes: { input: classes.inputFont } }}
                                     InputLabelProps={{ shrink: true }}
                                     className={classes.textField}
-                                    label={"名前"}
+                                    label={t('EntityEdit.PropertyMenu.PropertyItem.name')}
                                     variant="outlined" />
                             </ListItem>
                             <ListItem>
@@ -259,17 +266,17 @@ const PropertyItem: React.FC<PropertyProps> = props => {
                                     InputLabelProps={{ shrink: true }}
                                     InputProps={{ classes: { input: classes.inputSelect } }}
                                     value={type}
-                                    label={"タイプ"}
+                                    label={t('EntityEdit.PropertyMenu.PropertyItem.type')}
                                     variant="outlined"
                                     onChange={handleChange}
                                 >
-                                    <MenuItem className={classes.inputFont} value={'String'}>{'文字列'}</MenuItem>
-                                    <MenuItem className={classes.inputFont} value={'Date'}>{'日時'}</MenuItem>
-                                    <MenuItem className={classes.inputFont} value={'Integer'}>{'整数'}</MenuItem>
-                                    <MenuItem className={classes.inputFont} value={'Float'}>{'浮動小数点数'}</MenuItem>
-                                    <MenuItem className={classes.inputFont} value={'Boolean'}>{'ブール値'}</MenuItem>
-                                    <MenuItem className={classes.inputFont} value={'Key'}>{'鍵'}</MenuItem>
-                                    <MenuItem className={classes.inputFont} value={'Null'}>{'Null'}</MenuItem>
+                                    <MenuItem className={classes.inputFont} value={'String'}>{t('EntityEdit.PropertyMenu.PropertyItem.listItem.string')}</MenuItem>
+                                    <MenuItem className={classes.inputFont} value={'Date'}>{t('EntityEdit.PropertyMenu.PropertyItem.listItem.date')}</MenuItem>
+                                    <MenuItem className={classes.inputFont} value={'Integer'}>{t('EntityEdit.PropertyMenu.PropertyItem.listItem.int')}</MenuItem>
+                                    <MenuItem className={classes.inputFont} value={'Float'}>{t('EntityEdit.PropertyMenu.PropertyItem.listItem.float')}</MenuItem>
+                                    <MenuItem className={classes.inputFont} value={'Boolean'}>{t('EntityEdit.PropertyMenu.PropertyItem.listItem.bool')}</MenuItem>
+                                    <MenuItem className={classes.inputFont} value={'Key'}>{t('EntityEdit.PropertyMenu.PropertyItem.listItem.key')}</MenuItem>
+                                    <MenuItem className={classes.inputFont} value={'Null'}>{t('EntityEdit.PropertyMenu.PropertyItem.listItem.null')}</MenuItem>
                                 </TextField>
                             </ListItem>
                             <ListItem>
@@ -288,17 +295,17 @@ const PropertyItem: React.FC<PropertyProps> = props => {
                                     classes={{
                                         label: classes.inputFont,
                                     }}
-                                    label={'このプロパティをインデックス登録する'}
+                                    label={t('EntityEdit.PropertyMenu.PropertyItem.registIndex')}
                                 />
                             </ListItem>
                         </List>
                     </CardContent>
                     {/*<CardActions>*/}
                     {/*    <Button onClick={handleSave} size="small" color="primary">*/}
-                    {/*        {"完了"}*/}
+                    {/*        {t('EntityEdit.PropertyMenu.Button.save')}*/}
                     {/*    </Button>*/}
                     {/*    <Button onClick={handleCancel} size="small" color="primary">*/}
-                    {/*        {"キャンセル"}*/}
+                    {/*        {t('EntityEdit.PropertyMenu.Button.cancel')}*/}
                     {/*    </Button>*/}
                     {/*</CardActions>*/}
                 </Card>
@@ -336,10 +343,16 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface MenuProps {
     properties: Array<any>;
+    lang: string;
 }
 
 export default function PropertyMenu(props: MenuProps) {
     const classes = useStyles();
+    const [t, i18n] = useTranslation();
+
+    React.useEffect(() => {
+        i18n.changeLanguage(props.lang);
+    }, [props.lang, i18n]);
 
     const convertData = (properties: Array<Property>) => {
         return properties.map( property => {
@@ -375,7 +388,7 @@ export default function PropertyMenu(props: MenuProps) {
 
     return (
         <div className={classes.root}>
-            <div className={classes.title}>プロパティ</div>
+            <div className={classes.title}>{t('EntityEdit.PropertyMenu.title')}</div>
             <List className={classes.list}>
                 { properties.map( property =>
                     <PropertyItem
@@ -385,12 +398,13 @@ export default function PropertyMenu(props: MenuProps) {
                         value={property.value}
                         index={property.index}
                         DeleteHandler={deleteProperty}
-                        SaveHandler={updateProperty}/> )
+                        SaveHandler={updateProperty}
+                        lang={props.lang}/> )
                 }
                 {/*<ListItem button onClick={handleClickAddProperty} className={classes.addPropertyButton}>*/}
                 {/*    <ListItemText*/}
                 {/*        classes={{ primary: classes.addProperty }}*/}
-                {/*        primary={'プロパティを追加'}*/}
+                {/*        primary={t('EntityEdit.PropertyMenu.addProperty')}*/}
                 {/*    />*/}
                 {/*</ListItem>*/}
             </List>

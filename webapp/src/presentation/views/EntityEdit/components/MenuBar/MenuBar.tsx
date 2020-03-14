@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from "react-router-dom";
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
@@ -36,10 +37,16 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface Props {
     refreash(): void;
+    lang: string;
 }
 
 export default function MenuBar(props: Props) {
     const classes = useStyles();
+    const [t, i18n] = useTranslation();
+
+    React.useEffect(() => {
+        i18n.changeLanguage(props.lang);
+        }, [props.lang, i18n]);
 
     const handleClickRefreashEntity = () => {
         props.refreash();
@@ -52,12 +59,12 @@ export default function MenuBar(props: Props) {
                     <ArrowBackIcon fontSize="inherit" />
                 </IconButton>
             </Link>
-            <div className={classes.title}>エンティティの編集</div>
+            <div className={classes.title}>{t('EntityEdit.MenuBar.title')}</div>
             <Button startIcon={<RefreshIcon/>} onClick={handleClickRefreashEntity} className={classes.button}>
-                { "更新" }
+                {t('EntityEdit.MenuBar.refresh')}
             </Button>
             {/*<Button startIcon={<DeleteIcon/>} className={classes.button}>*/}
-            {/*    { "削除" }*/}
+            {/*    {t('EntityEdit.MenuBar.delete')}*/}
             {/*</Button>*/}
         </div>
     )

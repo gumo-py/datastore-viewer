@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import {NavLink} from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { MenuBar } from "./components/MenuBar";
@@ -26,11 +27,17 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface Props {
     projectName: string;
+    lang: string;
 }
 
 export default function EntityEdit(props: Props) {
     let { kind, urlSafeKey } = useParams();
     const [entity, setEntity] = React.useState<EntityObject>();
+    const [t, i18n] = useTranslation();
+
+    React.useEffect(() => {
+        i18n.changeLanguage(props.lang);
+    }, [props.lang, i18n]);
 
     const updateEntity = () => {
         if(kind && urlSafeKey) {
@@ -46,21 +53,22 @@ export default function EntityEdit(props: Props) {
     const classes = useStyles();
     return (
         <div className={'Entity'}>
-            <MenuBar refreash={updateEntity} />
+            <MenuBar refreash={updateEntity} lang={props.lang}/>
             { entity && <EntityInfo
                 kind={entity.key.getKind()}
                 entityKey={entity.key.toString()}
                 keyLiteral={entity.key.toLiteral()}
                 URLSafeKey={entity.URLSafeKey}
+                lang={props.lang}
                 />
             }
-            { entity && <PropertyMenu properties={entity.properties}/> }
+            { entity && <PropertyMenu properties={entity.properties} lang={props.lang}/> }
             {/*<div className={classes.saveMenu}>*/}
             {/*    <Button className={classes.button} variant="contained" color="primary">*/}
-            {/*        {"保存"}*/}
+            {/*        {t('EntityEdit.Button.save')}*/}
             {/*    </Button>*/}
             {/*    <Button className={classes.button} color="primary">*/}
-            {/*        <NavLink className={classes.link} to={'/'}>{"キャンセル"}</NavLink>*/}
+            {/*        <NavLink className={classes.link} to={'/'}>{t('EntityEdit.Button.cancel')}</NavLink>*/}
             {/*    </Button>*/}
             {/*</div>*/}
         </div>

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -25,10 +26,16 @@ interface EntityInfoProps {
     entityKey: string;
     keyLiteral: string;
     URLSafeKey: string;
+    lang: string;
 }
 
 export default function DenseTable(props: EntityInfoProps) {
   const classes = useStyles();
+  const [t, i18n] = useTranslation();
+
+  React.useEffect(() => {
+      i18n.changeLanguage(props.lang);
+  }, [props.lang, i18n]);
 
   return (
     <TableContainer className={classes.table}>
@@ -36,7 +43,7 @@ export default function DenseTable(props: EntityInfoProps) {
         <TableBody>
             <TableRow key={'kind'}>
               <TableCell className={classes.tableHeader} component="th" scope="row">
-                {'Kind'}
+                {t('EntityEdit.EntityInfo.kind')}
               </TableCell>
               <TableCell className={classes.tableCell} align="left">
                   {props.kind}
@@ -44,7 +51,7 @@ export default function DenseTable(props: EntityInfoProps) {
             </TableRow>
             <TableRow key={'key'}>
               <TableCell className={classes.tableHeader} component="th" scope="row">
-                {'キー'}
+                {t('EntityEdit.EntityInfo.key')}
               </TableCell>
               <TableCell className={classes.tableCell} align="left">
                   {props.entityKey}
@@ -52,7 +59,7 @@ export default function DenseTable(props: EntityInfoProps) {
             </TableRow>
             <TableRow key={'keyLiteral'}>
               <TableCell className={classes.tableHeader} component="th" scope="row">
-                {'キーのリテラル'}
+                {t('EntityEdit.EntityInfo.keyLiteral')}
               </TableCell>
               <TableCell className={classes.tableCell} align="left">
                   {props.keyLiteral}
@@ -60,7 +67,7 @@ export default function DenseTable(props: EntityInfoProps) {
             </TableRow>
             <TableRow key={'URLSafeKey'}>
               <TableCell className={classes.tableHeader} component="th" scope="row">
-                {'URLセーフキー'}
+                {t('EntityEdit.EntityInfo.urlSafeKey')}
               </TableCell>
               <TableCell className={classes.tableCell} align="left">
                   {props.URLSafeKey}

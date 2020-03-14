@@ -20,22 +20,22 @@ i18n.use(initReactI18next).init({
       translation: jaJson,
     },
   },
-  lng: 'ja',
-  fallbackLng: 'ja',
+  lng: 'en',
+  fallbackLng: 'en',
   interpolation: { escapeValue: false },
 });
 
 
 const App: React.FC = () => {
     const [projectName, setProjectName] = React.useState<string>('');
-    const [lang, setLang] = React.useState<string>('ja');
+    const [lang, setLang] = React.useState<string>('en');
 
     return (
         <div className="App">
             <Router>
                 <Header setProjectName={setProjectName} setLang={setLang}/>
                 <Route exact path="/" render={() => <EntityList projectName={projectName} lang={lang}/>} />
-                <Route path="/edit/update/:kind/:urlSafeKey" render={() => <EntityEdit projectName={projectName}/>} />
+                <Route path="/edit/update/:kind/:urlSafeKey" render={() => <EntityEdit projectName={projectName} lang={lang}/>} />
                 <Route path="/edit/new" component={NewEntityEdit} />
             </Router>
         </div>
