@@ -140,7 +140,7 @@ class DataStoreEntityJSONEncoder:
             return "key"
         elif isinstance(prop, bytes):
             return "blob"
-        elif isinstance(prop, type(None)):
+        elif prop is None:
             return "null"
         else:
             return "unknown"
