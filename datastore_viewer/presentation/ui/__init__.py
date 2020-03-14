@@ -189,7 +189,7 @@ class ProjectAPIView(flask.views.MethodView):
         current_kind = kind
         current_kind_properties = properties_by_kind.get(current_kind, [])
 
-        entities, next_cursor = repository.fetch_entities(
+        entities, next_cursor, total_count = repository.fetch_entities(
             kind=current_kind,
             limit=20,
             cursor=cursor,
@@ -207,7 +207,11 @@ class ProjectAPIView(flask.views.MethodView):
         entities_json = defaultdict(list)
         entities_json['entityResults'] = entities_array
 
-        return flask.jsonify(entities_json)
+        return flask.jsonify({
+            'entityResults': entities_array,
+            'nextCursor': next_cursor,
+            'totalCount': total_count,
+        })
 
 
 class EntityAPIView(flask.views.MethodView):
