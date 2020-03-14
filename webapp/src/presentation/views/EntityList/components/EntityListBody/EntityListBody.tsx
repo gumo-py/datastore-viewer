@@ -1,5 +1,6 @@
 import React from 'react';
 import * as _ from "underscore";
+import { useTranslation } from 'react-i18next';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -18,17 +19,6 @@ import {EntityCollection} from "../../../../../domain/Entity";
 interface HeadCell {
   id: string;
   label: string;
-}
-
-function makeHeadCells(kindObj: KindResult, hasParent: boolean) {
-  const headCells: HeadCell[] = [ { id: 'id', label: '名前/ID' } ];
-  if(hasParent) headCells.push({ id: 'parent', label: '親'});
-
-  kindObj.indexed_properties.forEach( (key) => {
-    headCells.push({ id: key.property_name, label: key.property_name });
-  });
-
-  return headCells;
 }
 
 interface Data {
@@ -83,7 +73,7 @@ interface EnhancedTableProps {
 }
 
 function EnhancedTableHead(props: EnhancedTableProps) {
-  const { classes, onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
+  const { classes, onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort} = props;
   const createSortHandler = (property: string) => (event: React.MouseEvent<unknown>) => {
     onRequestSort(event, property);
   };
@@ -157,6 +147,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface Props {
   entityCollection: EntityCollection | undefined;
+  lang: string;
   kindObj: KindResult | undefined;
   page: number;
   rowsPerPage: number;
@@ -173,10 +164,18 @@ export default function EnhancedTable(props: Props) {
   const entityCollection = props.entityCollection;
   const setPage = props.setPage;
   const rows = convertData(entityCollection?.entities || []);
+  const [t, i18n] = useTranslation();
 
-  let headCell: HeadCell[] = [];
+  React.useEffect(() => {
+    i18n.changeLanguage(props.lang);
+  }, [props.lang, i18n]);
+
+  let headCell: HeadCell[] = [ { id: 'id', label: `${t('EntityList.EntityListBody.HeadCell.nameId')}` } ];
   if(props.kindObj && rows.length) {
-     headCell = makeHeadCells(props.kindObj, rows[0].parent);
+    if(rows[0].parent) headCell.push({ id: 'parent', label: `${t('EntityList.EntityListBody.HeadCell.parent')}`});
+    props.kindObj.indexed_properties.forEach( (key) => {
+      headCell.push({ id: key.property_name, label: key.property_name });
+    });
   }
 
   const stableSort = (order: Order) => {

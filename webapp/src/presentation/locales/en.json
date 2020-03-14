@@ -1,0 +1,43 @@
+{
+  "EntityList": {
+    "EntityListBody": {
+      "HeadCell": {
+        "nameId": "Name/ID",
+        "parent": "Parent"
+      }
+    },
+    "EntityListHeader": {
+      "kind": "Kind",
+      "filter": "Filter Entity"
+    },
+    "MenuBar": {
+      "title": "Entity",
+      "makeEntity": "Make New Entity",
+      "import": "Import",
+      "export": "Export",
+      "delete": "Delete"
+    }
+  },
+   "EntityEdit": {
+    "EntityInfo": {
+
+    },
+    "MenuBar": {
+
+    },
+    "PropertyMenu": {
+
+    }
+  },
+  "NewEntityEdit": {
+    "EntityInfoEdit": {
+
+    },
+    "MenuBar": {
+
+    },
+    "PropertyMenu": {
+
+    }
+  }
+}

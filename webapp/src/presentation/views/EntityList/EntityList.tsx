@@ -7,6 +7,7 @@ import { EntityCollection } from '../../../domain/Entity';
 
 interface Props {
     projectName: string;
+    lang: string;
 }
 
 
@@ -42,14 +43,15 @@ export default function EntityList(props: Props) {
 
     return (
         <div className={'EntityList'}>
-            <MenuBar refreash={updateEntities}/>
-            <EntityListHeader kinds={kinds} kindHandler={setKindObj}/>
+            <MenuBar refreash={updateEntities} lang={props.lang}/>
+            <EntityListHeader kinds={kinds} kindHandler={setKindObj} lang={props.lang}/>
             <EntityListBody
                 kindObj={kindObj}
                 entityCollection={entityCollection}
                 page={page}
                 rowsPerPage={rowsPerPage}
                 setPage={setPage}
+                lang={props.lang}
             />
         </div>
     )

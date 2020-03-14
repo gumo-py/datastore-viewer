@@ -1,0 +1,43 @@
+{
+  "EntityList": {
+    "EntityListBody": {
+      "HeadCell": {
+        "nameId": "名前/ID",
+        "parent": "親"
+      }
+    },
+    "EntityListHeader": {
+      "kind": "種類",
+      "filter": "エンティティをフィルタ"
+    },
+    "MenuBar": {
+      "title": "エンティティ",
+      "makeEntity": "エンティティを作成",
+      "import": "インポート",
+      "export": "エクスポート",
+      "delete": "削除"
+    }
+  },
+   "EntityEdit": {
+    "EntityInfo": {
+
+    },
+    "MenuBar": {
+
+    },
+    "PropertyMenu": {
+
+    }
+  },
+  "NewEntityEdit": {
+    "EntityInfoEdit": {
+
+    },
+    "MenuBar": {
+
+    },
+    "PropertyMenu": {
+
+    }
+  }
+}
