@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -31,6 +32,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface Props {
     kinds: string[];
+    lang: string;
 }
 
 export default function DenseTable(props: Props) {
@@ -38,6 +40,11 @@ export default function DenseTable(props: Props) {
   const [kind, setKind] = React.useState('Project');
   const [keyType, setKeyType] = React.useState('Number');
   const [customKey, setCustomKey] = React.useState('');
+  const [t, i18n] = useTranslation();
+
+  React.useEffect(() => {
+      i18n.changeLanguage(props.lang);
+  }, [props.lang, i18n]);
 
   const handleKindChange = (event: React.ChangeEvent<{ value: any }>) => {
         setKind(event.target.value);
@@ -59,7 +66,7 @@ export default function DenseTable(props: Props) {
                 InputProps={{ classes: { input: classes.inputFont } }}
                 InputLabelProps={{ shrink: true }}
                 className={classes.textField}
-                label={"種類"}
+                label={t('NewEntityEdit.EntityInfoEdit.kind')}
                 variant="outlined" >
                 {props.kinds.map( kind => {
                     return <MenuItem className={classes.inputFont} value={kind}>{kind}</MenuItem>
@@ -75,10 +82,10 @@ export default function DenseTable(props: Props) {
                 InputProps={{ classes: { input: classes.inputFont } }}
                 InputLabelProps={{ shrink: true }}
                 className={classes.textField}
-                label={"キー識別子"}
+                label={t('NewEntityEdit.EntityInfoEdit.keyIdentifier')}
                 variant="outlined" >
-                <MenuItem className={classes.inputFont} value={'Number'}>{'数値ID(自動生成)'}</MenuItem>
-                <MenuItem className={classes.inputFont} value={'String'}>{'カスタム名'}</MenuItem>
+                <MenuItem className={classes.inputFont} value={'Number'}>{t('NewEntityEdit.EntityInfoEdit.KeyIdMenu.number')}</MenuItem>
+                <MenuItem className={classes.inputFont} value={'String'}>{t('NewEntityEdit.EntityInfoEdit.KeyIdMenu.string')}</MenuItem>
             </TextField>
         </ListItem>
         <Collapse in={keyType === 'String'} timeout="auto" unmountOnExit>
@@ -91,7 +98,7 @@ export default function DenseTable(props: Props) {
                 InputProps={{ classes: { input: classes.inputFont } }}
                 InputLabelProps={{ shrink: true }}
                 className={classes.textField}
-                label={"カスタム名"}
+                label={t('NewEntityEdit.EntityInfoEdit.customName')}
                 variant="outlined" >
             </TextField>
         </ListItem>

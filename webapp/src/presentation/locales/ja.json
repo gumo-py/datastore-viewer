@@ -65,14 +65,50 @@
     }
   },
   "NewEntityEdit": {
+    "Button":{
+      "save": "作成",
+      "cancel": "キャンセル"
+    },
     "EntityInfoEdit": {
-
+      "kind": "種類",
+      "keyIdentifier": "キー識別子",
+      "KeyIdMenu": {
+        "number": "数値 ID(自動生成)",
+        "string": "カスタム名"
+      },
+      "customName": "カスタム名"
     },
     "MenuBar": {
-
+      "title": "エンティティの作成"
     },
     "PropertyMenu": {
-
+      "title": "プロパティ",
+      "addProperty": "プロパティを追加",
+      "PropertyItem": {
+        "value": "値",
+        "empty": "空白",
+        "subTitle": "インデックス登録",
+        "name": "名前",
+        "type": "タイプ",
+        "registIndex": "このプロパティをインデックス登録する",
+        "listItem": {
+          "string": "文字列",
+          "date": "日付",
+          "int": "整数",
+          "float": "浮動小数点数",
+          "bool": "ブール値",
+          "key": "鍵",
+          "null": "Null"
+        },
+        "boolItem": {
+          "true": "真",
+          "false": "偽"
+        },
+        "Button": {
+          "save": "完了",
+          "cancel": "キャンセル"
+        }
+      }
     }
   }
 }

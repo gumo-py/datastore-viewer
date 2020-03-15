@@ -36,7 +36,7 @@ const App: React.FC = () => {
                 <Header setProjectName={setProjectName} setLang={setLang}/>
                 <Route exact path="/" render={() => <EntityList projectName={projectName} lang={lang}/>} />
                 <Route path="/edit/update/:kind/:urlSafeKey" render={() => <EntityEdit projectName={projectName} lang={lang}/>} />
-                <Route path="/edit/new" component={NewEntityEdit} />
+                <Route path="/edit/new" render={() => <NewEntityEdit lang={lang}/>} />
             </Router>
         </div>
     );
