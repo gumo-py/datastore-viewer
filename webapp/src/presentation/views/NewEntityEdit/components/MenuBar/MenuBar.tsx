@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from "react-router-dom";
 import IconButton from '@material-ui/core/IconButton';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
@@ -24,8 +25,18 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-export default function MenuBar() {
+interface Props {
+    lang: string;
+}
+
+export default function MenuBar(props: Props) {
     const classes = useStyles();
+    const [t, i18n] = useTranslation();
+
+    React.useEffect(() => {
+        i18n.changeLanguage(props.lang);
+    }, [props.lang, i18n]);
+
     return (
         <div className={classes.root}>
             <Link to={'/'}>
@@ -33,7 +44,7 @@ export default function MenuBar() {
                     <ArrowBackIcon fontSize="inherit" />
                 </IconButton>
             </Link>
-            <div className={classes.title}>エンティティの作成</div>
+            <div className={classes.title}>{t('NewEntityEdit.MenuBar.title')}</div>
         </div>
     )
 }

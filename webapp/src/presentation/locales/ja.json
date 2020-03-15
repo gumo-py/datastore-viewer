@@ -1,0 +1,114 @@
+{
+  "EntityList": {
+    "EntityListBody": {
+      "HeadCell": {
+        "nameId": "名前/ID",
+        "parent": "親"
+      }
+    },
+    "EntityListHeader": {
+      "kind": "種類",
+      "filter": "エンティティをフィルタ"
+    },
+    "MenuBar": {
+      "title": "エンティティ",
+      "makeEntity": "エンティティを作成",
+      "import": "インポート",
+      "export": "エクスポート",
+      "delete": "削除"
+    }
+  },
+   "EntityEdit": {
+    "Button":{
+      "save": "保存",
+      "cancel": "キャンセル"
+    },
+    "EntityInfo": {
+      "kind": "種類",
+      "key": "Key",
+      "keyLiteral": "鍵のリテラル",
+      "urlSafeKey": "URLセーフキー"
+    },
+    "MenuBar": {
+      "title": "エンティティの編集",
+      "refresh": "更新",
+      "delete": "削除"
+    },
+    "PropertyMenu": {
+      "title": "プロパティ",
+      "addProperty": "プロパティを追加",
+      "PropertyItem": {
+        "value": "値",
+        "empty": "空白",
+        "subTitle": "インデックス登録",
+        "name": "名前",
+        "type": "タイプ",
+        "registIndex": "このプロパティをインデックス登録する",
+        "listItem": {
+          "string": "文字列",
+          "date": "日付",
+          "int": "整数",
+          "float": "浮動小数点数",
+          "bool": "ブール値",
+          "key": "Key",
+          "null": "Null"
+        },
+        "boolItem": {
+          "true": "真",
+          "false": "偽"
+        },
+        "Button": {
+          "save": "完了",
+          "cancel": "キャンセル"
+        }
+      }
+    }
+  },
+  "NewEntityEdit": {
+    "Button":{
+      "save": "作成",
+      "cancel": "キャンセル"
+    },
+    "EntityInfoEdit": {
+      "kind": "種類",
+      "keyIdentifier": "キー識別子",
+      "KeyIdMenu": {
+        "number": "数値 ID(自動生成)",
+        "string": "カスタム名"
+      },
+      "customName": "カスタム名"
+    },
+    "MenuBar": {
+      "title": "エンティティの作成"
+    },
+    "PropertyMenu": {
+      "title": "プロパティ",
+      "addProperty": "プロパティを追加",
+      "PropertyItem": {
+        "value": "値",
+        "empty": "空白",
+        "subTitle": "インデックス登録",
+        "name": "名前",
+        "type": "タイプ",
+        "registIndex": "このプロパティをインデックス登録する",
+        "listItem": {
+          "string": "文字列",
+          "date": "日付",
+          "int": "整数",
+          "float": "浮動小数点数",
+          "bool": "ブール値",
+          "key": "Key",
+          "null": "Null"
+        },
+        "boolItem": {
+          "true": "真",
+          "false": "偽"
+        },
+        "Button": {
+          "save": "完了",
+          "cancel": "キャンセル"
+        }
+      }
+    }
+  }
+}

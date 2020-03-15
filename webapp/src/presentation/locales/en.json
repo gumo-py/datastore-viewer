@@ -1,0 +1,114 @@
+{
+  "EntityList": {
+    "EntityListBody": {
+      "HeadCell": {
+        "nameId": "Name/ID",
+        "parent": "Parent"
+      }
+    },
+    "EntityListHeader": {
+      "kind": "Kind",
+      "filter": "Filter Entity"
+    },
+    "MenuBar": {
+      "title": "Entity",
+      "makeEntity": "Make New Entity",
+      "import": "Import",
+      "export": "Export",
+      "delete": "Delete"
+    }
+  },
+  "EntityEdit": {
+    "Button":{
+      "save": "Save",
+      "cancel": "Cancel"
+    },
+    "EntityInfo": {
+      "kind": "Kind",
+      "key": "Key",
+      "keyLiteral": "KeyLiteral",
+      "urlSafeKey": "URLSafeKey"
+    },
+    "MenuBar": {
+      "title": "Edit Entity",
+      "refresh": "Refresh",
+      "delete": "Delete"
+    },
+    "PropertyMenu": {
+      "title": "Property",
+      "addProperty": "Add Property",
+      "PropertyItem": {
+        "value": "Value",
+        "empty": "Empty",
+        "subTitle": "Regist Index",
+        "name": "Name",
+        "type": "Type",
+        "registIndex": "Regist Index This Property",
+        "listItem": {
+          "string": "String",
+          "date": "Date",
+          "int": "Integer",
+          "float": "Float",
+          "bool": "Boolean",
+          "key": "Key",
+          "null": "Null"
+        },
+        "boolItem": {
+          "true": "True",
+          "false": "False"
+        },
+        "Button": {
+          "save": "Save",
+          "cancel": "Cancel"
+        }
+      }
+    }
+  },
+  "NewEntityEdit": {
+    "Button":{
+      "save": "Save",
+      "cancel": "Cancel"
+    },
+    "EntityInfoEdit": {
+      "kind": "Kind",
+      "keyIdentifier": "Key Identifier",
+      "KeyIdMenu": {
+        "number": "NumberID(Automatic Generation)",
+        "string": "Custom Name"
+      },
+      "customName": "Custom Name"
+    },
+    "MenuBar": {
+      "title": "Make New Entity"
+    },
+    "PropertyMenu": {
+      "title": "Property",
+      "addProperty": "Add Property",
+      "PropertyItem": {
+        "value": "Value",
+        "empty": "Empty",
+        "subTitle": "Regist Index",
+        "name": "Name",
+        "type": "Type",
+        "registIndex": "Regist Index This Property",
+        "listItem": {
+          "string": "String",
+          "date": "Date",
+          "int": "Integer",
+          "float": "Float",
+          "bool": "Boolean",
+          "key": "Key",
+          "null": "Null"
+        },
+        "boolItem": {
+          "true": "True",
+          "false": "False"
+        },
+        "Button": {
+          "save": "Save",
+          "cancel": "Cancel"
+        }
+      }
+    }
+  }
+}

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from "react-router-dom";
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
@@ -37,10 +38,16 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface Props {
     refreash(): void;
+    lang: string;
 }
 
 export default function MenuBar(props: Props) {
     const classes = useStyles();
+    const [t, i18n] = useTranslation();
+
+    React.useEffect(() => {
+        i18n.changeLanguage(props.lang);
+    }, [props.lang, i18n]);
 
     const handleClickRefreashEntity = () => {
         props.refreash();
@@ -48,18 +55,18 @@ export default function MenuBar(props: Props) {
 
     return (
         <div className={classes.root}>
-            <div className={classes.title}>エンティティ</div>
+            <div className={classes.title}>{t('EntityList.MenuBar.title')}</div>
             {/*<Button startIcon={<AddBoxIcon/>} className={classes.button}>*/}
-            {/*    <Link to={'/edit/new'} style={{ textDecoration: 'none', color: '#4169e1' }}  > { "エンティティを作成" }</Link>*/}
+            {/*    <Link to={'/edit/new'} style={{ textDecoration: 'none', color: '#4169e1' }}  > { t('EntityList.MenuBar.makeEntity') }</Link>*/}
             {/*</Button>*/}
             {/*<Button startIcon={<GetAppIcon/>} className={classes.button}>*/}
-            {/*    { "インポート" }*/}
+            {/*    { t('EntityList.MenuBar.import') }*/}
             {/*</Button>*/}
             {/*<Button startIcon={<PublishIcon/>} className={classes.button}>*/}
-            {/*    { "エクスポート" }*/}
+            {/*    { t('EntityList.MenuBar.export') }*/}
             {/*</Button>*/}
             {/*<Button startIcon={<DeleteIcon/>} className={classes.button} disabled>*/}
-            {/*    { "削除" }*/}
+            {/*    { t('EntityList.MenuBar.delete') }*/}
             {/*</Button>*/}
             <IconButton aria-label="refreash" onClick={handleClickRefreashEntity} className={classes.iconButton}>
                 <RefreshIcon fontSize="inherit" />

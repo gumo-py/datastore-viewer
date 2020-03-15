@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import Button from '@material-ui/core/Button';
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import FilterListIcon from '@material-ui/icons/FilterList';
@@ -38,11 +39,18 @@ const useStyles = makeStyles((theme: Theme) =>
 interface Props {
     kinds: KindResults | undefined;
     kindHandler: ((kind: KindResult) => void);
+    lang: string;
 }
 
 export default function MenuBar(props: Props) {
     const classes = useStyles();
     const [entity, setEntity] = React.useState<string>('');
+    const [t, i18n] = useTranslation();
+
+    React.useEffect(() => {
+        i18n.changeLanguage(props.lang);
+    }, [props.lang, i18n]);
+
     let kinds: Array<KindResult> = [];
     if(props.kinds) {
         kinds = props.kinds.kindResults;
@@ -73,7 +81,7 @@ export default function MenuBar(props: Props) {
                     className={classes.listItem}
                     input={<OutlinedInput classes={{ input: classes.input }} />}
                 >
-                    <MenuItem className={classes.listItem} value="" disabled>{'種類'}</MenuItem>
+                    <MenuItem className={classes.listItem} value="" disabled>{t('EntityList.EntityListHeader.kind')}</MenuItem>
                     {
                         kinds.map( obj => {
                             return (
@@ -86,7 +94,7 @@ export default function MenuBar(props: Props) {
                 </Select>
             </FormControl>
             {/*<Button startIcon={<FilterListIcon/>} className={classes.button}>*/}
-            {/*    { "エンティティをフィルタ" }*/}
+            {/*    { t('EntityList.EntityListHeader.filter') }*/}
             {/*</Button>*/}
         </div>
     )

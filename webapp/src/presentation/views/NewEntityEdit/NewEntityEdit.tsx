@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { MenuBar } from "./components/MenuBar";
 import { EntityInfoEdit } from "./components/EntityInfoEdit";
 import { PropertyMenu } from "./components/PropertyMenu";
@@ -26,19 +27,29 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-export default function NewEntityEdit() {
+interface Props {
+    lang: string;
+}
+
+export default function NewEntityEdit(props: Props) {
+    const [t, i18n] = useTranslation();
+
+    React.useEffect(() => {
+        i18n.changeLanguage(props.lang);
+    }, [props.lang, i18n]);
+
     const classes = useStyles();
     return (
         <div className={'Entity'}>
-            <MenuBar />
-            <EntityInfoEdit kinds={['Project', 'Task']}/>
-            <PropertyMenu properties={testEntity.property}/>
+            <MenuBar lang={props.lang}/>
+            <EntityInfoEdit kinds={['Project', 'Task']} lang={props.lang}/>
+            <PropertyMenu properties={testEntity.property} lang={props.lang}/>
             <div className={classes.saveMenu}>
                 <Button className={classes.button} variant="contained" color="primary">
-                    {"保存"}
+                    {t('NewEntityEdit.Button.save')}
                 </Button>
                 <Button className={classes.button} color="primary">
-                    {"キャンセル"}
+                    {t('NewEntityEdit.Button.cancel')}
                 </Button>
             </div>
         </div>

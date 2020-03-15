@@ -2,10 +2,10 @@ import React from 'react';
 import {makeStyles, Theme, createStyles} from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import MenuIcon from '@material-ui/icons/Menu';
 import TextField from '@material-ui/core/TextField';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 import { getProject } from "../../../infrastructure/APIClient";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -30,10 +30,23 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         notchedOutline: {
             borderWidth: "1px",
-            borderColor: "white !important"
+            borderColor: "white !important",
         },
         input: {
             height: 5,
+            color: 'white',
+        },
+        langSelect: {
+            marginLeft: "auto",
+            marginRight: -8,
+            "&:before": {
+                borderColor: "white",
+            },
+            "&:after": {
+                borderColor: "white",
+            },
+        },
+        icon: {
             color: 'white',
         },
     }),
@@ -41,12 +54,14 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface Props {
     setProjectName(name: string): void;
+    setLang(lang: string): void;
 }
 
 export default function HeaderAppBar(props: Props) {
   const classes = useStyles();
   const [project, setProject] = React.useState<Project>();
   const [projectName, setProjectName] = React.useState<string>('');
+  const [lang, setLang] = React.useState<string>('en');
 
   if(!project) {
       getProject().then( res => setProject(res.projectResult) );
@@ -63,27 +78,25 @@ export default function HeaderAppBar(props: Props) {
       props.setProjectName(projectName);
   }, [projectName, props]);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  React.useEffect(() => {
+      props.setLang(lang);
+  }, [lang, props]);
+
+  const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
     setProjectName(event.target.value);
+  };
+  const handleChangeLang = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setLang(event.target.value as string);
   };
 
   return (
       <div className={classes.grow}>
           <AppBar position="static">
               <Toolbar variant="dense">
-                  <IconButton
-                      edge="start"
-                      className={classes.menuButton}
-                      color="inherit"
-                      aria-label="open drawer"
-                  >
-                      <MenuIcon />
-                  </IconButton>
                   <Typography className={classes.title} variant="h6" noWrap>
                       Datastore-Viewer
                   </Typography>
                   <TextField
-                      color={'primary'}
                       className={classes.textField}
                       InputProps={{
                           classes: {
@@ -91,10 +104,24 @@ export default function HeaderAppBar(props: Props) {
                               notchedOutline: classes.notchedOutline
                           }
                       }}
-                      onChange={handleChange}
+                      onChange={handleChangeName}
                       value={projectName}
                       variant={"outlined"}
                   />
+                  <Select
+                      className={classes.langSelect}
+                      inputProps={{
+                            classes: {
+                                icon: classes.icon,
+                                root: classes.icon,
+                            },
+                      }}
+                      value={lang}
+                      onChange={handleChangeLang}
+                  >
+                      <MenuItem value={'ja'}>ja</MenuItem>
+                      <MenuItem value={'en'}>en</MenuItem>
+                  </Select>
               </Toolbar>
           </AppBar>
       </div>
