@@ -12,6 +12,7 @@ import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
 import { NavLink } from "react-router-dom";
+import {EntityCollection} from "../../../../../domain/Entity";
 
 
 interface HeadCell {
@@ -155,7 +156,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface Props {
-  entities: Array<EntityObject>;
+  entityCollection: EntityCollection | undefined;
   kindObj: KindResult | undefined;
 }
 
@@ -165,8 +166,9 @@ export default function EnhancedTable(props: Props) {
   const [orderBy, setOrderBy] = React.useState<string>('id');
   const [selected, setSelected] = React.useState<string[]>([]);
   const [page, setPage] = React.useState(0);
+  const entityCollection = props.entityCollection;
   const rowsPerPage = 25;
-  const rows = convertData(props.entities);
+  const rows = convertData(entityCollection?.entities || []);
 
   let headCell: HeadCell[] = [];
   if(props.kindObj && rows.length) {
@@ -291,7 +293,7 @@ export default function EnhancedTable(props: Props) {
         <TablePagination
           rowsPerPageOptions={[]}
           component="div"
-          count={rows.length}
+          count={entityCollection?.totalCount || -1}
           rowsPerPage={rowsPerPage}
           page={page}
           onChangePage={handleChangePage}
