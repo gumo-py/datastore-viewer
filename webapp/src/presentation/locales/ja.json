@@ -25,7 +25,7 @@
     },
     "EntityInfo": {
       "kind": "種類",
-      "key": "鍵",
+      "key": "Key",
       "keyLiteral": "鍵のリテラル",
       "urlSafeKey": "URLセーフキー"
     },
@@ -50,7 +50,7 @@
           "int": "整数",
           "float": "浮動小数点数",
           "bool": "ブール値",
-          "key": "鍵",
+          "key": "Key",
           "null": "Null"
         },
         "boolItem": {
@@ -97,7 +97,7 @@
           "int": "整数",
           "float": "浮動小数点数",
           "bool": "ブール値",
-          "key": "鍵",
+          "key": "Key",
           "null": "Null"
         },
         "boolItem": {
