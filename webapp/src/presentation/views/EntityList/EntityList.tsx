@@ -13,12 +13,16 @@ interface Props {
 export default function EntityList(props: Props) {
     const [kinds, setKinds] = React.useState< KindResults | undefined >();
     const [kindObj, setKindObj] = React.useState<KindResult>();
+    const [page, setPage] = React.useState(0);
     const [entityCollection, setEntities] = React.useState< EntityCollection >();
 
     const onChangePageHandler = (pageNumber: number, rowsPerPage: number) => {
         if (kindObj) {
             getEntityList(props.projectName, kindObj.kind, pageNumber, rowsPerPage)
-                .then( entityCollection => setEntities(entityCollection) );
+                .then( entityCollection => {
+                    console.log('called onChangePageHandler', pageNumber);
+                    setEntities(entityCollection);
+                });
         }
     };
 

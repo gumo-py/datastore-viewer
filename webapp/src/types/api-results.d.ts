@@ -19,7 +19,7 @@ declare interface PropertyJson {
 declare interface EntityResults {
     entityResults: Array<EntityJson>;
     totalCount: number;
-    nextCursor?: string;
+    pageNumber: number;
 }
 
 declare interface EntityResult {

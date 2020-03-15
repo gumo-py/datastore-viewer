@@ -11,7 +11,7 @@ declare interface EntityCollectionObject {
     kind: string;
     entities: Array<EntityObject>;
     totalCount: number;
-    nextCursor?: string;
+    pageNumber: number;
 }
 
 

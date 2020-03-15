@@ -5,13 +5,13 @@ export default class EntityCollection implements EntityCollectionObject {
     readonly kind: string;
     readonly entities: Array<Entity>;
     readonly totalCount: number;
-    readonly nextCursor?: string;
+    readonly pageNumber: number;
 
-    constructor( projectId: string, kind: string, entities: Array<Entity>, totalCount: number, nextCursor?: string ) {
+    constructor( projectId: string, kind: string, entities: Array<Entity>, totalCount: number, pageNumber: number) {
         this.projectId = projectId;
         this.kind = kind;
         this.entities = entities;
         this.totalCount = totalCount;
-        this.nextCursor = nextCursor;
+        this.pageNumber = pageNumber;
     }
 }
