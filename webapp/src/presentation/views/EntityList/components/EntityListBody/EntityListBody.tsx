@@ -158,6 +158,7 @@ const useStyles = makeStyles((theme: Theme) =>
 interface Props {
   entityCollection: EntityCollection | undefined;
   kindObj: KindResult | undefined;
+  onChangePageHandler: ((pageNumber: number, rowsPerPage: number) => void);
 }
 
 export default function EnhancedTable(props: Props) {
@@ -227,6 +228,7 @@ export default function EnhancedTable(props: Props) {
   };
 
   const handleChangePage = (event: unknown, newPage: number) => {
+    props.onChangePageHandler(newPage, rowsPerPage);
     setPage(newPage);
   };
 

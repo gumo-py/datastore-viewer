@@ -1,8 +1,14 @@
 import axios from "axios"
 import { Entity, entityFactory, EntityCollection } from '../../domain/Entity'
 
-export async function getEntityList(projectName: string, kind: string) {
-    const url = `/datastore_viewer/api/projects/${projectName}/kinds/${kind}/entities`;
+export async function getEntityList(projectName: string, kind: string, pageNumber: number = 0, rowsPerPage: number = 25) {
+    const params = new URLSearchParams();
+    if (pageNumber > 0) {
+        params.append('page', `${pageNumber + 1}`);
+    }
+    params.append('perPage', `${rowsPerPage}`);
+
+    const url = `/datastore_viewer/api/projects/${projectName}/kinds/${kind}/entities?${params.toString()}`;
     const res = await axios.get<EntityResults>(url);
     const entities: Array<Entity> = res.data.entityResults.map(
             entityResult => { return entityFactory(entityResult) }
