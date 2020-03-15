@@ -158,7 +158,9 @@ const useStyles = makeStyles((theme: Theme) =>
 interface Props {
   entityCollection: EntityCollection | undefined;
   kindObj: KindResult | undefined;
-  onChangePageHandler: ((pageNumber: number, rowsPerPage: number) => void);
+  page: number;
+  rowsPerPage: number;
+  setPage: ((pageNumber: number) => void);
 }
 
 export default function EnhancedTable(props: Props) {
@@ -166,9 +168,10 @@ export default function EnhancedTable(props: Props) {
   const [order, setOrder] = React.useState<Order>('asc');
   const [orderBy, setOrderBy] = React.useState<string>('id');
   const [selected, setSelected] = React.useState<string[]>([]);
-  const [page, setPage] = React.useState(0);
+  const rowsPerPage = props.rowsPerPage;
+  const page = props.page;
   const entityCollection = props.entityCollection;
-  const rowsPerPage = 25;
+  const setPage = props.setPage;
   const rows = convertData(entityCollection?.entities || []);
 
   let headCell: HeadCell[] = [];
@@ -227,8 +230,7 @@ export default function EnhancedTable(props: Props) {
     setSelected(newSelected);
   };
 
-  const handleChangePage = (event: unknown, newPage: number) => {
-    props.onChangePageHandler(newPage, rowsPerPage);
+  const onChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
 
@@ -256,7 +258,7 @@ export default function EnhancedTable(props: Props) {
             />
             <TableBody>
               {stableSort(order)
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.name_id);
                   const labelId = `enhanced-table-checkbox-${index}`;
@@ -298,7 +300,7 @@ export default function EnhancedTable(props: Props) {
           count={entityCollection?.totalCount || -1}
           rowsPerPage={rowsPerPage}
           page={page}
-          onChangePage={handleChangePage}
+          onChangePage={onChangePage}
         />
       </Paper>
     </div>

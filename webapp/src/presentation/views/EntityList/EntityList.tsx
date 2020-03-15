@@ -14,17 +14,8 @@ export default function EntityList(props: Props) {
     const [kinds, setKinds] = React.useState< KindResults | undefined >();
     const [kindObj, setKindObj] = React.useState<KindResult>();
     const [page, setPage] = React.useState(0);
+    const rowsPerPage = 25;
     const [entityCollection, setEntities] = React.useState< EntityCollection >();
-
-    const onChangePageHandler = (pageNumber: number, rowsPerPage: number) => {
-        if (kindObj) {
-            getEntityList(props.projectName, kindObj.kind, pageNumber, rowsPerPage)
-                .then( entityCollection => {
-                    console.log('called onChangePageHandler', pageNumber);
-                    setEntities(entityCollection);
-                });
-        }
-    };
 
     if(!kinds?.kindResults.length && props.projectName){
         getKindList(props.projectName)
@@ -33,24 +24,33 @@ export default function EntityList(props: Props) {
 
     const updateEntities = React.useCallback(() => {
         if(kindObj){
-            getEntityList(props.projectName, kindObj.kind)
-                .then( entityCollection => setEntities(entityCollection) );
+            getEntityList(props.projectName, kindObj.kind, page, rowsPerPage)
+                .then( entityCollection => {
+                    console.log('updateEntities', entityCollection);
+                    setEntities(entityCollection);
+                });
         }
-    }, [kindObj, props.projectName]);
+    }, [kindObj, props.projectName, page]);
 
     React.useEffect(() => {
         updateEntities();
     },[kindObj, updateEntities]);
 
     React.useEffect(() => {
-        console.log(entityCollection);
+        console.log('effect watch', entityCollection);
     },[entityCollection]);
 
     return (
         <div className={'EntityList'}>
             <MenuBar refreash={updateEntities}/>
             <EntityListHeader kinds={kinds} kindHandler={setKindObj}/>
-            <EntityListBody kindObj={kindObj} entityCollection={entityCollection} onChangePageHandler={onChangePageHandler}/>
+            <EntityListBody
+                kindObj={kindObj}
+                entityCollection={entityCollection}
+                page={page}
+                rowsPerPage={rowsPerPage}
+                setPage={setPage}
+            />
         </div>
     )
 }
