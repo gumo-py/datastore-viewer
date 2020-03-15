@@ -2,8 +2,10 @@ import base64
 import json
 import os
 from collections import defaultdict
+from typing import List
 from typing import Optional
 from logging import getLogger
+from typing import Tuple
 
 import google.auth
 import requests
@@ -107,20 +109,19 @@ class DatastoreViewerRepository:
 
         return properties_by_kind
 
-    def fetch_entities(self, kind: str, limit: int = 20, cursor=None):
-        query = self.datastore_client.query(kind=kind)
-        query_iter = query.fetch(start_cursor=cursor, limit=limit)
+    def fetch_entities(self, kind: str, per_page: int = 25, page_number: int = 1) -> Tuple[List[datastore.Entity], int]:
+        offset = per_page * (page_number - 1)
+        query: datastore.Query = self.datastore_client.query(kind=kind)
 
         entities = []
-        for entity in query_iter:
+        for entity in query.fetch(limit=per_page, offset=offset):
             entity._serialized_key = base64.b64encode(json.dumps(entity.key.flat_path).encode('utf-8')).decode('utf-8')
             entities.append(entity)
 
-        next_cursor = query_iter.next_page_token
-        if len(list(query.fetch(start_cursor=next_cursor, limit=1))) == 0:
-            next_cursor = b''
+        query.keys_only()
+        total_count = len(list(query.fetch()))
 
-        return (entities, next_cursor)
+        return entities, total_count
 
     def fetch_entity(self, key: datastore.Key):
         entity = self.datastore_client.get(key)

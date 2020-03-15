@@ -181,18 +181,20 @@ class DataStoreEntityJSONEncoder:
 
 class ProjectAPIView(flask.views.MethodView):
     def get(self, project_name: str, kind: str):
+        per_page = int(flask.request.args.get('perPage', '25'))
+        page_number = int(flask.request.args.get('page', '1'))
+
         encoder = DataStoreEntityJSONEncoder()
-        cursor = base64.b64decode(flask.request.args.get('cursor', '')).decode('utf-8')
         repository = DatastoreViewerRepository(project_name=project_name)
 
         properties_by_kind = repository.fetch_parent_properties()
         current_kind = kind
         current_kind_properties = properties_by_kind.get(current_kind, [])
 
-        entities, next_cursor = repository.fetch_entities(
+        entities, total_count = repository.fetch_entities(
             kind=current_kind,
-            limit=20,
-            cursor=cursor,
+            per_page=per_page,
+            page_number=page_number,
         )
 
         entities_array = []
@@ -207,7 +209,12 @@ class ProjectAPIView(flask.views.MethodView):
         entities_json = defaultdict(list)
         entities_json['entityResults'] = entities_array
 
-        return flask.jsonify(entities_json)
+        return flask.jsonify({
+            'entityResults': entities_array,
+            'pageNumber': page_number,
+            'perPage': per_page,
+            'totalCount': total_count,
+        })
 
 
 class EntityAPIView(flask.views.MethodView):

@@ -3,6 +3,7 @@ import { MenuBar } from './components/MenuBar';
 import { EntityListHeader } from './components/EntityListHeader';
 import { EntityListBody } from './components/EntityListBody';
 import { getEntityList, getKindList } from "../../../infrastructure/APIClient";
+import { EntityCollection } from '../../../domain/Entity';
 
 interface Props {
     projectName: string;
@@ -12,7 +13,9 @@ interface Props {
 export default function EntityList(props: Props) {
     const [kinds, setKinds] = React.useState< KindResults | undefined >();
     const [kindObj, setKindObj] = React.useState<KindResult>();
-    const [entities, setEntities] = React.useState< Array<EntityObject> >([]);
+    const [page, setPage] = React.useState(0);
+    const rowsPerPage = 25;
+    const [entityCollection, setEntities] = React.useState< EntityCollection >();
 
     if(!kinds?.kindResults.length && props.projectName){
         getKindList(props.projectName)
@@ -21,24 +24,33 @@ export default function EntityList(props: Props) {
 
     const updateEntities = React.useCallback(() => {
         if(kindObj){
-            getEntityList(props.projectName, kindObj.kind)
-                .then( res => setEntities(res) );
+            getEntityList(props.projectName, kindObj.kind, page, rowsPerPage)
+                .then( entityCollection => {
+                    console.log('updateEntities', entityCollection);
+                    setEntities(entityCollection);
+                });
         }
-    }, [kindObj, props.projectName]);
+    }, [kindObj, props.projectName, page]);
 
     React.useEffect(() => {
         updateEntities();
     },[kindObj, updateEntities]);
 
     React.useEffect(() => {
-        console.log(entities);
-    },[entities]);
+        console.log('effect watch', entityCollection);
+    },[entityCollection]);
 
     return (
         <div className={'EntityList'}>
             <MenuBar refreash={updateEntities}/>
             <EntityListHeader kinds={kinds} kindHandler={setKindObj}/>
-            <EntityListBody kindObj={kindObj} entities={entities}/>
+            <EntityListBody
+                kindObj={kindObj}
+                entityCollection={entityCollection}
+                page={page}
+                rowsPerPage={rowsPerPage}
+                setPage={setPage}
+            />
         </div>
     )
 }
