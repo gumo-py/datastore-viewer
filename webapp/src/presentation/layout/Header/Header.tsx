@@ -3,6 +3,9 @@ import {makeStyles, Theme, createStyles} from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import AutorenewIcon from '@material-ui/icons/Autorenew';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import IconButton from "@material-ui/core/IconButton";
 import TextField from '@material-ui/core/TextField';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -75,10 +78,6 @@ export default function HeaderAppBar(props: Props) {
   }, [project]);
 
   React.useEffect(() => {
-      props.setProjectName(projectName);
-  }, [projectName, props]);
-
-  React.useEffect(() => {
       props.setLang(lang);
   }, [lang, props]);
 
@@ -102,7 +101,18 @@ export default function HeaderAppBar(props: Props) {
                           classes: {
                               input: classes.input,
                               notchedOutline: classes.notchedOutline
-                          }
+                          },
+                          endAdornment:
+                              <InputAdornment position="end">
+                                  <div
+                                      className={"project-name-refresh-icon"}
+                                      onClick={() => {props.setProjectName(projectName);}}
+                                  >
+                                      <IconButton edge="end" color="inherit">
+                                          <AutorenewIcon style={{fill: 'white'}}/>
+                                      </IconButton>
+                                  </div>
+                              </InputAdornment>
                       }}
                       onChange={handleChangeName}
                       value={projectName}
