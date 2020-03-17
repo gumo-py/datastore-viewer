@@ -58,82 +58,87 @@ const useStyles = makeStyles((theme: Theme) =>
 interface Props {
     setProjectName(name: string): void;
     setLang(lang: string): void;
+    projectName: any;
 }
 
 export default function HeaderAppBar(props: Props) {
-  const classes = useStyles();
-  const [project, setProject] = React.useState<Project>();
-  const [projectName, setProjectName] = React.useState<string>('');
-  const [lang, setLang] = React.useState<string>('en');
+    const classes = useStyles();
+    const [project, setProject] = React.useState<Project>();
+    const [projectName, setProjectName] = React.useState<string>('');
+    const [lang, setLang] = React.useState<string>('en');
 
-  if(!project) {
-      getProject().then( res => setProject(res.projectResult) );
-  }
+    if(!project) {
+        getProject().then( res => setProject(res.projectResult) );
+    }
 
-  React.useEffect(() => {
-      if(project) {
-          const defaultProjectName = project.project_name;
-          setProjectName(defaultProjectName);
-      }
-  }, [project]);
+    React.useEffect(() => {
+        if(!props.projectName && project) {
+            const defaultProjectName = project.project_name;
+            setProjectName(defaultProjectName);
+            props.setProjectName(defaultProjectName);
 
-  React.useEffect(() => {
-      props.setLang(lang);
-  }, [lang, props]);
+        }else if(props.projectName) {
+            setProjectName(props.projectName);
+        }
+    }, [project, props.projectName]);
 
-  const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setProjectName(event.target.value);
-  };
-  const handleChangeLang = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setLang(event.target.value as string);
-  };
+    React.useEffect(() => {
+        props.setLang(lang);
+    }, [lang, props]);
 
-  return (
-      <div className={classes.grow}>
-          <AppBar position="static">
-              <Toolbar variant="dense">
-                  <Typography className={classes.title} variant="h6" noWrap>
-                      Datastore-Viewer
-                  </Typography>
-                  <TextField
-                      className={classes.textField}
-                      InputProps={{
-                          classes: {
-                              input: classes.input,
-                              notchedOutline: classes.notchedOutline
-                          },
-                          endAdornment:
-                              <InputAdornment position="end">
-                                  <div
-                                      className={"project-name-refresh-icon"}
-                                      onClick={() => {props.setProjectName(projectName);}}
-                                  >
-                                      <IconButton edge="end" color="inherit">
-                                          <AutorenewIcon style={{fill: 'white'}}/>
-                                      </IconButton>
-                                  </div>
-                              </InputAdornment>
-                      }}
-                      onChange={handleChangeName}
-                      value={projectName}
-                      variant={"outlined"}
-                  />
-                  <Select
-                      className={classes.langSelect}
-                      inputProps={{
+    const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setProjectName(event.target.value);
+    };
+    const handleChangeLang = (event: React.ChangeEvent<{ value: unknown }>) => {
+        setLang(event.target.value as string);
+    };
+
+    return (
+        <div className={classes.grow}>
+            <AppBar position="static">
+                <Toolbar variant="dense">
+                    <Typography className={classes.title} variant="h6" noWrap>
+                        Datastore-Viewer
+                    </Typography>
+                    <TextField
+                        className={classes.textField}
+                        InputProps={{
+                            classes: {
+                                input: classes.input,
+                                notchedOutline: classes.notchedOutline
+                            },
+                            endAdornment:
+                                <InputAdornment position="end">
+                                    <div
+                                        className={"project-name-refresh-icon"}
+                                        onClick={() => {props.setProjectName(projectName);}}
+                                    >
+                                        <IconButton edge="end" color="inherit">
+                                            <AutorenewIcon style={{fill: 'white'}}/>
+                                        </IconButton>
+                                    </div>
+                                </InputAdornment>
+                        }}
+                        onChange={handleChangeName}
+                        value={projectName}
+                        variant={"outlined"}
+                    />
+                    <Select
+                        className={classes.langSelect}
+                        inputProps={{
                             classes: {
                                 icon: classes.icon,
                                 root: classes.icon,
                             },
-                      }}
-                      value={lang}
-                      onChange={handleChangeLang}
-                  >
-                      <MenuItem value={'ja'}>ja</MenuItem>
-                      <MenuItem value={'en'}>en</MenuItem>
-                  </Select>
-              </Toolbar>
-          </AppBar>
-      </div>
-  );
+                        }}
+                        value={lang}
+                        onChange={handleChangeLang}
+                    >
+                        <MenuItem value={'ja'}>ja</MenuItem>
+                        <MenuItem value={'en'}>en</MenuItem>
+                    </Select>
+                </Toolbar>
+            </AppBar>
+        </div>
+    );
 }

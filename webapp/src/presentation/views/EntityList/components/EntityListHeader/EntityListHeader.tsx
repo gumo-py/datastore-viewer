@@ -1,4 +1,5 @@
 import React from 'react';
+import { withRouter } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import Button from '@material-ui/core/Button';
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
@@ -39,6 +40,7 @@ const useStyles = makeStyles((theme: Theme) =>
 interface Props {
     kinds: KindResults | undefined;
     kindHandler: ((kind: KindResult) => void);
+    projectName: string;
     lang: string;
 }
 
