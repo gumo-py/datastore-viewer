@@ -1,5 +1,5 @@
 import React from 'react';
-import { withRouter } from 'react-router';
+import { useHistory } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
 import Button from '@material-ui/core/Button';
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
@@ -38,15 +38,18 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface Props {
+    setKind(kind: string): void;
+    kind: string | undefined;
     kinds: KindResults | undefined;
     kindHandler: ((kind: KindResult) => void);
     projectName: string;
     lang: string;
 }
 
-export default function MenuBar(props: Props) {
+export default function EntityListHeader(props: Props) {
     const classes = useStyles();
-    const [entity, setEntity] = React.useState<string>('');
+
+    const [entity, setEntity] = React.useState<string>(props.kind ? props.kind : '');
     const [t, i18n] = useTranslation();
 
     React.useEffect(() => {
@@ -63,14 +66,17 @@ export default function MenuBar(props: Props) {
     };
 
     React.useEffect(() => {
-        if(props.kinds && props.kinds.kindResults.length) {
+        if(!props.kind && props.kinds?.kindResults.length) {
             setEntity(kinds[0].kind);
         }
-    }, [kinds, props.kinds]);
+    }, [kinds, props.kinds, props.kind]);
 
     React.useEffect(() => {
         const kind = kinds.find(kind => kind.kind === entity);
-        if(kind) props.kindHandler(kind);
+        if(kind) {
+            props.kindHandler(kind);
+            props.setKind(entity);
+        }
     }, [entity, kinds, props]);
 
     return (

@@ -32,18 +32,21 @@ interface Props {
 
 const App = (props: Props) => {
     const [projectName, setProjectName] = React.useState(props.qs.projectName);
+    const [kind, setKind] = React.useState(props.qs.kind);
     const [lang, setLang] = React.useState<string>('en');
     let history = useHistory();
 
     React.useEffect(() => {
-        console.log(projectName);
-        if(projectName) history.push(`/?projectName=${projectName}`);
-    }, [projectName]);
+        let queryPath = '/?';
+        if(projectName) queryPath += `projectName=${projectName}`;
+        if(projectName && kind) queryPath += `&kind=${kind}`;
+        if(queryPath !== '/?') history.push(queryPath);
+    }, [projectName, kind]);
 
     return (
         <div className="App">
             <Header setProjectName={setProjectName} projectName={projectName} setLang={setLang}/>
-            <Route exact path="/" render={() => <EntityList kind={props.qs.kind} projectName={projectName} lang={lang}/>} />
+            <Route exact path="/" render={() => <EntityList setKind={setKind} kind={kind} projectName={projectName} lang={lang}/>} />
             <Route path="/edit/update/:kind/:urlSafeKey" render={() => <EntityEdit projectName={projectName} lang={lang}/>} />
             <Route path="/edit/new" render={() => <NewEntityEdit lang={lang}/>} />
         </div>

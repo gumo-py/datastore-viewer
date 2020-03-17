@@ -6,6 +6,8 @@ import { getEntityList, getKindList } from "../../../infrastructure/APIClient";
 import { EntityCollection } from '../../../domain/Entity';
 
 interface Props {
+    setKind(kind: string): void;
+    kind: any;
     projectName: any;
     lang: string;
 }
@@ -46,6 +48,8 @@ export default function EntityList(props: Props) {
             <MenuBar refreash={updateEntities} lang={props.lang}/>
             <EntityListHeader
                 kinds={kinds}
+                kind={props.kind}
+                setKind={props.setKind}
                 kindHandler={setKindObj}
                 projectName={props.projectName}
                 lang={props.lang}/>
