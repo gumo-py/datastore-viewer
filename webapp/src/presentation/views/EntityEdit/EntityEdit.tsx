@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface Props {
-    projectName: string;
+    projectName: any;
     lang: string;
 }
 

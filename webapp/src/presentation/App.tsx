@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route} from "react-router-dom";
+import { Route, useHistory } from "react-router-dom";
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import { Header } from './layout/Header';
@@ -10,6 +10,7 @@ import { NewEntityEdit } from './views/NewEntityEdit';
 import enJson from './locales/en.json'
 import jaJson from './locales/ja.json'
 import './App.css';
+import {ParsedQuery} from "query-string";
 
 i18n.use(initReactI18next).init({
   resources: {
@@ -25,19 +26,29 @@ i18n.use(initReactI18next).init({
   interpolation: { escapeValue: false },
 });
 
+interface Props {
+    qs: ParsedQuery;
+}
 
-const App: React.FC = () => {
-    const [projectName, setProjectName] = React.useState<string>('');
+const App = (props: Props) => {
+    const [projectName, setProjectName] = React.useState(props.qs.projectName);
+    const [kind, setKind] = React.useState(props.qs.kind);
     const [lang, setLang] = React.useState<string>('en');
+    let history = useHistory();
+
+    React.useEffect(() => {
+        let queryPath = '/?';
+        if(projectName) queryPath += `projectName=${projectName}`;
+        if(projectName && kind) queryPath += `&kind=${kind}`;
+        if(queryPath !== '/?') history.push(queryPath);
+    }, [projectName, kind]);
 
     return (
         <div className="App">
-            <Router>
-                <Header setProjectName={setProjectName} setLang={setLang}/>
-                <Route exact path="/" render={() => <EntityList projectName={projectName} lang={lang}/>} />
-                <Route path="/edit/update/:kind/:urlSafeKey" render={() => <EntityEdit projectName={projectName} lang={lang}/>} />
-                <Route path="/edit/new" render={() => <NewEntityEdit lang={lang}/>} />
-            </Router>
+            <Header setProjectName={setProjectName} projectName={projectName} setLang={setLang}/>
+            <Route exact path="/" render={() => <EntityList setKind={setKind} kind={kind} projectName={projectName} lang={lang}/>} />
+            <Route path="/edit/update/:kind/:urlSafeKey" render={() => <EntityEdit projectName={projectName} lang={lang}/>} />
+            <Route path="/edit/new" render={() => <NewEntityEdit lang={lang}/>} />
         </div>
     );
 };
