@@ -7,16 +7,18 @@ import { EntityCollection } from '../../../domain/Entity';
 
 interface Props {
     setKind(kind: string): void;
+    setPage(page: number): void;
     kind: any;
     projectName: any;
     lang: string;
+    page: any;
 }
 
 
 export default function EntityList(props: Props) {
     const [kinds, setKinds] = React.useState< KindResults | undefined >();
     const [kindObj, setKindObj] = React.useState<KindResult>();
-    const [page, setPage] = React.useState(0);
+    const [page, setPage] = React.useState(props.page);
     const rowsPerPage = 25;
     const [entityCollection, setEntities] = React.useState< EntityCollection >();
 
@@ -33,6 +35,7 @@ export default function EntityList(props: Props) {
                     setEntities(entityCollection);
                 });
         }
+        props.setPage(page);
     }, [kindObj, props.projectName, page]);
 
     React.useEffect(() => {
