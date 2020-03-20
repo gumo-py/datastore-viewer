@@ -27,26 +27,27 @@ class EmulatorCreds(google.auth.credentials.Credentials):
         raise RuntimeError('Should never be refreshed.')
 
 
+def get_client(project_name: str, namespace: Optional[str] = None):
+    if 'DATASTORE_EMULATOR_HOST' in os.environ:
+        emulator_credentials = EmulatorCreds()
+        return datastore.Client(
+            project=project_name,
+            namespace=namespace,
+            credentials=emulator_credentials,
+            _http=requests.Session(),
+        )
+    else:
+        return datastore.Client(
+            project=project_name,
+            namespace=namespace
+        )
+
+
 class DatastoreViewerRepository:
     def __init__(self, project_name: str, namespace: Optional[str] = None):
         self._project_name = project_name
         self._namespace = namespace
-        self._datastore_client = self._build_client()
-
-    def _build_client(self) -> datastore.Client:
-        if 'DATASTORE_EMULATOR_HOST' in os.environ:
-            emulator_credentials = EmulatorCreds()
-            return datastore.Client(
-                project=self._project_name,
-                namespace=self._namespace,
-                credentials=emulator_credentials,
-                _http=requests.Session(),
-            )
-        else:
-            return datastore.Client(
-                project=self._project_name,
-                namespace=self._namespace
-            )
+        self._datastore_client = get_client(project_name=self._project_name, namespace=self._namespace)
 
     @property
     def datastore_client(self) -> datastore.Client:
