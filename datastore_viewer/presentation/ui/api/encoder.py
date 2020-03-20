@@ -40,18 +40,19 @@ class DataStoreEntityJSONEncoder:
             "URLSafeKey": entity._serialized_key
         }
 
-        for property in properties:
-            if self._property_type_checker(entity[property]) == "key":
-                value = entity[property].path
-            elif self._property_type_checker(entity[property]) == "blob":
-                value = base64.b64encode(entity[property]).decode('utf-8')
-            else:
-                value = entity[property]
+        for prop_name in properties:
+            value = entity.get(prop_name)
+            value_type = self._property_type_checker(entity.get(prop_name))
+
+            if value_type == "key":
+                value = entity[prop_name].path
+            elif value_type == "blob":
+                value = base64.b64encode(entity[prop_name]).decode('utf-8')
 
             entity_dict['entity']['properties'].append(
                 {
-                    "property_name": property,
-                    "value_type": self._property_type_checker(entity[property]),
+                    "property_name": prop_name,
+                    "value_type": value_type,
                     "value": value,
                     "index": True,
                 },
