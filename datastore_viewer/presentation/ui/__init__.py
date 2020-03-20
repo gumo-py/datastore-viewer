@@ -44,3 +44,9 @@ def register_views(blueprint):
         view_func=api.ProjectListAPIView.as_view(name='project_list_api_view'),
         methods=['GET']
     )
+
+    blueprint.add_url_rule(
+        '/datastore_viewer/api/sample',
+        view_func=api.SampleDataAPIView.as_view(name='sample_generate_view'),
+        methods=['POST']
+    )

@@ -2,11 +2,13 @@ import base64
 import datetime
 import json
 import os
+import uuid
 from collections import defaultdict
 
 import flask.views
 
 from datastore_viewer.infrastructure import DatastoreViewerRepository
+from datastore_viewer.infrastructure import get_client
 from datastore_viewer.presentation.ui.api.encoder import DataStoreEntityJSONEncoder
 
 
@@ -114,3 +116,88 @@ class ProjectListAPIView(flask.views.MethodView):
                 "project_name": os.environ.get('GOOGLE_CLOUD_PROJECT', '')
             }
         })
+
+
+class SampleDataAPIView(flask.views.MethodView):
+    @staticmethod
+    def _serialized_doc(doc) -> str:
+        doc_ = {}
+        for k, v in doc.items():
+            doc_[k] = repr(v)
+        return json.dumps(doc_, ensure_ascii=True, indent=4)
+
+    def post(self):
+        from google.cloud import datastore
+
+        client = get_client(project_name=os.environ.get('GOOGLE_CLOUD_PROJECT', ''))
+
+        user1 = datastore.Entity(key=client.key("User"))
+        user1.update({
+            "name": "User Name",
+            "float": 3.141592,
+            "int": 42,
+            "false": False,
+            "true": True,
+            "null": None,
+            "datetime": datetime.datetime.utcnow(),
+        })
+        user1["serialized"] = self._serialized_doc(user1)
+        client.put(user1)
+
+        user2 = datastore.Entity(key=client.key("User", str(uuid.uuid4())))
+        user2.update({
+            "full_name": "User Full Name",
+            "birthday": datetime.datetime.utcnow(),
+        })
+        user2["serialized"] = self._serialized_doc(user2)
+        client.put(user2)
+
+        profile1 = datastore.Entity(key=client.key("Profile"), exclude_from_indexes=("description",))
+        profile1.update({
+            "user_key": user2.key,
+            "description": "this is description text"
+        })
+        profile1["serialized"] = self._serialized_doc(profile1)
+        client.put(profile1)
+
+        bulk_objects = []
+        for i in range(100):
+            bulk = datastore.Entity(key=client.key("Bulk", str(uuid.uuid4())))
+            bulk.update({
+                "value": str(uuid.uuid4()),
+                "timestamp": datetime.datetime.utcnow(),
+            })
+            bulk["serialized"] = self._serialized_doc(bulk)
+            bulk_objects.append(bulk)
+        client.put_multi(bulk_objects)
+
+        setting = datastore.Entity(key=client.key("Setting", str(uuid.uuid4())), exclude_from_indexes=("value",))
+        setting.update({"value": "this is excluded from indexes"})
+        client.put(setting)
+
+        embedded = datastore.Entity(key=client.key("Embedded", str(uuid.uuid4())))
+        embedded.update({
+            "embedded_property": {
+                "name": "NAME",
+                "integer": 42,
+                "float": 3.141592,
+                "datetime": datetime.datetime.utcnow(),
+            }
+        })
+        embedded["serialized"] = self._serialized_doc(embedded)
+        client.put(embedded)
+
+        array = datastore.Entity(key=client.key("SampleArray", str(uuid.uuid4())))
+        array.update({
+            "string_array": ["this", "is", "a", "pen"],
+            "integer_array": [1, 2, 3, 5, 7, 11],
+            "float_array": [1.41421, 2.2362],
+        })
+        embedded["serialized"] = self._serialized_doc(array)
+        client.put(array)
+
+        new_kind = datastore.Entity(key=client.key(f"z{datetime.datetime.utcnow().strftime('%Y%m%d-%H%M%S')}"))
+        new_kind.update({"value": datetime.datetime.utcnow()})
+        client.put(new_kind)
+
+        return flask.jsonify({"ok": True})
