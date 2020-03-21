@@ -55,7 +55,7 @@ class ProjectAPIView(flask.views.MethodView):
             entities_array.append(
                 encoder.encode(
                     entity=entity,
-                    properties=current_kind_properties
+                    property_names=current_kind_properties
                 )
             )
 
@@ -98,7 +98,7 @@ class EntityAPIView(flask.views.MethodView):
             "entityResult":
                 encoder.encode(
                     entity=entity,
-                    properties=current_kind_properties
+                    property_names=current_kind_properties
                 )
         })
 
