@@ -62,11 +62,23 @@ class ProjectAPIView(flask.views.MethodView):
         entities_json = defaultdict(list)
         entities_json['entityResults'] = entities_array
 
+        property_names = set()
+        for entity in entities:
+            property_names.update(entity.keys())
+
+        entity_properties = []
+        for name in property_names:
+            entity_properties.append({
+                "name": name,
+                "index": name in current_kind_properties,
+            })
+
         return flask.jsonify({
             'entityResults': entities_array,
             'pageNumber': page_number,
             'perPage': per_page,
             'totalCount': total_count,
+            'properties': entity_properties,
         })
 
 
