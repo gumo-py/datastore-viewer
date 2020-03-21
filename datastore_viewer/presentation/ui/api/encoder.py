@@ -26,7 +26,7 @@ class DataStoreEntityJSONEncoder:
         else:
             return "unknown"
 
-    def encode(self, entity, properties):
+    def encode(self, entity, property_names):
         entity_dict = {
             "entity": {
                 "key": {
@@ -40,7 +40,7 @@ class DataStoreEntityJSONEncoder:
             "URLSafeKey": entity._serialized_key
         }
 
-        for prop_name in properties:
+        for prop_name in entity.keys():
             value = entity.get(prop_name)
             value_type = self._property_type_checker(entity.get(prop_name))
 
@@ -54,7 +54,7 @@ class DataStoreEntityJSONEncoder:
                     "property_name": prop_name,
                     "value_type": value_type,
                     "value": value,
-                    "index": True,
+                    "index": prop_name in property_names,
                 },
             )
 
