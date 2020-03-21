@@ -99,6 +99,9 @@ class DatastoreViewerRepository:
     def fetch_parent_properties(self):
         properties_by_kind = {}
 
+        for kind in self.fetch_kinds():
+            properties_by_kind[kind] = []
+
         for kind, props in self.fetch_properties().items():
             result = []
             for prop in props:
