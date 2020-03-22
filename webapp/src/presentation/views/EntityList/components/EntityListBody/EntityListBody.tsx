@@ -19,6 +19,7 @@ import {EntityCollection} from "../../../../../domain/Entity";
 interface HeadCell {
   id: string;
   label: string;
+  index: boolean;
 }
 
 interface Data {
@@ -26,9 +27,12 @@ interface Data {
   kind: string;
   urlSafeKey: string;
   parent: any;
-  properties: {
-    [key: string]: any
-  };
+  properties: property;
+
+}
+
+interface property {
+  [key: string]: any;
 }
 
 function createData(
@@ -52,7 +56,7 @@ function convertData(entities: Array<EntityObject>) {
     const properties: { [key:string] : any } = {};
 
     for(let property of entity.properties) {
-      if(property.index) properties[property.name] = property.toStr();
+      properties[property.name] = { value: property.toStr(), index: property.index };
     }
     rows.push(createData(name_id, kind, parent, urlSafeKey, properties));
   }
@@ -89,28 +93,56 @@ function EnhancedTableHead(props: EnhancedTableProps) {
             inputProps={{ 'aria-label': 'select all desserts' }}
           />
         </TableCell>
-        {props.headCells.map(headCell => (
-          <TableCell
-            key={headCell.id}
-            align={'left'}
-            padding={'default'}
-            sortDirection={orderBy === headCell.id ? order : false}
-            style={{fontWeight:'bolder'}}
-          >
-            {/*<TableSortLabel*/}
-            {/*  active={orderBy === headCell.id}*/}
-            {/*  direction={orderBy === headCell.id ? order : 'asc'}*/}
-            {/*  onClick={createSortHandler(headCell.id)}*/}
-            {/*>*/}
-              {headCell.label}
-            {/*  {orderBy === headCell.id ? (*/}
-            {/*    <span className={classes.visuallyHidden}>*/}
-            {/*      {order === 'desc' ? 'sorted descending' : 'sorted ascending'}*/}
-            {/*    </span>*/}
-            {/*  ) : null}*/}
-            {/*</TableSortLabel>*/}
-          </TableCell>
-        ))}
+        {props.headCells.map(headCell => {
+          if(headCell.index) {
+            return(
+                <TableCell
+                    key={headCell.id}
+                    align={'left'}
+                    padding={'default'}
+                    sortDirection={orderBy === headCell.id ? order : false}
+                    style={{fontWeight:'bolder'}}
+                >
+                  {/*<TableSortLabel*/}
+                  {/*  active={orderBy === headCell.id}*/}
+                  {/*  direction={orderBy === headCell.id ? order : 'asc'}*/}
+                  {/*  onClick={createSortHandler(headCell.id)}*/}
+                  {/*>*/}
+                  {headCell.label}
+                  {/*  {orderBy === headCell.id ? (*/}
+                  {/*    <span className={classes.visuallyHidden}>*/}
+                  {/*      {order === 'desc' ? 'sorted descending' : 'sorted ascending'}*/}
+                  {/*    </span>*/}
+                  {/*  ) : null}*/}
+                  {/*</TableSortLabel>*/}
+                </TableCell>
+            )
+          } else {
+            return(
+                <TableCell
+                    key={headCell.id}
+                    align={'left'}
+                    padding={'default'}
+                    sortDirection={orderBy === headCell.id ? order : false}
+                    style={{fontWeight:'bolder', color:'grey'}}
+                >
+                  {/*<TableSortLabel*/}
+                  {/*  active={orderBy === headCell.id}*/}
+                  {/*  direction={orderBy === headCell.id ? order : 'asc'}*/}
+                  {/*  onClick={createSortHandler(headCell.id)}*/}
+                  {/*>*/}
+                  {headCell.label}
+                  {/*  {orderBy === headCell.id ? (*/}
+                  {/*    <span className={classes.visuallyHidden}>*/}
+                  {/*      {order === 'desc' ? 'sorted descending' : 'sorted ascending'}*/}
+                  {/*    </span>*/}
+                  {/*  ) : null}*/}
+                  {/*</TableSortLabel>*/}
+                </TableCell>
+            )
+          }
+        })
+      }
       </TableRow>
     </TableHead>
   );
@@ -170,11 +202,11 @@ export default function EnhancedTable(props: Props) {
     i18n.changeLanguage(props.lang);
   }, [props.lang, i18n]);
 
-  let headCell: HeadCell[] = [ { id: 'id', label: `${t('EntityList.EntityListBody.HeadCell.nameId')}` } ];
-  if(props.kindObj && rows.length) {
-    if(rows[0].parent) headCell.push({ id: 'parent', label: `${t('EntityList.EntityListBody.HeadCell.parent')}`});
-    props.kindObj.indexed_properties.forEach( (key) => {
-      headCell.push({ id: key.property_name, label: key.property_name });
+  let headCell: HeadCell[] = [ { id: 'id', label: `${t('EntityList.EntityListBody.HeadCell.nameId')}`, index: true } ];
+  if(rows.length) {
+    if(rows[0].parent) headCell.push({ id: 'parent', label: `${t('EntityList.EntityListBody.HeadCell.parent')}`, index: true });
+    (Object.keys(rows[0].properties) as Array<keyof property>).forEach( (property_name) => {
+      headCell.push({ id: String(property_name), label: String(property_name), index:rows[0].properties[property_name].index });
     });
   }
 
@@ -284,7 +316,7 @@ export default function EnhancedTable(props: Props) {
                       {row.parent === " " && <TableCell key={row.parent} align="left">{ row.parent }</TableCell>}
                       {
                         Object.keys(row.properties).map( value => {
-                          return <TableCell key={value} align="left">{ row.properties[value] }</TableCell>
+                          return <TableCell key={value} align="left">{ row.properties[value].value }</TableCell>
                         })
                       }
                     </TableRow>
