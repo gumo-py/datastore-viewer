@@ -4,7 +4,7 @@ export default class BooleanProperty implements Property {
     index: boolean;
 
     constructor(value: string, name: string, index: boolean) {
-        this.value = value.toLowerCase() === 'true';
+        this.value = value === 'true';
         this.name = name;
         this.index = index;
     }
