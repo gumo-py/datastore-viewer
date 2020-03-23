@@ -16,6 +16,9 @@
       "import": "Import",
       "export": "Export",
       "delete": "Delete"
+    },
+    "NotFound": {
+      "message": "No entities matched this query."
     }
   },
   "EntityEdit": {
