@@ -9,12 +9,12 @@ class DataStoreEntityJSONEncoder:
         # TODO: Handling Geographical points, Array, Object
         if isinstance(prop, str):
             return "string"
+        elif isinstance(prop, bool):
+            return "boolean"
         elif isinstance(prop, int):
             return "integer"
         elif isinstance(prop, float):
             return "float"
-        elif isinstance(prop, bool):
-            return "boolean"
         elif isinstance(prop, datetime.datetime):
             return "timestamp"
         elif isinstance(prop, datastore.Key):
