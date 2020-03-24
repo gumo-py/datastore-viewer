@@ -10,6 +10,12 @@ def register_views(blueprint):
     )
 
     blueprint.add_url_rule(
+        '/datastore_viewer/<path:path>',
+        view_func=html.DashboardView.as_view(name='dashboardCatchAll'),
+        methods=['GET']
+    )
+
+    blueprint.add_url_rule(
         '/datastore_viewer/projects/<string:project_name>/view_entity',
         view_func=api.EntityView.as_view(name='entity_view'),
         methods=['GET']
