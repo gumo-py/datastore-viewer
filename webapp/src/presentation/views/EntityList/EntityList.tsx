@@ -2,6 +2,7 @@ import React from 'react';
 import { MenuBar } from './components/MenuBar';
 import { EntityListHeader } from './components/EntityListHeader';
 import { EntityListBody } from './components/EntityListBody';
+import { NotFound } from './components/NotFound';
 import { getEntityList, getKindList } from "../../../infrastructure/APIClient";
 import { EntityCollection } from '../../../domain/Entity';
 
@@ -58,14 +59,22 @@ export default function EntityList(props: Props) {
                 kindHandler={setKindObj}
                 projectName={props.projectName}
                 lang={props.lang}/>
-            <EntityListBody
-                kindObj={kindObj}
-                entityCollection={entityCollection}
-                page={page}
-                rowsPerPage={rowsPerPage}
-                setPage={setPage}
-                lang={props.lang}
-            />
+
+            {
+                entityCollection?.entities.length ?
+                    <EntityListBody
+                        kindObj={kindObj}
+                        entityCollection={entityCollection}
+                        page={page}
+                        rowsPerPage={rowsPerPage}
+                        setPage={setPage}
+                        lang={props.lang}
+                    /> :
+                    <NotFound
+                        lang={props.lang}
+                    />
+            }
+
         </div>
     )
 }

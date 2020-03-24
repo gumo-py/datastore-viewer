@@ -16,6 +16,9 @@
       "import": "インポート",
       "export": "エクスポート",
       "delete": "削除"
+    },
+    "NotFound": {
+      "message": "このクエリに一致するエンティティがありません。"
     }
   },
    "EntityEdit": {
