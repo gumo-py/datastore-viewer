@@ -311,7 +311,7 @@ export default function EnhancedTable(props: Props) {
                         />
                       </TableCell>
                       <TableCell component="th" id={labelId} scope="row" padding="none">
-                        <NavLink className={classes.link} to={`/edit/update/${row.kind}/${row.urlSafeKey}`} >{row.name_id}</NavLink>
+                        <NavLink className={classes.link} to={`/datastore_viewer/edit/update/${row.kind}/${row.urlSafeKey}`} >{row.name_id}</NavLink>
                       </TableCell>
                       {row.parent === " " && <TableCell key={row.parent} align="left">{ row.parent }</TableCell>}
                       {

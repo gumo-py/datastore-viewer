@@ -38,19 +38,19 @@ const App = (props: Props) => {
     let history = useHistory();
 
     React.useEffect(() => {
-        let queryPath = '/?';
+        let queryPath = '/datastore_viewer/?';
         if(projectName) queryPath += `projectName=${projectName}`;
         if(projectName && kind) queryPath += `&kind=${kind}`;
         if(projectName && page) queryPath += `&page=${page}`;
-        if(queryPath !== '/?') history.push(queryPath);
+        if(queryPath !== '/datastore_viewer/?') history.push(queryPath);
     }, [projectName, kind, page]);
 
     return (
         <div className="App">
             <Header setProjectName={setProjectName} projectName={projectName} setLang={setLang}/>
-            <Route exact path="/" render={() => <EntityList setKind={setKind} kind={kind} setPage={setPage} page={page} projectName={projectName} lang={lang}/>} />
-            <Route path="/edit/update/:kind/:urlSafeKey" render={() => <EntityEdit projectName={projectName} lang={lang}/>} />
-            <Route path="/edit/new" render={() => <NewEntityEdit lang={lang}/>} />
+            <Route exact path="/datastore_viewer" render={() => <EntityList setKind={setKind} kind={kind} setPage={setPage} page={page} projectName={projectName} lang={lang}/>} />
+            <Route path="/datastore_viewer/edit/update/:kind/:urlSafeKey" render={() => <EntityEdit projectName={projectName} lang={lang}/>} />
+            <Route path="/datastore_viewer/edit/new" render={() => <NewEntityEdit lang={lang}/>} />
         </div>
     );
 };
