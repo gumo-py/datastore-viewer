@@ -29,7 +29,7 @@ webapp-build:
 	docker-compose run --rm --no-deps webapp yarn run build
 
 .PHONY: build
-build: webapp-build
+build:
 	python setup.py sdist bdist_wheel
 
 .PHONY: clean
