@@ -4,7 +4,7 @@ from datastore_viewer.presentation.ui import html
 
 def register_views(blueprint):
     blueprint.add_url_rule(
-        '/datastore_viewer',
+        '/datastore_viewer/',
         view_func=html.DashboardView.as_view(name='dashboard'),
         methods=['GET']
     )
