@@ -54,7 +54,7 @@ export default function MenuBar(props: Props) {
 
     return (
         <div className={classes.root}>
-            <Link to={'/'}>
+            <Link to={'/datastore_viewer'}>
                 <IconButton aria-label="back" className={classes.iconButton}>
                     <ArrowBackIcon fontSize="inherit" />
                 </IconButton>
