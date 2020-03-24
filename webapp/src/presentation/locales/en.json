@@ -30,23 +30,23 @@
       "kind": "Kind",
       "key": "Key",
       "keyLiteral": "KeyLiteral",
-      "urlSafeKey": "URLSafeKey"
+      "urlSafeKey": "URL-Safe Key"
     },
     "MenuBar": {
       "title": "Edit Entity",
-      "refresh": "Refresh",
+      "refresh": "REFRESH",
       "delete": "Delete"
     },
     "PropertyMenu": {
-      "title": "Property",
+      "title": "Properties",
       "addProperty": "Add Property",
       "PropertyItem": {
         "value": "Value",
         "empty": "Empty",
-        "subTitle": "Regist Index",
+        "subTitle": "Indexed",
         "name": "Name",
         "type": "Type",
-        "registIndex": "Regist Index This Property",
+        "registIndex": "Index This Property",
         "listItem": {
           "string": "String",
           "date": "Date",
