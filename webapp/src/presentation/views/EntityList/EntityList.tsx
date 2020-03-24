@@ -31,6 +31,8 @@ export default function EntityList(props: Props) {
         if(kindObj){
             getEntityList(props.projectName, kindObj.kind, page, rowsPerPage)
                 .then( entityCollection => {
+                    const maxPage = entityCollection.totalCount / rowsPerPage - 1;
+                    if(maxPage < page) setPage(maxPage);
                     console.log('updateEntities', entityCollection);
                     setEntities(entityCollection);
                 });
