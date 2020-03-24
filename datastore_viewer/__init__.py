@@ -42,7 +42,11 @@ class DatastoreViewer:
 
         @self._app.route('/')
         def root():
-            return flask.redirect('/datastore_viewer')
+            return flask.redirect('/datastore_viewer/')
+
+        @self._app.route('/datastore_viewer')
+        def datastore_viewer():
+            return flask.redirect('/datastore_viewer/')
 
     def run(
             self,

@@ -124,3 +124,6 @@ yarn-error.log*
 
 # builded templetes
 datastore_viewer/presentation/template/*
+
+# ignore
+docker-compose.override.yml

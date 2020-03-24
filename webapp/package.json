@@ -32,7 +32,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build && rm -r ../datastore_viewer/presentation/template && mv build/ ../datastore_viewer/presentation/template/",
+    "build": "react-scripts build && rm -fr ../datastore_viewer/presentation/template && mv build/ ../datastore_viewer/presentation/template/",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
