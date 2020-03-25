@@ -273,7 +273,7 @@ export default function EnhancedTable(props: Props) {
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelecteds = rows.map(n => n.name_id);
+      const newSelecteds = rows.map(n => n.urlSafeKey);
       setSelected(newSelecteds);
       return;
     }
@@ -331,17 +331,17 @@ export default function EnhancedTable(props: Props) {
               {stableSort(order)
                 // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.name_id);
+                  const isItemSelected = isSelected(row.urlSafeKey);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
                     <TableRow
                       hover
-                      onClick={event => handleClick(event, row.name_id)}
+                      onClick={event => handleClick(event, row.urlSafeKey)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.name_id}
+                      key={row.urlSafeKey}
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
