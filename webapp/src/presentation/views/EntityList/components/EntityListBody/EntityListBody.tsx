@@ -73,7 +73,8 @@ interface EnhancedTableProps {
   order: Order;
   orderBy: string;
   rowCount: number;
-  headCells: HeadCell[];
+  headCellIds: HeadCell[];
+  headCellProperties: HeadCell[];
 }
 
 function EnhancedTableHead(props: EnhancedTableProps) {
@@ -93,7 +94,32 @@ function EnhancedTableHead(props: EnhancedTableProps) {
             inputProps={{ 'aria-label': 'select all desserts' }}
           />
         </TableCell>
-        {props.headCells.map(headCell => {
+        {props.headCellIds.map(headCell => {
+            return(
+                <TableCell
+                    key={headCell.id}
+                    align={'left'}
+                    padding={'default'}
+                    sortDirection={orderBy === headCell.id ? order : false}
+                    style={{fontWeight:'bolder'}}
+                >
+                  {/*<TableSortLabel*/}
+                  {/*  active={orderBy === headCell.id}*/}
+                  {/*  direction={orderBy === headCell.id ? order : 'asc'}*/}
+                  {/*  onClick={createSortHandler(headCell.id)}*/}
+                  {/*>*/}
+                  {headCell.label}
+                  {/*  {orderBy === headCell.id ? (*/}
+                  {/*    <span className={classes.visuallyHidden}>*/}
+                  {/*      {order === 'desc' ? 'sorted descending' : 'sorted ascending'}*/}
+                  {/*    </span>*/}
+                  {/*  ) : null}*/}
+                  {/*</TableSortLabel>*/}
+                </TableCell>
+            );
+          })
+        }
+        {props.headCellProperties.map(headCell => {
           if(headCell.index) {
             return(
                 <TableCell
@@ -173,7 +199,18 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     link: {
       color: 'black',
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow:'ellipsis',
+      maxWidth: 200
     },
+    cell: {
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow:'ellipsis',
+      maxWidth: 200
+    },
+
   }),
 );
 
@@ -202,12 +239,14 @@ export default function EnhancedTable(props: Props) {
     i18n.changeLanguage(props.lang);
   }, [props.lang, i18n]);
 
-  let headCell: HeadCell[] = [ { id: 'id', label: `${t('EntityList.EntityListBody.HeadCell.nameId')}`, index: true } ];
+  const headCellIds: HeadCell[] = [ { id: 'id', label: `${t('EntityList.EntityListBody.HeadCell.nameId')}`, index: true } ];
+  const headCellProperties: HeadCell[] = [];
   if(rows.length) {
-    if(rows[0].parent) headCell.push({ id: 'parent', label: `${t('EntityList.EntityListBody.HeadCell.parent')}`, index: true });
+    if(rows[0].parent) headCellIds.push({ id: 'parent', label: `${t('EntityList.EntityListBody.HeadCell.parent')}`, index: true });
     (Object.keys(rows[0].properties) as Array<keyof property>).forEach( (property_name) => {
-      headCell.push({ id: String(property_name), label: String(property_name), index:rows[0].properties[property_name].index });
+      headCellProperties.push({ id: String(property_name), label: String(property_name), index:rows[0].properties[property_name].index });
     });
+    headCellProperties.sort();
   }
 
   const stableSort = (order: Order) => {
@@ -234,7 +273,7 @@ export default function EnhancedTable(props: Props) {
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelecteds = rows.map(n => n.name_id);
+      const newSelecteds = rows.map(n => n.urlSafeKey);
       setSelected(newSelecteds);
       return;
     }
@@ -285,23 +324,24 @@ export default function EnhancedTable(props: Props) {
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
               rowCount={rows.length}
-              headCells={headCell}
+              headCellIds={headCellIds}
+              headCellProperties={headCellProperties}
             />
             <TableBody>
               {stableSort(order)
                 // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.name_id);
+                  const isItemSelected = isSelected(row.urlSafeKey);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
                     <TableRow
                       hover
-                      onClick={event => handleClick(event, row.name_id)}
+                      onClick={event => handleClick(event, row.urlSafeKey)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.name_id}
+                      key={row.urlSafeKey}
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
@@ -313,10 +353,14 @@ export default function EnhancedTable(props: Props) {
                       <TableCell component="th" id={labelId} scope="row" padding="none">
                         <NavLink className={classes.link} to={`/datastore_viewer/edit/update/${row.kind}/${row.urlSafeKey}`} >{row.name_id}</NavLink>
                       </TableCell>
-                      {row.parent === " " && <TableCell key={row.parent} align="left">{ row.parent }</TableCell>}
+                      {row.parent === " " && <TableCell className={classes.cell} key={row.parent} align="left">{ row.parent }</TableCell>}
                       {
-                        Object.keys(row.properties).map( value => {
-                          return <TableCell key={value} align="left">{ row.properties[value].value }</TableCell>
+                        headCellProperties.map((property) => {
+                          if(row.properties[property.id]) {
+                            return <TableCell className={classes.cell} key={property.id} align="left">{ row.properties[property.id].value }</TableCell>
+                          }else{
+                            return <TableCell className={classes.cell} key={property.id} align="left">{''}</TableCell>
+                          }
                         })
                       }
                     </TableRow>

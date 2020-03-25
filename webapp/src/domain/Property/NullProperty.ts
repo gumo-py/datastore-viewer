@@ -1,10 +1,10 @@
 export default class NullProperty implements Property {
-    value: null;
+    value: string;
     name: string;
     index: boolean;
 
     constructor(name: string, index: boolean) {
-        this.value = null;
+        this.value = 'Null';
         this.name = name;
         this.index = index;
     }
@@ -14,6 +14,6 @@ export default class NullProperty implements Property {
     }
 
     toStr(): string {
-        return '';
+        return 'Null';
     }
 }
