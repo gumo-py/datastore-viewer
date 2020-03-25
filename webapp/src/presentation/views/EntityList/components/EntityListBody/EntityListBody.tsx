@@ -199,7 +199,18 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     link: {
       color: 'black',
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow:'ellipsis',
+      maxWidth: 200
     },
+    cell: {
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow:'ellipsis',
+      maxWidth: 200
+    },
+
   }),
 );
 
@@ -342,13 +353,13 @@ export default function EnhancedTable(props: Props) {
                       <TableCell component="th" id={labelId} scope="row" padding="none">
                         <NavLink className={classes.link} to={`/datastore_viewer/edit/update/${row.kind}/${row.urlSafeKey}`} >{row.name_id}</NavLink>
                       </TableCell>
-                      {row.parent === " " && <TableCell key={row.parent} align="left">{ row.parent }</TableCell>}
+                      {row.parent === " " && <TableCell className={classes.cell} key={row.parent} align="left">{ row.parent }</TableCell>}
                       {
                         headCellProperties.map((property) => {
                           if(row.properties[property.id]) {
-                            return <TableCell key={property.id} align="left">{ row.properties[property.id].value }</TableCell>
+                            return <TableCell className={classes.cell} key={property.id} align="left">{ row.properties[property.id].value }</TableCell>
                           }else{
-                            return <TableCell key={property.id} align="left">{''}</TableCell>
+                            return <TableCell className={classes.cell} key={property.id} align="left">{''}</TableCell>
                           }
                         })
                       }
