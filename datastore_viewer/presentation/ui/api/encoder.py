@@ -26,6 +26,17 @@ class DataStoreEntityJSONEncoder:
         else:
             return "unknown"
 
+    def _property_encode(self, property_value):
+        value = property_value
+        value_type = self._property_type_checker(property_value)
+
+        if value_type == "key":
+            value = property_value.path
+        elif value_type == "blob":
+            value = base64.b64encode(property_value).decode('utf-8')
+
+        return value_type, value
+
     def encode(self, entity, property_names):
         entity_dict = {
             "entity": {
@@ -41,13 +52,7 @@ class DataStoreEntityJSONEncoder:
         }
 
         for prop_name in entity.keys():
-            value = entity.get(prop_name)
-            value_type = self._property_type_checker(entity.get(prop_name))
-
-            if value_type == "key":
-                value = entity[prop_name].path
-            elif value_type == "blob":
-                value = base64.b64encode(entity[prop_name]).decode('utf-8')
+            value_type, value = self._property_encode(entity.get(prop_name))
 
             entity_dict['entity']['properties'].append(
                 {
