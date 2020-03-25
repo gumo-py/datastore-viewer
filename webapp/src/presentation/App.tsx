@@ -30,10 +30,18 @@ interface Props {
     qs: ParsedQuery;
 }
 
+const pageValidator = function(page: number): number {
+    if(!Number.isInteger(page) || page < 0) {
+        return 0;
+    }else {
+        return page;
+    }
+};
+
 const App = (props: Props) => {
     const [projectName, setProjectName] = React.useState(props.qs.projectName ? props.qs.projectName : '');
     const [kind, setKind] = React.useState(props.qs.kind ? props.qs.kind : '');
-    const [page, setPage] = React.useState(props.qs.page ? Number(props.qs.page) : 0);
+    const [page, setPage] = React.useState(props.qs.page ? pageValidator(Number(props.qs.page)) : 0);
     const [lang, setLang] = React.useState<string>('en');
     let history = useHistory();
 
