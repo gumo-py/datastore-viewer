@@ -353,7 +353,7 @@ export default function EnhancedTable(props: Props) {
                       <TableCell component="th" id={labelId} scope="row" padding="none">
                         <NavLink className={classes.link} to={`/datastore_viewer/edit/update/${row.kind}/${row.urlSafeKey}`} >{row.name_id}</NavLink>
                       </TableCell>
-                      {row.parent === " " && <TableCell className={classes.cell} key={row.parent} align="left">{ row.parent }</TableCell>}
+                      {row.parent && <TableCell className={classes.cell} key={row.parent} align="left">{ row.parent }</TableCell>}
                       {
                         headCellProperties.map((property) => {
                           if(row.properties[property.id]) {
