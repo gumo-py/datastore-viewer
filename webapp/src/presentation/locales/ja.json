@@ -54,6 +54,7 @@
           "float": "浮動小数点数",
           "bool": "ブール値",
           "array": "配列",
+          "embedded": "埋め込みエンティティ",
           "key": "Key",
           "unknown": "Unknown",
           "null": "Null"

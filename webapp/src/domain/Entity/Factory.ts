@@ -4,7 +4,7 @@ import {
     IntegerProperty, FloatProperty, BooleanProperty,
     DateProperty, KeyProperty, StringProperty,
     NullProperty, BlobProperty, ArrayProperty,
-    UnknownProperty
+    EmbeddedProperty, UnknownProperty
 } from '../Property'
 
 function makeProperty(propertyJson: PropertyJson) {
@@ -60,6 +60,13 @@ function makeProperty(propertyJson: PropertyJson) {
 
         case 'array':
             return new ArrayProperty(
+                propertyJson.value,
+                propertyJson.property_name,
+                propertyJson.index
+            );
+
+        case 'embedded':
+            return new EmbeddedProperty(
                 propertyJson.value,
                 propertyJson.property_name,
                 propertyJson.index

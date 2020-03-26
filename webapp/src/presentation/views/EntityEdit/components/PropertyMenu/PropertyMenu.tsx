@@ -29,6 +29,7 @@ const useMenuItemStyles = makeStyles((theme: Theme) =>
         },
         inputFont: {
             fontSize: 13,
+            color:'black'
         },
         inputSelect: {
             fontSize: 13,
@@ -121,7 +122,9 @@ const PropertyItem: React.FC<PropertyProps> = props => {
                 case 'Boolean':
                     return `${name}: ${value}`;
                 case 'Array':
-                    return `${name}: [${value}]`;
+                    return `${name}: ${JSON.stringify(value)}`;
+                case 'Embedded':
+                    return `${name}: ${JSON.stringify(value)}`;
                 default:
                     if(!value) {
                         return `${name}: ${t('EntityEdit.PropertyMenu.PropertyItem.empty')}`;
@@ -245,8 +248,33 @@ const PropertyItem: React.FC<PropertyProps> = props => {
                         label={t('EntityEdit.PropertyMenu.PropertyItem.value')}
                         variant="outlined" /> );
 
+            case 'Embedded':
+                return (
+                    <TextField
+                        disabled
+                        value={JSON.stringify(value, null, 4)}
+                        onChange={handleFormValueChange}
+                        size={'small'}
+                        multiline={true}
+                        InputLabelProps={{ shrink: true }}
+                        InputProps={{ classes: { input: classes.inputFont } }}
+                        className={classes.textField}
+                        label={t('EntityEdit.PropertyMenu.PropertyItem.value')}
+                        variant="outlined" /> );
+
             case 'Array':
-                return;
+                return (
+                    <TextField
+                        disabled
+                        value={JSON.stringify(value)}
+                        onChange={handleFormValueChange}
+                        size={'small'}
+                        multiline={true}
+                        InputLabelProps={{ shrink: true }}
+                        InputProps={{ classes: { input: classes.inputFont } }}
+                        className={classes.textField}
+                        label={t('EntityEdit.PropertyMenu.PropertyItem.value')}
+                        variant="outlined" /> );
 
             case 'Null':
                 return;
@@ -322,6 +350,7 @@ const PropertyItem: React.FC<PropertyProps> = props => {
                                     <MenuItem className={classes.inputFont} value={'Boolean'}>{t('EntityEdit.PropertyMenu.PropertyItem.listItem.bool')}</MenuItem>
                                     <MenuItem className={classes.inputFont} value={'Key'}>{t('EntityEdit.PropertyMenu.PropertyItem.listItem.key')}</MenuItem>
                                     <MenuItem className={classes.inputFont} value={'Array'}>{t('EntityEdit.PropertyMenu.PropertyItem.listItem.array')}</MenuItem>
+                                    <MenuItem className={classes.inputFont} value={'Embedded'}>{t('EntityEdit.PropertyMenu.PropertyItem.listItem.embedded')}</MenuItem>
                                     <MenuItem className={classes.inputFont} value={'Unknown'}>{t('EntityEdit.PropertyMenu.PropertyItem.listItem.unknown')}</MenuItem>
                                     <MenuItem className={classes.inputFont} value={'Null'}>{t('EntityEdit.PropertyMenu.PropertyItem.listItem.null')}</MenuItem>
                                 </TextField>

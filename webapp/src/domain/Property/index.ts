@@ -6,6 +6,7 @@ import KeyProperty from './KeyProperty'
 import StringProperty from './StringProperty'
 import BlobProperty from './BlobProperty'
 import ArrayProperty from "./ArrayProperty";
+import EmbeddedProperty from "./EmbeddedProperty";
 import UnknownProperty from './UnknownProperty'
 import NullProperty from './NullProperty'
 
@@ -20,5 +21,6 @@ export {
     BlobProperty,
     UnknownProperty,
     ArrayProperty,
+    EmbeddedProperty,
     NullProperty
 }
