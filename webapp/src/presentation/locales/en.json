@@ -43,7 +43,7 @@
       "PropertyItem": {
         "value": "Value",
         "empty": "Empty",
-        "subTitle": "Indexed",
+        "indexed": "Indexed",
         "name": "Name",
         "type": "Type",
         "registIndex": "Index This Property",
@@ -54,6 +54,7 @@
           "float": "Float",
           "bool": "Boolean",
           "key": "Key",
+          "unknown": "Unknown",
           "null": "Null"
         },
         "boolItem": {

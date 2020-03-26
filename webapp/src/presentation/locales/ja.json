@@ -43,7 +43,7 @@
       "PropertyItem": {
         "value": "値",
         "empty": "空白",
-        "subTitle": "インデックス登録",
+        "indexed": "インデックス登録",
         "name": "名前",
         "type": "タイプ",
         "registIndex": "このプロパティをインデックス登録する",
@@ -54,6 +54,7 @@
           "float": "浮動小数点数",
           "bool": "ブール値",
           "key": "Key",
+          "unknown": "Unknown",
           "null": "Null"
         },
         "boolItem": {

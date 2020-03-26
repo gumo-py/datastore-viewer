@@ -73,6 +73,7 @@ export default function EntityList(props: Props) {
                         rowsPerPage={rowsPerPage}
                         setPage={setPage}
                         lang={props.lang}
+                        projectName={props.projectName}
                     /> :
                     <NotFound
                         lang={props.lang}
