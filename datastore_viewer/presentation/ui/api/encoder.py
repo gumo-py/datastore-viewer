@@ -47,7 +47,9 @@ class DataStoreEntityJSONEncoder:
         elif value_type == "array":
             value = [self._array_value_encode(v) for v in value]
         elif value_type == "embedded":
-            value = DataStoreEntityJSONEncoder().encode(value, None)
+            value = {
+                "properties": DataStoreEntityJSONEncoder().encode(value, None)["entity"]["properties"]
+            }
 
         return value_type, value
 
