@@ -28,6 +28,10 @@ export default function EntityList(props: Props) {
             .then( res => setKinds(res) );
     }
 
+    React.useEffect( () => {
+        setKinds(undefined);
+    }, [props.projectName]);
+
     const updateEntities = React.useCallback(() => {
         if(kindObj){
             getEntityList(props.projectName, kindObj.kind, page, rowsPerPage)

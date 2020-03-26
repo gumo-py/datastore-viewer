@@ -51,7 +51,13 @@ const App = (props: Props) => {
         if(projectName && kind) queryPath += `&kind=${kind}`;
         if(projectName && page) queryPath += `&page=${page}`;
         if(queryPath !== '/datastore_viewer/?') history.push(queryPath);
-    }, [projectName, kind, page]);
+    }, [kind, page]);
+
+    React.useEffect(() => {
+         setKind('');
+         setPage(0);
+         history.push(`/datastore_viewer/?projectName=${projectName}`);
+    }, [projectName]);
 
     return (
         <div className="App">
