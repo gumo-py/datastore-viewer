@@ -239,6 +239,10 @@ export default function EnhancedTable(props: Props) {
     i18n.changeLanguage(props.lang);
   }, [props.lang, i18n]);
 
+  React.useEffect(() => {
+    setSelected([]);
+  }, [props.kindObj]);
+
   const headCellIds: HeadCell[] = [ { id: 'id', label: `${t('EntityList.EntityListBody.HeadCell.nameId')}`, index: true } ];
   const headCellProperties: HeadCell[] = [];
   if(rows.length) {

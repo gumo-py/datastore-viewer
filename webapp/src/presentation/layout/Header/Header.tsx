@@ -58,6 +58,7 @@ const useStyles = makeStyles((theme: Theme) =>
 interface Props {
     setProjectName(name: string): void;
     setLang(lang: string): void;
+    lang: string;
     projectName: any;
 }
 
@@ -65,7 +66,7 @@ export default function HeaderAppBar(props: Props) {
     const classes = useStyles();
     const [project, setProject] = React.useState<Project>();
     const [projectName, setProjectName] = React.useState<string>('');
-    const [lang, setLang] = React.useState<string>('en');
+    const [lang, setLang] = React.useState<string>(props.lang);
 
     if(!project) {
         getProject().then( res => setProject(res.projectResult) );
