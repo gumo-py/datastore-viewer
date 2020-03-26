@@ -53,6 +53,7 @@
           "int": "整数",
           "float": "浮動小数点数",
           "bool": "ブール値",
+          "array": "配列",
           "key": "Key",
           "unknown": "Unknown",
           "null": "Null"

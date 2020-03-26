@@ -110,17 +110,25 @@ const PropertyItem: React.FC<PropertyProps> = props => {
     const handleNameChange = (event: React.ChangeEvent<{ value: any }>) => {
         setName(event.target.value);
     };
+
     const makeTitle = () => {
         if(!name) {
             return t('EntityEdit.PropertyMenu.PropertyItem.empty');
-        } else if(!value) {
-            if(type === "Null" || type === "Boolean") {
-                return `${name}: ${value}`;
-            }else {
-                return `${name}: ${t('EntityEdit.PropertyMenu.PropertyItem.empty')}`;
+        }else {
+            switch(type) {
+                case 'Null':
+                    return `${name}: ${value}`;
+                case 'Boolean':
+                    return `${name}: ${value}`;
+                case 'Array':
+                    return `${name}: [${value}]`;
+                default:
+                    if(!value) {
+                        return `${name}: ${t('EntityEdit.PropertyMenu.PropertyItem.empty')}`;
+                    }else {
+                        return `${name}: ${value}`;
+                    }
             }
-        } else {
-            return `${name}: ${value}`;
         }
     };
 
@@ -133,9 +141,7 @@ const PropertyItem: React.FC<PropertyProps> = props => {
     };
 
     React.useEffect(() => {
-        if(type === 'Date') {
-            setValue(moment(value).format('YYYY-MM-DDThh:mm'));
-        }
+        if(type === 'Date') setValue(moment(value).format('YYYY-MM-DDThh:mm'));
     }, [value, type]);
 
     const formAdjuster = (type: string) => {
@@ -239,6 +245,9 @@ const PropertyItem: React.FC<PropertyProps> = props => {
                         label={t('EntityEdit.PropertyMenu.PropertyItem.value')}
                         variant="outlined" /> );
 
+            case 'Array':
+                return;
+
             case 'Null':
                 return;
         }
@@ -312,6 +321,7 @@ const PropertyItem: React.FC<PropertyProps> = props => {
                                     <MenuItem className={classes.inputFont} value={'Float'}>{t('EntityEdit.PropertyMenu.PropertyItem.listItem.float')}</MenuItem>
                                     <MenuItem className={classes.inputFont} value={'Boolean'}>{t('EntityEdit.PropertyMenu.PropertyItem.listItem.bool')}</MenuItem>
                                     <MenuItem className={classes.inputFont} value={'Key'}>{t('EntityEdit.PropertyMenu.PropertyItem.listItem.key')}</MenuItem>
+                                    <MenuItem className={classes.inputFont} value={'Array'}>{t('EntityEdit.PropertyMenu.PropertyItem.listItem.array')}</MenuItem>
                                     <MenuItem className={classes.inputFont} value={'Unknown'}>{t('EntityEdit.PropertyMenu.PropertyItem.listItem.unknown')}</MenuItem>
                                     <MenuItem className={classes.inputFont} value={'Null'}>{t('EntityEdit.PropertyMenu.PropertyItem.listItem.null')}</MenuItem>
                                 </TextField>

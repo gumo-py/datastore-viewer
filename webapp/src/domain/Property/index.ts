@@ -5,6 +5,7 @@ import DateProperty from './DateProperty'
 import KeyProperty from './KeyProperty'
 import StringProperty from './StringProperty'
 import BlobProperty from './BlobProperty'
+import ArrayProperty from "./ArrayProperty";
 import UnknownProperty from './UnknownProperty'
 import NullProperty from './NullProperty'
 
@@ -18,5 +19,6 @@ export {
     StringProperty,
     BlobProperty,
     UnknownProperty,
+    ArrayProperty,
     NullProperty
 }

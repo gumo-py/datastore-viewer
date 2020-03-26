@@ -53,6 +53,7 @@
           "int": "Integer",
           "float": "Float",
           "bool": "Boolean",
+          "array": "Array",
           "key": "Key",
           "unknown": "Unknown",
           "null": "Null"
