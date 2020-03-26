@@ -114,8 +114,8 @@ const PropertyItem: React.FC<PropertyProps> = props => {
         if(!name) {
             return t('EntityEdit.PropertyMenu.PropertyItem.empty');
         } else if(!value) {
-            if(type === "Null") {
-                return `${name}`;
+            if(type === "Null" || type === "Boolean") {
+                return `${name}: ${value}`;
             }else {
                 return `${name}: ${t('EntityEdit.PropertyMenu.PropertyItem.empty')}`;
             }
