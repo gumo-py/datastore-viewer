@@ -27,9 +27,9 @@ class KeyPath implements Path {
 
     toLiteral(): string {
         if(this.name) {
-            return `${this.kind} ${this.name}`;
+            return `${this.kind}, '${this.name}'`;
         }else {
-            return `${this.kind} ${this.id}`;
+            return `${this.kind}, ${this.id}`;
         }
     }
 }
@@ -67,9 +67,11 @@ export default class Key implements KeyObject {
     toLiteral(): string {
         let keyLiterals = '';
         if(this._paths.length > 1) {
-            for(let path of this._paths) {
-                keyLiterals += path.toLiteral();
-            }
+            const literals = this._paths.map((path) => {
+                return path.toLiteral();
+            });
+            keyLiterals = literals.join(', ');
+
         }else {
             keyLiterals = this._paths[0].toLiteral();
         }
