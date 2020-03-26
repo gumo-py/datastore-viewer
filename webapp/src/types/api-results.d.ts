@@ -12,7 +12,7 @@ declare interface EntityJson {
 declare interface PropertyJson {
     index: boolean;
     property_name: string;
-    value: string;
+    value: any;
     value_type: string;
 }
 

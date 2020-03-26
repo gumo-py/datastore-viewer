@@ -53,6 +53,8 @@
           "int": "Integer",
           "float": "Float",
           "bool": "Boolean",
+          "array": "Array",
+          "embedded": "Embedded Entity",
           "key": "Key",
           "unknown": "Unknown",
           "null": "Null"
