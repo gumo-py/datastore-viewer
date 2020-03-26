@@ -217,6 +217,7 @@ const useStyles = makeStyles((theme: Theme) =>
 interface Props {
   entityCollection: EntityCollection | undefined;
   lang: string;
+  projectName: string;
   kindObj: KindResult | undefined;
   page: number;
   rowsPerPage: number;
@@ -230,6 +231,7 @@ export default function EnhancedTable(props: Props) {
   const [selected, setSelected] = React.useState<string[]>([]);
   const rowsPerPage = props.rowsPerPage;
   const page = props.page;
+  const projectName = props.projectName;
   const entityCollection = props.entityCollection;
   const setPage = props.setPage;
   const rows = convertData(entityCollection?.entities || []);
@@ -355,7 +357,7 @@ export default function EnhancedTable(props: Props) {
                         />
                       </TableCell>
                       <TableCell component="th" id={labelId} scope="row" padding="none">
-                        <NavLink className={classes.link} to={`/datastore_viewer/edit/update/${row.kind}/${row.urlSafeKey}`} >{row.name_id}</NavLink>
+                        <NavLink className={classes.link} to={`/datastore_viewer/edit/update/${projectName}/${row.kind}/${row.urlSafeKey}`} >{row.name_id}</NavLink>
                       </TableCell>
                       {row.parent && <TableCell className={classes.cell} key={row.parent} align="left">{ row.parent }</TableCell>}
                       {

@@ -19,15 +19,13 @@ import Card from '@material-ui/core/Card';
 import Button from '@material-ui/core/Button';
 import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from "@material-ui/core/IconButton";
+import {Typography} from "@material-ui/core";
 
 
 const useMenuItemStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
             outline: 'solid 1px lightgrey',
-        },
-        itemName: {
-            fontSize: 14,
         },
         inputFont: {
             fontSize: 13,
@@ -38,7 +36,7 @@ const useMenuItemStyles = makeStyles((theme: Theme) =>
         },
         textField: {
             width:'100%',
-}       ,
+        },
         select: {
             height: 30,
             paddingTop: 0,
@@ -116,13 +114,21 @@ const PropertyItem: React.FC<PropertyProps> = props => {
         if(!name) {
             return t('EntityEdit.PropertyMenu.PropertyItem.empty');
         } else if(!value) {
-            if(type === "Null") {
-                return `${name}`;
+            if(type === "Null" || type === "Boolean") {
+                return `${name}: ${value}`;
             }else {
                 return `${name}: ${t('EntityEdit.PropertyMenu.PropertyItem.empty')}`;
             }
         } else {
             return `${name}: ${value}`;
+        }
+    };
+
+    const checkIndexed = () => {
+        if(checkState) {
+            return t('EntityEdit.PropertyMenu.PropertyItem.indexed');
+        }else {
+            return null;
         }
     };
 
@@ -219,6 +225,20 @@ const PropertyItem: React.FC<PropertyProps> = props => {
                         label={t('EntityEdit.PropertyMenu.PropertyItem.value')}
                         variant="outlined" /> );
 
+            case 'Unknown':
+                return (
+                    <TextField
+                        required
+                        value={value}
+                        onChange={handleFormValueChange}
+                        size={'small'}
+                        multiline={true}
+                        InputLabelProps={{ shrink: true }}
+                        InputProps={{ classes: { input: classes.inputFont } }}
+                        className={classes.textField}
+                        label={t('EntityEdit.PropertyMenu.PropertyItem.value')}
+                        variant="outlined" /> );
+
             case 'Null':
                 return;
         }
@@ -228,18 +248,34 @@ const PropertyItem: React.FC<PropertyProps> = props => {
         <div className={classes.root}>
             <ListItem button onClick={handleClick}>
                 <ListItemText
-                    classes={{
-                        primary: classes.itemName,
-                        secondary: classes.inputFont
-                    }}
-                    primary={ makeTitle() }
-                    secondary={t('EntityEdit.PropertyMenu.PropertyItem.subTitle')}
+                    disableTypography
+                    primary={
+                        <Typography
+                            style={{
+                                fontSize: 14,
+                                whiteSpace: 'nowrap',
+                                overflow: 'hidden',
+                                textOverflow:'ellipsis',
+                            }}
+                        >
+                            { makeTitle() }
+                        </Typography>
+                    }
+                    secondary={
+                        <Typography
+                            style={{
+                                color: 'grey'
+                                , fontSize: 13 }}
+                        >
+                            { checkIndexed() }
+                        </Typography>
+                    }
                 />
-                {open &&
-                    <IconButton onClick={handleDeleteButton} aria-label="delete">
-                        <DeleteIcon fontSize="inherit" />
-                    </IconButton>
-                }
+                {/*{open &&*/}
+                {/*    <IconButton onClick={handleDeleteButton} aria-label="delete">*/}
+                {/*        <DeleteIcon fontSize="inherit" />*/}
+                {/*    </IconButton>*/}
+                {/*}*/}
                 {open ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
             <Collapse in={open} timeout="auto" unmountOnExit>
@@ -276,6 +312,7 @@ const PropertyItem: React.FC<PropertyProps> = props => {
                                     <MenuItem className={classes.inputFont} value={'Float'}>{t('EntityEdit.PropertyMenu.PropertyItem.listItem.float')}</MenuItem>
                                     <MenuItem className={classes.inputFont} value={'Boolean'}>{t('EntityEdit.PropertyMenu.PropertyItem.listItem.bool')}</MenuItem>
                                     <MenuItem className={classes.inputFont} value={'Key'}>{t('EntityEdit.PropertyMenu.PropertyItem.listItem.key')}</MenuItem>
+                                    <MenuItem className={classes.inputFont} value={'Unknown'}>{t('EntityEdit.PropertyMenu.PropertyItem.listItem.unknown')}</MenuItem>
                                     <MenuItem className={classes.inputFont} value={'Null'}>{t('EntityEdit.PropertyMenu.PropertyItem.listItem.null')}</MenuItem>
                                 </TextField>
                             </ListItem>
@@ -322,7 +359,7 @@ const useStyles = makeStyles((theme: Theme) =>
         list: {
             margin: theme.spacing(2),
             width: '100%',
-            maxWidth: 360,
+            maxWidth: 450,
             backgroundColor: theme.palette.background.paper,
         },
         title: {

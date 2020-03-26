@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
@@ -41,6 +41,7 @@ interface Props {
 }
 
 export default function MenuBar(props: Props) {
+    const history = useHistory();
     const classes = useStyles();
     const [t, i18n] = useTranslation();
 
@@ -54,11 +55,9 @@ export default function MenuBar(props: Props) {
 
     return (
         <div className={classes.root}>
-            <Link to={'/datastore_viewer'}>
-                <IconButton aria-label="back" className={classes.iconButton}>
-                    <ArrowBackIcon fontSize="inherit" />
-                </IconButton>
-            </Link>
+            <IconButton aria-label="back" className={classes.iconButton} onClick={history.goBack}>
+                <ArrowBackIcon fontSize="inherit"/>
+            </IconButton>
             <div className={classes.title}>{t('EntityEdit.MenuBar.title')}</div>
             <Button startIcon={<RefreshIcon/>} onClick={handleClickRefreashEntity} className={classes.button}>
                 {t('EntityEdit.MenuBar.refresh')}

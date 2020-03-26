@@ -26,12 +26,11 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface Props {
-    projectName: any;
     lang: string;
 }
 
 export default function EntityEdit(props: Props) {
-    let { kind, urlSafeKey } = useParams();
+    let { kind, urlSafeKey, projectName } = useParams();
     const [entity, setEntity] = React.useState<EntityObject>();
     const [t, i18n] = useTranslation();
 
@@ -40,8 +39,8 @@ export default function EntityEdit(props: Props) {
     }, [props.lang, i18n]);
 
     const updateEntity = () => {
-        if(kind && urlSafeKey) {
-            getEntity(props.projectName, kind, urlSafeKey)
+        if(kind && urlSafeKey && projectName) {
+            getEntity(projectName, kind, urlSafeKey)
                 .then(res => setEntity(res));
         }
     };
