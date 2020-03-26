@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import IconButton from '@material-ui/core/IconButton';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
@@ -31,6 +31,7 @@ interface Props {
 
 export default function MenuBar(props: Props) {
     const classes = useStyles();
+    const history = useHistory();
     const [t, i18n] = useTranslation();
 
     React.useEffect(() => {
@@ -39,11 +40,9 @@ export default function MenuBar(props: Props) {
 
     return (
         <div className={classes.root}>
-            <Link to={'/'}>
-                <IconButton aria-label="back" className={classes.iconButton}>
-                    <ArrowBackIcon fontSize="inherit" />
-                </IconButton>
-            </Link>
+            <IconButton aria-label="back" className={classes.iconButton} onClick={history.goBack}>
+                <ArrowBackIcon fontSize="inherit" />
+            </IconButton>
             <div className={classes.title}>{t('NewEntityEdit.MenuBar.title')}</div>
         </div>
     )
