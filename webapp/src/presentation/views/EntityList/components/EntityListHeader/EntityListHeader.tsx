@@ -66,7 +66,7 @@ export default function EntityListHeader(props: Props) {
     };
 
     React.useEffect(() => {
-        if(!props.kind && props.kinds?.kindResults.length) {
+        if(!entity && props.kinds?.kindResults.length) {
             setEntity(kinds[0].kind);
         }
     }, [kinds, props.kinds, props.kind]);
