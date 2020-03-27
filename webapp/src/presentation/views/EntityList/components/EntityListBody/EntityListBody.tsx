@@ -234,6 +234,7 @@ export default function EnhancedTable(props: Props) {
   const projectName = props.projectName;
   const entityCollection = props.entityCollection;
   const setPage = props.setPage;
+  const properties = entityCollection?.properties;
   const rows = convertData(entityCollection?.entities || []);
   const [t, i18n] = useTranslation();
 
@@ -247,12 +248,13 @@ export default function EnhancedTable(props: Props) {
 
   const headCellIds: HeadCell[] = [ { id: 'id', label: `${t('EntityList.EntityListBody.HeadCell.nameId')}`, index: true } ];
   const headCellProperties: HeadCell[] = [];
-  if(rows.length) {
-    if(rows[0].parent) headCellIds.push({ id: 'parent', label: `${t('EntityList.EntityListBody.HeadCell.parent')}`, index: true });
-    (Object.keys(rows[0].properties) as Array<keyof property>).forEach( (property_name) => {
-      headCellProperties.push({ id: String(property_name), label: String(property_name), index:rows[0].properties[property_name].index });
+  if(rows.length && rows[0].parent) {
+    headCellIds.push({ id: 'parent', label: `${t('EntityList.EntityListBody.HeadCell.parent')}`, index: true });
+  }
+  if(properties?.length) {
+    properties.forEach( (property) => {
+      headCellProperties.push({ id: property.name, label: property.name, index: property.index });
     });
-    headCellProperties.sort();
   }
 
   const stableSort = (order: Order) => {

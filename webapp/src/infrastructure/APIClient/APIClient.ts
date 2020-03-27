@@ -18,7 +18,8 @@ export async function getEntityList(projectName: string, kind: string, pageNumbe
         kind,
         entities,
         res.data.totalCount,
-        res.data.pageNumber
+        res.data.pageNumber,
+        res.data.properties
     );
 
     return entityCollection;
