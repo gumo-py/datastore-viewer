@@ -1,5 +1,4 @@
 import React from 'react';
-import { useHistory } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
 import Button from '@material-ui/core/Button';
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
