@@ -65,8 +65,12 @@ export default function EntityListHeader(props: Props) {
         setEntity(event.target.value as string);
     };
 
+    React.useEffect( () => {
+        if(props.kind) setEntity(props.kind);
+    }, [props.kind]);
+
     React.useEffect(() => {
-        if(!entity && props.kinds?.kindResults.length) {
+        if(!props.kind && props.kinds?.kindResults.length) {
             setEntity(kinds[0].kind);
         }
     }, [kinds, props.kinds, props.kind]);
@@ -77,7 +81,7 @@ export default function EntityListHeader(props: Props) {
             props.kindHandler(kind);
             props.setKind(entity);
         }
-    }, [entity, kinds, props]);
+    }, [entity, kinds]);
 
     return (
         <div className={classes.root}>

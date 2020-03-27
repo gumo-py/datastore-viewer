@@ -48,6 +48,10 @@ const App = (props: Props) => {
     });
 
     React.useEffect(() => {
+        if(props.qs.kind) setKind(String(props.qs.kind));
+    },[props.qs.kind]);
+
+    React.useEffect(() => {
         setCookie('lang', lang);
     }, [lang]);
 
