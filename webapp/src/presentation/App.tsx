@@ -52,6 +52,12 @@ const App = (props: Props) => {
     }, [lang]);
 
     React.useEffect(() => {
+        setProjectName(props.qs.projectName ? props.qs.projectName : '');
+        setKind(props.qs.kind ? props.qs.kind : '');
+        setPage(props.qs.page ? pageValidator(Number(props.qs.page)) : 0);
+    }, [props.qs.kind, props.qs.page, props.qs.projectName]);
+
+    React.useEffect(() => {
         if(history.location.pathname === '/datastore_viewer/') {
             let queryPath = '/datastore_viewer/?';
             if (projectName) queryPath += `projectName=${projectName}`;
@@ -72,7 +78,7 @@ const App = (props: Props) => {
     return (
         <div className="App">
             <Header setProjectName={setProjectName} projectName={projectName} setLang={setLang} lang={lang}/>
-            <Route exact path="/datastore_viewer" render={() => <EntityList setKind={setKind} kind={kind} setPage={setPage} page={page} projectName={projectName} lang={lang}/>} />
+            <Route exact path="/datastore_viewer/" render={() => <EntityList setKind={setKind} kind={kind} setPage={setPage} page={page} projectName={projectName} lang={lang}/>} />
             <Route path="/datastore_viewer/edit/update/:projectName/:kind/:urlSafeKey" render={() => <EntityEdit lang={lang}/>} />
             <Route path="/datastore_viewer/edit/new" render={() => <NewEntityEdit lang={lang}/>} />
         </div>

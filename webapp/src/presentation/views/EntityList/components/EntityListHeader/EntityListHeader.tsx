@@ -1,5 +1,4 @@
 import React from 'react';
-import { useHistory } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
 import Button from '@material-ui/core/Button';
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
@@ -65,6 +64,10 @@ export default function EntityListHeader(props: Props) {
         setEntity(event.target.value as string);
     };
 
+    React.useEffect( () => {
+        if(props.kind) setEntity(props.kind);
+    }, [props.kind]);
+
     React.useEffect(() => {
         if(!props.kind && props.kinds?.kindResults.length) {
             setEntity(kinds[0].kind);
@@ -77,7 +80,7 @@ export default function EntityListHeader(props: Props) {
             props.kindHandler(kind);
             props.setKind(entity);
         }
-    }, [entity, kinds, props]);
+    }, [entity, kinds]);
 
     return (
         <div className={classes.root}>

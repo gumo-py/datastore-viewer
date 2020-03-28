@@ -9,6 +9,7 @@ import IconButton from "@material-ui/core/IconButton";
 import TextField from '@material-ui/core/TextField';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
+import Link from '@material-ui/core/Link';
 import { getProject } from "../../../infrastructure/APIClient";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -98,9 +99,11 @@ export default function HeaderAppBar(props: Props) {
         <div className={classes.grow}>
             <AppBar position="static">
                 <Toolbar variant="dense">
-                    <Typography className={classes.title} variant="h6" noWrap>
-                        Datastore-Viewer
-                    </Typography>
+                    <Link href={'/datastore_viewer/'} style={{textDecoration: 'none', color: 'white'}}>
+                        <Typography className={classes.title} variant="h6" noWrap>
+                            Datastore-Viewer
+                        </Typography>
+                    </Link>
                     <TextField
                         className={classes.textField}
                         InputProps={{

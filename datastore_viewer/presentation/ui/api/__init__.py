@@ -66,6 +66,8 @@ class ProjectAPIView(flask.views.MethodView):
         for entity in entities:
             property_names.update(entity.keys())
 
+        property_names = sorted(property_names)
+
         entity_properties = []
         for name in property_names:
             entity_properties.append({

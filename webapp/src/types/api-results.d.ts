@@ -20,6 +20,11 @@ declare interface EntityResults {
     entityResults: Array<EntityJson>;
     totalCount: number;
     pageNumber: number;
+    properties: Array<
+        {
+            index: boolean;
+            name: string;
+        }>;
 }
 
 declare interface EntityResult {
