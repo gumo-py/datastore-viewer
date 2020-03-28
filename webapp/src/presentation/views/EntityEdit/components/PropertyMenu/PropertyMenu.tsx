@@ -34,6 +34,7 @@ const useMenuItemStyles = makeStyles((theme: Theme) =>
         inputSelect: {
             fontSize: 13,
             marginTop: theme.spacing(1),
+            color:'black'
         },
         textField: {
             width:'100%',
@@ -152,7 +153,7 @@ const PropertyItem: React.FC<PropertyProps> = props => {
             case 'String':
                 return (
                     <TextField
-                        required
+                        disabled
                         value={value}
                         onChange={handleFormValueChange}
                         size={'small'}
@@ -166,7 +167,7 @@ const PropertyItem: React.FC<PropertyProps> = props => {
             case 'Date':
                 return (
                     <TextField
-                        required
+                        disabled
                         value={value}
                         onChange={handleFormValueChange}
                         type="datetime-local"
@@ -180,7 +181,7 @@ const PropertyItem: React.FC<PropertyProps> = props => {
             case 'Integer':
                 return (
                     <TextField
-                        required
+                        disabled
                         value={value}
                         onChange={handleFormValueChange}
                         size={'small'}
@@ -193,7 +194,7 @@ const PropertyItem: React.FC<PropertyProps> = props => {
             case 'Float':
                 return (
                     <TextField
-                        required
+                        disabled
                         value={value}
                         onChange={handleFormValueChange}
                         size={'small'}
@@ -206,7 +207,7 @@ const PropertyItem: React.FC<PropertyProps> = props => {
             case 'Boolean':
                 return (
                     <TextField
-                        required
+                        disabled
                         select
                         className={classes.textField}
                         SelectProps={{ classes: { select: classes.select } }}
@@ -224,7 +225,7 @@ const PropertyItem: React.FC<PropertyProps> = props => {
             case 'Key':
                 return (
                     <TextField
-                        required
+                        disabled
                         value={value}
                         onChange={handleFormValueChange}
                         size={'small'}
@@ -237,7 +238,7 @@ const PropertyItem: React.FC<PropertyProps> = props => {
             case 'Unknown':
                 return (
                     <TextField
-                        required
+                        disabled
                         value={value}
                         onChange={handleFormValueChange}
                         size={'small'}
@@ -321,6 +322,7 @@ const PropertyItem: React.FC<PropertyProps> = props => {
                         <List component="nav" aria-label="property area">
                             <ListItem>
                                 <TextField
+                                    disabled
                                     required
                                     size={'small'}
                                     value={name}
@@ -333,6 +335,7 @@ const PropertyItem: React.FC<PropertyProps> = props => {
                             </ListItem>
                             <ListItem>
                                 <TextField
+                                    disabled
                                     select
                                     className={classes.textField}
                                     SelectProps={{ classes: { select: classes.select } }}
@@ -362,6 +365,7 @@ const PropertyItem: React.FC<PropertyProps> = props => {
                                 <FormControlLabel
                                     control={
                                         <Checkbox
+                                            disabled
                                             checked={checkState}
                                             onChange={handleCheckBoxChange}
                                             value="checked"

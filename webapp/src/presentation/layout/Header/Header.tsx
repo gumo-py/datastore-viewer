@@ -97,7 +97,7 @@ export default function HeaderAppBar(props: Props) {
 
     return (
         <div className={classes.grow}>
-            <AppBar position="static">
+            <AppBar position="fixed">
                 <Toolbar variant="dense">
                     <Link href={'/datastore_viewer/'} style={{textDecoration: 'none', color: 'white'}}>
                         <Typography className={classes.title} variant="h6" noWrap>
