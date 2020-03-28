@@ -26,7 +26,7 @@ class DatastoreViewer:
         self._app_load()
 
     def _app_init(self):
-        app = flask.Flask(__name__, static_folder='presentation/template/static')
+        app = flask.Flask(__name__)
         app.config['JSON_AS_ASCII'] = False
 
         return app

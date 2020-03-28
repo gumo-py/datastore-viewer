@@ -10,6 +10,12 @@ def register_views(blueprint):
     )
 
     blueprint.add_url_rule(
+        '/datastore_viewer/static/<path:path>',
+        view_func=html.ServeStaticFileView.as_view(name='static'),
+        methods=['GET']
+    )
+
+    blueprint.add_url_rule(
         '/datastore_viewer/<path:path>',
         view_func=html.DashboardView.as_view(name='dashboardCatchAll'),
         methods=['GET']
