@@ -48,6 +48,22 @@ class DatastoreViewer:
         def datastore_viewer():
             return flask.redirect('/datastore_viewer/')
 
+        @self._app.route("/manifest.json")
+        def manifest():
+            return flask.send_from_directory('presentation/template', 'manifest.json')
+
+        @self._app.route('/favicon.ico')
+        def favicon():
+            return flask.send_from_directory('presentation/template', 'favicon.ico')
+
+        @self._app.route('/logo192.png')
+        def logo192():
+            return flask.send_from_directory('presentation/template', 'logo192.png')
+
+        @self._app.route('/logo512.png')
+        def logo512():
+            return flask.send_from_directory('presentation/template', 'logo512.png')
+
     def run(
             self,
             host: Optional[str] = None,
