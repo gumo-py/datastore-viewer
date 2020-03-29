@@ -23,13 +23,14 @@ export default function EntityList(props: Props) {
     const rowsPerPage = 25;
     const [entityCollection, setEntities] = React.useState< EntityCollection >();
 
-    if(!kinds?.kindResults.length && props.projectName){
-        getKindList(props.projectName)
-            .then( res => setKinds(res) );
-    }
 
     React.useEffect( () => {
-        setKinds(undefined);
+        if(!kinds?.kindResults.length && props.projectName) {
+            getKindList(props.projectName)
+                .then( res => setKinds(res));
+        }else {
+            setKinds(undefined);
+        }
     }, [props.projectName]);
 
     const updateEntities = React.useCallback(() => {
