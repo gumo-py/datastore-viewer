@@ -78,9 +78,11 @@ const App = (props: Props) => {
     return (
         <div className="App">
             <Header setProjectName={setProjectName} projectName={projectName} setLang={setLang} lang={lang}/>
-            <Route exact path="/datastore_viewer/" render={() => <EntityList setKind={setKind} kind={kind} setPage={setPage} page={page} projectName={projectName} lang={lang}/>} />
-            <Route path="/datastore_viewer/edit/update/:projectName/:kind/:urlSafeKey" render={() => <EntityEdit lang={lang}/>} />
-            <Route path="/datastore_viewer/edit/new" render={() => <NewEntityEdit lang={lang}/>} />
+            <div className="Content">
+                <Route exact path="/datastore_viewer/" render={() => <EntityList setKind={setKind} kind={kind} setPage={setPage} page={page} projectName={projectName} lang={lang}/>} />
+                <Route path="/datastore_viewer/edit/update/:projectName/:kind/:urlSafeKey" render={() => <EntityEdit lang={lang}/>} />
+                <Route path="/datastore_viewer/edit/new" render={() => <NewEntityEdit lang={lang}/>} />
+            </div>
         </div>
     );
 };
