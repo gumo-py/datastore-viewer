@@ -31,6 +31,7 @@ const App = (props: Props) => {
     const [kind, setKind] = React.useState(props.qs.kind ? props.qs.kind : '');
     const [page, setPage] = React.useState(props.qs.page ? pageValidator(Number(props.qs.page)) : 0);
     const [lang, setLang] = React.useState<string>(cookies['lang'] ? cookies['lang'] : 'en');
+    const beforeProjectName = React.useRef(props.qs.projectName ? props.qs.projectName : '');
     const history = useHistory();
 
     i18n.use(initReactI18next).init({
@@ -59,21 +60,20 @@ const App = (props: Props) => {
 
     React.useEffect(() => {
         if(history.location.pathname === '/datastore_viewer/') {
-            let queryPath = '/datastore_viewer/?';
-            if (projectName) queryPath += `projectName=${projectName}`;
-            if (projectName && kind) queryPath += `&kind=${kind}`;
-            if (projectName && page) queryPath += `&page=${page}`;
-            if (queryPath !== '/datastore_viewer/?') history.push(queryPath);
+            if(projectName === beforeProjectName.current){
+                let queryPath = `/datastore_viewer/?projectName=${projectName}`;
+                if (kind) queryPath += `&kind=${kind}`;
+                if (page) queryPath += `&page=${page}`;
+                if (queryPath !== `/datastore_viewer/?projectName=${projectName}`) history.push(queryPath);
+            }else {
+                beforeProjectName.current = projectName;
+                setKind('');
+                setPage(0);
+                history.push(`/datastore_viewer/?projectName=${projectName}`);
+                window.location.reload();
+            }
         }
-    }, [kind, page]);
-
-    React.useEffect(() => {
-        if(history.location.pathname === '/datastore_viewer/') {
-            setKind('');
-            setPage(0);
-            history.push(`/datastore_viewer/?projectName=${projectName}`);
-        }
-    }, [projectName]);
+    }, [kind, page, projectName]);
 
     return (
         <div className="App">
