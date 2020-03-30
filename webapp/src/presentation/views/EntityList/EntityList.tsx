@@ -23,7 +23,6 @@ export default function EntityList(props: Props) {
     const rowsPerPage = 25;
     const [entityCollection, setEntities] = React.useState< EntityCollection >();
 
-
     React.useEffect( () => {
         if(!kinds?.kindResults.length && props.projectName) {
             getKindList(props.projectName)
