@@ -1,85 +1,95 @@
-import React from 'react';
-import { MenuBar } from './components/MenuBar';
-import { EntityListHeader } from './components/EntityListHeader';
-import { EntityListBody } from './components/EntityListBody';
-import { NotFound } from './components/NotFound';
-import { getEntityList, getKindList } from "../../../infrastructure/APIClient";
-import { EntityCollection } from '../../../domain/Entity';
+import React from "react";
+import { MenuBar } from "./components/MenuBar";
+import { EntityListHeader } from "./components/EntityListHeader";
+import { EntityListBody } from "./components/EntityListBody";
+import { NotFound } from "./components/NotFound";
+import { fetchEntities } from "../../../infra/entity/entityClient";
+import { fetchKinds } from "../../../infra/kind/kindClient";
+import { Domain } from "../../../api-types/domain";
+import { EntityCollection } from "../../../domain/Entity";
 
-interface Props {
-    setKind(kind: string): void;
-    setPage(page: number): void;
-    kind: any;
-    projectName: any;
-    lang: string;
-    page: any;
-}
+type Props = {
+  setKind(kind: string): void;
+  setCurrentPage(page: number): void;
+  kind: any;
+  projectName: any;
+  lang: string;
+  currentPage: any;
+};
 
+export const EntityList: React.FunctionComponent<Props> = ({
+  setKind,
+  setCurrentPage,
+  kind,
+  projectName,
+  lang,
+  currentPage,
+}) => {
+  const [kinds, setKinds] = React.useState<Domain.KindResult[] | undefined>();
+  const [kindObj, setKindObj] = React.useState<Domain.KindResult>();
+  const [page, setPage] = React.useState(currentPage);
+  const rowsPerPage = 25;
+  const [entityCollection, setEntities] = React.useState<EntityCollection>();
 
-export default function EntityList(props: Props) {
-    const [kinds, setKinds] = React.useState< KindResults | undefined >();
-    const [kindObj, setKindObj] = React.useState<KindResult>();
-    const [page, setPage] = React.useState(props.page);
-    const rowsPerPage = 25;
-    const [entityCollection, setEntities] = React.useState< EntityCollection >();
+  React.useEffect(() => {
+    if (!kinds?.length && projectName) {
+      fetchKinds({ projectName: projectName }).then((data) =>
+        setKinds(data.kindResults)
+      );
+    } else {
+      setKinds(undefined);
+    }
+  }, [projectName]);
 
-    React.useEffect( () => {
-        if(!kinds?.kindResults.length && props.projectName) {
-            getKindList(props.projectName)
-                .then( res => setKinds(res));
-        }else {
-            setKinds(undefined);
-        }
-    }, [props.projectName]);
+  const updateEntities = React.useCallback(() => {
+    if (kindObj) {
+      fetchEntities({
+        projectName: projectName,
+        kind: kindObj.kind,
+        pageNumber: page,
+        rowsPerPage: rowsPerPage,
+      }).then((entityCollection) => {
+        const maxPage = Math.floor(entityCollection.totalCount / rowsPerPage);
+        if (maxPage < page) setPage(maxPage);
+        console.log("updateEntities", entityCollection);
+        setEntities(entityCollection);
+      });
+    }
+    setCurrentPage(page);
+  }, [kindObj, projectName, page]);
 
-    const updateEntities = React.useCallback(() => {
-        if(kindObj){
-            getEntityList(props.projectName, kindObj.kind, page, rowsPerPage)
-                .then( entityCollection => {
-                    const maxPage = Math.floor(entityCollection.totalCount / rowsPerPage);
-                    if(maxPage < page) setPage(maxPage);
-                    console.log('updateEntities', entityCollection);
-                    setEntities(entityCollection);
-                });
-        }
-        props.setPage(page);
-    }, [kindObj, props.projectName, page]);
+  React.useEffect(() => {
+    updateEntities();
+  }, [kindObj, updateEntities]);
 
-    React.useEffect(() => {
-        updateEntities();
-    },[kindObj, updateEntities]);
+  React.useEffect(() => {
+    console.log("effect watch", entityCollection);
+  }, [entityCollection]);
 
-    React.useEffect(() => {
-        console.log('effect watch', entityCollection);
-    },[entityCollection]);
+  return (
+    <div className={"EntityList"}>
+      <MenuBar refreash={updateEntities} lang={lang} />
+      <EntityListHeader
+        kinds={kinds}
+        kind={kind}
+        setKind={setKind}
+        kindHandler={setKindObj}
+        lang={lang}
+      />
 
-    return (
-        <div className={'EntityList'}>
-            <MenuBar refreash={updateEntities} lang={props.lang}/>
-            <EntityListHeader
-                kinds={kinds}
-                kind={props.kind}
-                setKind={props.setKind}
-                kindHandler={setKindObj}
-                projectName={props.projectName}
-                lang={props.lang}/>
-
-            {
-                entityCollection?.entities.length ?
-                    <EntityListBody
-                        kindObj={kindObj}
-                        entityCollection={entityCollection}
-                        page={page}
-                        rowsPerPage={rowsPerPage}
-                        setPage={setPage}
-                        lang={props.lang}
-                        projectName={props.projectName}
-                    /> :
-                    <NotFound
-                        lang={props.lang}
-                    />
-            }
-
-        </div>
-    )
-}
+      {entityCollection?.entities.length ? (
+        <EntityListBody
+          kindObj={kindObj}
+          entityCollection={entityCollection}
+          page={page}
+          rowsPerPage={rowsPerPage}
+          setPage={setPage}
+          lang={lang}
+          projectName={projectName}
+        />
+      ) : (
+        <NotFound lang={lang} />
+      )}
+    </div>
+  );
+};
