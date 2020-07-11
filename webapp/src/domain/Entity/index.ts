@@ -1,3 +1,3 @@
-export { default as entityFactory } from './Factory';
-export { default as Entity } from './Entity';
-export { default as EntityCollection } from './Collection';
+export { entityFactory } from "./Factory";
+export { EntityCollection } from "./Collection";
+export * from "./Entity";

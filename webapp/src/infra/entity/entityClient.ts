@@ -1,7 +1,6 @@
 import axios from "axios";
 import { Entity, entityFactory, EntityCollection } from "../../domain/Entity";
-import { Response } from "../../api-types/response";
-import { Request } from "../../api-types/request";
+import { Response, Request } from "../../api-types";
 
 export type FetchEntitiesParams = Request.Entity.FetchAll;
 export type FetchEntitiesResponse = Response.Entity.FetchAll;

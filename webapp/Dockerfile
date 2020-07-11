@@ -1,4 +1,4 @@
-FROM node:12.16.1-stretch
+FROM node:14.5.0-stretch
 
 RUN mkdir -p /app/webapp
 WORKDIR /app/webapp

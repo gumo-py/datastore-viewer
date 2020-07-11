@@ -10,6 +10,7 @@ import TextField from "@material-ui/core/TextField";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import Link from "@material-ui/core/Link";
+import { Domain } from "../../../api-types";
 import { fetchProject } from "../../../infra/project/projectClient";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -65,7 +66,7 @@ interface Props {
 
 export default function HeaderAppBar(props: Props) {
   const classes = useStyles();
-  const [project, setProject] = React.useState<Project>();
+  const [project, setProject] = React.useState<Domain.Project>();
   const [projectName, setProjectName] = React.useState<string>("");
   const [lang, setLang] = React.useState<string>(props.lang);
 

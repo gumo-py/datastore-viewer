@@ -1,80 +1,90 @@
-class KeyPath implements Path {
-    readonly kind: string;
-    readonly name: string;
-    readonly id: number;
+import { Domain } from "../../api-types";
 
-    constructor(path: any) {
-        this.kind = path.kind;
-        this.name = path.name ? path.name : null;
-        this.id = path.id ? path.id : null;
-    }
-
-    getIdOrName(): string | number {
-        if (this.name) {
-            return this.name;
-        } else {
-            return this.id;
-        }
-    }
-
-    toString(): string {
-        if(this.name) {
-            return `${this.kind} name:${this.name}`;
-        }else {
-            return `${this.kind} id:${this.id}`;
-        }
-    }
-
-    toLiteral(): string {
-        if(this.name) {
-            return `${this.kind}, '${this.name}'`;
-        }else {
-            return `${this.kind}, ${this.id}`;
-        }
-    }
+export interface KindObject extends Domain.Kind {
+  getIdOrName(): string | number;
+  toString(): string;
+  toLiteral(): string;
 }
 
-export default class Key implements KeyObject {
-    _paths: Array<Path> = [];
+export class Kind implements KindObject {
+  readonly kind: string;
+  readonly name: string;
+  readonly id: number;
 
-    constructor(keyObject: any) {
-        for(let path of keyObject) {
-            this._paths.push(new KeyPath(path));
-        }
+  constructor(path: Domain.Kind) {
+    this.kind = path.kind;
+    this.name = path.name ? path.name : "";
+    this.id = path.id ? path.id : 0;
+  }
+
+  getIdOrName(): string | number {
+    return this.name ? this.name : this.id;
+  }
+
+  toString(): string {
+    return this.name
+      ? `${this.kind} name:${this.name}`
+      : `${this.kind} id:${this.id}`;
+  }
+
+  toLiteral(): string {
+    return this.name
+      ? `${this.kind}, '${this.name}'`
+      : `${this.kind}, ${this.id}`;
+  }
+}
+
+export interface KeyObject extends Domain.Key {
+  getKind(): string;
+  getIdOrName(): string | number;
+  getParent(): Kind[];
+  toString(): string;
+  toLiteral(): string;
+}
+
+export class Key implements KeyObject {
+  readonly path: Kind[] = [];
+  readonly partitionId: Domain.Key["partitionId"];
+
+  constructor(key: Domain.Key) {
+    this.partitionId = key.partitionId;
+
+    for (let path of key.path) {
+      this.path.push(new Kind(path));
     }
+  }
 
-    getKind(): string {
-        const key = this._paths.slice(-1)[0];
-        return key.kind;
+  getKind(): string {
+    const key = this.path.slice(-1)[0];
+    return key.kind;
+  }
+
+  getIdOrName(): string | number {
+    const key = this.path.slice(-1)[0];
+    return key.getIdOrName();
+  }
+
+  getParent(): Kind[] {
+    const keys = this.path.slice();
+    keys.pop();
+    return keys;
+  }
+
+  toString(): string {
+    const key = this.path.slice(-1)[0];
+    return key.toString();
+  }
+
+  toLiteral(): string {
+    let keyLiterals = "";
+    if (this.path.length > 1) {
+      const literals = this.path.map((path) => {
+        return path.toLiteral();
+      });
+      keyLiterals = literals.join(", ");
+    } else {
+      keyLiterals = this.path[0].toLiteral();
     }
-
-    getIdOrName(): string | number {
-        const key = this._paths.slice(-1)[0];
-        return key.getIdOrName();
-    }
-
-    getParent(): Array<Path> {
-        const keys = this._paths.slice();
-        keys.pop();
-        return keys;
-    }
-
-    toString(): string {
-        const key = this._paths.slice(-1)[0];
-        return key.toString();
-    }
-
-    toLiteral(): string {
-        let keyLiterals = '';
-        if(this._paths.length > 1) {
-            const literals = this._paths.map((path) => {
-                return path.toLiteral();
-            });
-            keyLiterals = literals.join(', ');
-
-        }else {
-            keyLiterals = this._paths[0].toLiteral();
-        }
-        return `Key(${keyLiterals})`;
-    }
+    return `Key(${keyLiterals})`;
+  }
 }

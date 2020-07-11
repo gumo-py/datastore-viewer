@@ -1,43 +1,43 @@
 export namespace Domain {
   export type URLSafeKey = string;
-  export type Entity = {
+  export interface Entity {
     key: Domain.Key;
     properties: Domain.Property[];
-  };
+  }
 
-  export type Key = {
+  export interface Key {
     partitionId: { projectId: string };
     path: Domain.Kind[];
-  };
+  }
 
-  export type Kind = {
+  export interface Kind {
     kind: string;
     name?: string;
     id?: number;
-  };
+  }
 
-  export type Property = {
+  export interface Property {
     index: boolean;
     property_name: string;
-    value: string;
+    value: any;
     value_type: string;
-  };
+  }
 
-  export type IndexedProperty = {
+  export interface IndexedProperty {
     property_name: Exclude<Domain.Property, "index" | "value" | "value_type">;
-  };
+  }
 
-  export type Project = {
+  export interface Project {
     project_name: string;
-  };
+  }
 
-  export type EntityResult = {
+  export interface EntityResult {
     URLSafeKey: Domain.URLSafeKey;
     entity: Domain.Entity;
-  };
+  }
 
-  export type KindResult = {
+  export interface KindResult {
     indexed_properties: Domain.IndexedProperty[];
     kind: string;
-  };
+  }
 }

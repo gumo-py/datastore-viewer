@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Response } from "../../api-types/response";
+import { Response } from "../../api-types";
 
 export type FetchProjectResponse = Response.Project.Fetch;
 

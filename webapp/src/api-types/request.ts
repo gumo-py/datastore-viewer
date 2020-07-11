@@ -1,22 +1,22 @@
 export namespace Request {
   export namespace Entity {
-    export type FetchAll = {
+    export interface FetchAll {
       projectName: string;
       kind: string;
       pageNumber?: number;
       rowsPerPage?: number;
-    };
+    }
 
-    export type Fetch = {
+    export interface Fetch {
       projectName: string;
       kind: string;
       urlSafeKey: string;
-    };
+    }
   }
 
   export namespace Kind {
-    export type FetchAll = {
+    export interface FetchAll {
       projectName: string;
-    };
+    }
   }
 }

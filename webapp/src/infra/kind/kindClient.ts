@@ -1,6 +1,5 @@
 import axios from "axios";
-import { Response } from "../../api-types/response";
-import { Request } from "../../api-types/request";
+import { Response, Request } from "../../api-types";
 
 export type FetchKindsParams = Request.Kind.FetchAll;
 export type FetchKindsResponse = Response.Kind.FetchAll;

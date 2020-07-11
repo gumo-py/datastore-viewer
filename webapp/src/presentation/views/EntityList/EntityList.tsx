@@ -5,7 +5,7 @@ import { EntityListBody } from "./components/EntityListBody";
 import { NotFound } from "./components/NotFound";
 import { fetchEntities } from "../../../infra/entity/entityClient";
 import { fetchKinds } from "../../../infra/kind/kindClient";
-import { Domain } from "../../../api-types/domain";
+import { Domain } from "../../../api-types";
 import { EntityCollection } from "../../../domain/Entity";
 
 type Props = {
@@ -43,6 +43,7 @@ export const EntityList: React.FunctionComponent<Props> = ({
 
   const updateEntities = React.useCallback(() => {
     if (kindObj) {
+      console.log("!");
       fetchEntities({
         projectName: projectName,
         kind: kindObj.kind,

@@ -1,24 +1,21 @@
-import { default as Entity } from "./Entity";
+import { EntityObject } from "./Entity";
 
-interface PropertyIndex {
-  index: boolean;
-  name: string;
-}
-export default class EntityCollection implements EntityCollectionObject {
+type PropertyIndex = { index: boolean; name: string };
+export class EntityCollection {
   readonly projectId: string;
   readonly kind: string;
-  readonly entities: Array<Entity>;
+  readonly entities: EntityObject[];
   readonly totalCount: number;
   readonly pageNumber: number;
-  readonly properties: Array<PropertyIndex>;
+  readonly properties: PropertyIndex[];
 
   constructor(
     projectId: string,
     kind: string,
-    entities: Array<Entity>,
+    entities: EntityObject[],
     totalCount: number,
     pageNumber: number,
-    properties: Array<PropertyIndex>
+    properties: PropertyIndex[]
   ) {
     this.projectId = projectId;
     this.kind = kind;

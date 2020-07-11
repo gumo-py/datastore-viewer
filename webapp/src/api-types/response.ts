@@ -2,28 +2,28 @@ import { Domain } from "./domain";
 
 export namespace Response {
   export namespace Entity {
-    export type FetchAll = {
+    export interface FetchAll {
       entityResults: Domain.EntityResult[];
       pageNumber: number;
       perPage: number;
       properties: { index: boolean; name: string }[];
       totalCount: number;
-    };
+    }
 
-    export type Fetch = {
+    export interface Fetch {
       entityResult: Domain.EntityResult;
-    };
+    }
   }
 
   export namespace Kind {
-    export type FetchAll = {
+    export interface FetchAll {
       kindResults: Domain.KindResult[];
-    };
+    }
   }
 
   export namespace Project {
-    export type Fetch = {
+    export interface Fetch {
       projectResult: Domain.Project;
-    };
+    }
   }
 }

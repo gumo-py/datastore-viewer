@@ -7,7 +7,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import OutlinedInput from "@material-ui/core/OutlinedInput";
-import { Domain } from "../../../../../api-types/domain";
+import { Domain } from "../../../../../api-types";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -78,7 +78,8 @@ export const EntityListHeader: React.FunctionComponent<Props> = ({
     const selectedKind = kinds.find(
       (kind) => kind.kind === entity
     ) as Domain.KindResult;
-    if (kind) {
+
+    if (selectedKind) {
       kindHandler(selectedKind);
       setKind(entity);
     }

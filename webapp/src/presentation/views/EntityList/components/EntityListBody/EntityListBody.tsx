@@ -13,8 +13,8 @@ import TableSortLabel from "@material-ui/core/TableSortLabel";
 import Paper from "@material-ui/core/Paper";
 import Checkbox from "@material-ui/core/Checkbox";
 import { NavLink } from "react-router-dom";
-import { EntityCollection } from "../../../../../domain/Entity";
-import { Domain } from "../../../../../api-types/domain";
+import { EntityCollection, EntityObject } from "../../../../../domain/Entity";
+import { Domain } from "../../../../../api-types";
 
 type HeadCell = {
   id: string;
@@ -44,7 +44,7 @@ function createData(
   return { name_id, kind, parent, urlSafeKey, properties };
 }
 
-function convertData(entities: Array<EntityObject>) {
+function convertData(entities: EntityObject[]) {
   const rows: Data[] = [];
 
   for (let entity of entities) {
@@ -55,7 +55,7 @@ function convertData(entities: Array<EntityObject>) {
     const properties: { [key: string]: any } = {};
 
     for (let property of entity.properties) {
-      properties[property.name] = {
+      properties[property.property_name] = {
         value: property.toStr(),
         index: property.index,
       };

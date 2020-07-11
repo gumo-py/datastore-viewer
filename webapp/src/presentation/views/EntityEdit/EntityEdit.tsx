@@ -7,6 +7,7 @@ import { EntityInfo } from "./components/EntityInfo";
 import { PropertyMenu } from "./components/PropertyMenu";
 import Button from "@material-ui/core/Button";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+import { EntityObject } from "../../../domain/Entity";
 import { fetchEntity } from "../../../infra/entity/entityClient";
 
 const useStyles = makeStyles((theme: Theme) =>
