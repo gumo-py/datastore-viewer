@@ -1,21 +1,47 @@
-import { Key } from '../Key';
+import { Kind, KeyObject } from "../Key";
 
-export default class KeyProperty implements Property {
-    value: Key;
-    name: string;
-    index: boolean;
+type KeyProp = Omit<KeyObject, "partitionId">;
 
-    constructor(value: string, name: string, index: boolean) {
-        this.value = new Key(value);
-        this.name = name;
-        this.index = index;
+export class KeyProperty implements KeyProp {
+  readonly path: Kind[] = [];
+
+  constructor(value: Kind[]) {
+    for (let path of value) {
+      this.path.push(new Kind(path));
     }
+  }
 
-    getType(): string {
-        return 'Key';
-    }
+  getKind(): string {
+    const key = this.path.slice(-1)[0];
+    return key.kind;
+  }
 
-    toStr(): string {
-        return this.value.toLiteral();
+  getIdOrName(): string | number {
+    const key = this.path.slice(-1)[0];
+    return key.getIdOrName();
+  }
+
+  getParent(): Kind[] {
+    const keys = this.path.slice();
+    keys.pop();
+    return keys;
+  }
+
+  toString(): string {
+    const key = this.path.slice(-1)[0];
+    return key.toString();
+  }
+
+  toLiteral(): string {
+    let keyLiterals = "";
+    if (this.path.length > 1) {
+      const literals = this.path.map((path) => {
+        return path.toLiteral();
+      });
+      keyLiterals = literals.join(", ");
+    } else {
+      keyLiterals = this.path[0].toLiteral();
     }
+    return `Key(${keyLiterals})`;
+  }
 }

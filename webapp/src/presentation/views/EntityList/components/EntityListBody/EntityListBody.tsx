@@ -1,186 +1,200 @@
-import React from 'react';
+import React from "react";
 import * as _ from "underscore";
-import { useTranslation } from 'react-i18next';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TablePagination from '@material-ui/core/TablePagination';
-import TableRow from '@material-ui/core/TableRow';
-import TableSortLabel from '@material-ui/core/TableSortLabel';
-import Paper from '@material-ui/core/Paper';
-import Checkbox from '@material-ui/core/Checkbox';
+import { useTranslation } from "react-i18next";
+import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TablePagination from "@material-ui/core/TablePagination";
+import TableRow from "@material-ui/core/TableRow";
+import TableSortLabel from "@material-ui/core/TableSortLabel";
+import Paper from "@material-ui/core/Paper";
+import Checkbox from "@material-ui/core/Checkbox";
 import { NavLink } from "react-router-dom";
-import {EntityCollection} from "../../../../../domain/Entity";
+import { EntityCollection, EntityObject } from "../../../../../domain/Entity";
+import { Domain } from "../../../../../api-types";
 
-
-interface HeadCell {
+type HeadCell = {
   id: string;
   label: string;
   index: boolean;
-}
+};
 
-interface Data {
+type Data = {
   name_id: string;
   kind: string;
   urlSafeKey: string;
   parent: any;
   properties: property;
+};
 
-}
-
-interface property {
+type property = {
   [key: string]: any;
-}
+};
 
 function createData(
-    name_id: string,
-    kind: string,
-    parent: any,
-    urlSafeKey: string,
-    properties: any
+  name_id: string,
+  kind: string,
+  parent: any,
+  urlSafeKey: string,
+  properties: any
 ): Data {
-  return {name_id, kind, parent, urlSafeKey, properties};
+  return { name_id, kind, parent, urlSafeKey, properties };
 }
 
-function convertData(entities: Array<EntityObject>) {
+function convertData(entities: EntityObject[]) {
   const rows: Data[] = [];
 
-  for(let entity of entities) {
+  for (let entity of entities) {
     const name_id: string = String(entity.key.getIdOrName());
     const kind: string = entity.key.getKind();
     const parent: string = entity.key.getParent().toString();
     const urlSafeKey: string = entity.URLSafeKey;
-    const properties: { [key:string] : any } = {};
+    const properties: { [key: string]: any } = {};
 
-    for(let property of entity.properties) {
-      properties[property.name] = { value: property.toStr(), index: property.index };
+    for (let property of entity.properties) {
+      properties[property.property_name] = {
+        value: property.toStr(),
+        index: property.index,
+      };
     }
     rows.push(createData(name_id, kind, parent, urlSafeKey, properties));
   }
   return rows;
 }
 
-type Order = 'asc' | 'desc';
+type Order = "asc" | "desc";
 
-interface EnhancedTableProps {
+type EnhancedTableProps = {
   classes: ReturnType<typeof useStyles>;
   numSelected: number;
   onRequestSort: (event: React.MouseEvent<unknown>, property: string) => void;
-  onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => void;
+  onSelectAllClick: (
+    event: React.ChangeEvent<HTMLInputElement>,
+    checked: boolean
+  ) => void;
   order: Order;
   orderBy: string;
   rowCount: number;
   headCellIds: HeadCell[];
   headCellProperties: HeadCell[];
-}
+};
 
-function EnhancedTableHead(props: EnhancedTableProps) {
-  const { classes, onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort} = props;
-  const createSortHandler = (property: string) => (event: React.MouseEvent<unknown>) => {
+const EnhancedTableHead: React.FunctionComponent<EnhancedTableProps> = ({
+  classes,
+  numSelected,
+  onRequestSort,
+  onSelectAllClick,
+  order,
+  orderBy,
+  rowCount,
+  headCellIds,
+  headCellProperties,
+}) => {
+  const createSortHandler = (property: string) => (
+    event: React.MouseEvent<unknown>
+  ) => {
     onRequestSort(event, property);
   };
 
   return (
     <TableHead>
-      <TableRow style={{backgroundColor:'lightgrey'}}>
+      <TableRow style={{ backgroundColor: "lightgrey" }}>
         <TableCell padding="checkbox">
           <Checkbox
             indeterminate={numSelected > 0 && numSelected < rowCount}
             checked={rowCount > 0 && numSelected === rowCount}
             onChange={onSelectAllClick}
-            inputProps={{ 'aria-label': 'select all desserts' }}
+            inputProps={{ "aria-label": "select all desserts" }}
           />
         </TableCell>
-        {props.headCellIds.map(headCell => {
-            return(
-                <TableCell
-                    key={headCell.id}
-                    align={'left'}
-                    padding={'default'}
-                    sortDirection={orderBy === headCell.id ? order : false}
-                    style={{fontWeight:'bolder'}}
-                >
-                  {/*<TableSortLabel*/}
-                  {/*  active={orderBy === headCell.id}*/}
-                  {/*  direction={orderBy === headCell.id ? order : 'asc'}*/}
-                  {/*  onClick={createSortHandler(headCell.id)}*/}
-                  {/*>*/}
-                  {headCell.label}
-                  {/*  {orderBy === headCell.id ? (*/}
-                  {/*    <span className={classes.visuallyHidden}>*/}
-                  {/*      {order === 'desc' ? 'sorted descending' : 'sorted ascending'}*/}
-                  {/*    </span>*/}
-                  {/*  ) : null}*/}
-                  {/*</TableSortLabel>*/}
-                </TableCell>
+        {headCellIds.map((headCell) => {
+          return (
+            <TableCell
+              key={headCell.id}
+              align={"left"}
+              padding={"default"}
+              sortDirection={orderBy === headCell.id ? order : false}
+              style={{ fontWeight: "bolder" }}
+            >
+              {/*<TableSortLabel*/}
+              {/*  active={orderBy === headCell.id}*/}
+              {/*  direction={orderBy === headCell.id ? order : 'asc'}*/}
+              {/*  onClick={createSortHandler(headCell.id)}*/}
+              {/*>*/}
+              {headCell.label}
+              {/*  {orderBy === headCell.id ? (*/}
+              {/*    <span className={classes.visuallyHidden}>*/}
+              {/*      {order === 'desc' ? 'sorted descending' : 'sorted ascending'}*/}
+              {/*    </span>*/}
+              {/*  ) : null}*/}
+              {/*</TableSortLabel>*/}
+            </TableCell>
+          );
+        })}
+        {headCellProperties.map((headCell) => {
+          if (headCell.index) {
+            return (
+              <TableCell
+                key={headCell.id}
+                align={"left"}
+                padding={"default"}
+                sortDirection={orderBy === headCell.id ? order : false}
+                style={{ fontWeight: "bolder" }}
+              >
+                {/*<TableSortLabel*/}
+                {/*  active={orderBy === headCell.id}*/}
+                {/*  direction={orderBy === headCell.id ? order : 'asc'}*/}
+                {/*  onClick={createSortHandler(headCell.id)}*/}
+                {/*>*/}
+                {headCell.label}
+                {/*  {orderBy === headCell.id ? (*/}
+                {/*    <span className={classes.visuallyHidden}>*/}
+                {/*      {order === 'desc' ? 'sorted descending' : 'sorted ascending'}*/}
+                {/*    </span>*/}
+                {/*  ) : null}*/}
+                {/*</TableSortLabel>*/}
+              </TableCell>
             );
-          })
-        }
-        {props.headCellProperties.map(headCell => {
-          if(headCell.index) {
-            return(
-                <TableCell
-                    key={headCell.id}
-                    align={'left'}
-                    padding={'default'}
-                    sortDirection={orderBy === headCell.id ? order : false}
-                    style={{fontWeight:'bolder'}}
-                >
-                  {/*<TableSortLabel*/}
-                  {/*  active={orderBy === headCell.id}*/}
-                  {/*  direction={orderBy === headCell.id ? order : 'asc'}*/}
-                  {/*  onClick={createSortHandler(headCell.id)}*/}
-                  {/*>*/}
-                  {headCell.label}
-                  {/*  {orderBy === headCell.id ? (*/}
-                  {/*    <span className={classes.visuallyHidden}>*/}
-                  {/*      {order === 'desc' ? 'sorted descending' : 'sorted ascending'}*/}
-                  {/*    </span>*/}
-                  {/*  ) : null}*/}
-                  {/*</TableSortLabel>*/}
-                </TableCell>
-            )
           } else {
-            return(
-                <TableCell
-                    key={headCell.id}
-                    align={'left'}
-                    padding={'default'}
-                    sortDirection={orderBy === headCell.id ? order : false}
-                    style={{fontWeight:'bolder', color:'grey'}}
-                >
-                  {/*<TableSortLabel*/}
-                  {/*  active={orderBy === headCell.id}*/}
-                  {/*  direction={orderBy === headCell.id ? order : 'asc'}*/}
-                  {/*  onClick={createSortHandler(headCell.id)}*/}
-                  {/*>*/}
-                  {headCell.label}
-                  {/*  {orderBy === headCell.id ? (*/}
-                  {/*    <span className={classes.visuallyHidden}>*/}
-                  {/*      {order === 'desc' ? 'sorted descending' : 'sorted ascending'}*/}
-                  {/*    </span>*/}
-                  {/*  ) : null}*/}
-                  {/*</TableSortLabel>*/}
-                </TableCell>
-            )
+            return (
+              <TableCell
+                key={headCell.id}
+                align={"left"}
+                padding={"default"}
+                sortDirection={orderBy === headCell.id ? order : false}
+                style={{ fontWeight: "bolder", color: "grey" }}
+              >
+                {/*<TableSortLabel*/}
+                {/*  active={orderBy === headCell.id}*/}
+                {/*  direction={orderBy === headCell.id ? order : 'asc'}*/}
+                {/*  onClick={createSortHandler(headCell.id)}*/}
+                {/*>*/}
+                {headCell.label}
+                {/*  {orderBy === headCell.id ? (*/}
+                {/*    <span className={classes.visuallyHidden}>*/}
+                {/*      {order === 'desc' ? 'sorted descending' : 'sorted ascending'}*/}
+                {/*    </span>*/}
+                {/*  ) : null}*/}
+                {/*</TableSortLabel>*/}
+              </TableCell>
+            );
           }
-        })
-      }
+        })}
       </TableRow>
     </TableHead>
   );
-}
+};
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      width: '100%',
+      width: "100%",
     },
     paper: {
-      width: '100%',
+      width: "100%",
       marginBottom: theme.spacing(2),
     },
     table: {
@@ -188,100 +202,127 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     visuallyHidden: {
       border: 0,
-      clip: 'rect(0 0 0 0)',
+      clip: "rect(0 0 0 0)",
       height: 1,
       margin: -1,
-      overflow: 'hidden',
+      overflow: "hidden",
       padding: 0,
-      position: 'absolute',
+      position: "absolute",
       top: 20,
       width: 1,
     },
     link: {
-      color: 'black',
-      whiteSpace: 'nowrap',
-      overflow: 'hidden',
-      textOverflow:'ellipsis',
-      maxWidth: 200
+      color: "black",
+      whiteSpace: "nowrap",
+      overflow: "hidden",
+      textOverflow: "ellipsis",
+      maxWidth: 200,
     },
     cell: {
-      whiteSpace: 'nowrap',
-      overflow: 'hidden',
-      textOverflow:'ellipsis',
-      maxWidth: 200
+      whiteSpace: "nowrap",
+      overflow: "hidden",
+      textOverflow: "ellipsis",
+      maxWidth: 200,
     },
-
-  }),
+  })
 );
 
-interface Props {
-  entityCollection: EntityCollection | undefined;
+type Props = {
+  entityCollection?: EntityCollection;
   lang: string;
   projectName: string;
-  kindObj: KindResult | undefined;
+  kindObj?: Domain.KindResult;
   page: number;
   rowsPerPage: number;
-  setPage: ((pageNumber: number) => void);
-}
+  setPage: (pageNumber: number) => void;
+};
 
-export default function EnhancedTable(props: Props) {
+export const EntityListBody: React.FunctionComponent<Props> = ({
+  entityCollection,
+  lang,
+  projectName,
+  kindObj,
+  page,
+  rowsPerPage,
+  setPage,
+}) => {
   const classes = useStyles();
-  const [order, setOrder] = React.useState<Order>('asc');
-  const [orderBy, setOrderBy] = React.useState<string>('id');
+  const [order, setOrder] = React.useState<Order>("asc");
+  const [orderBy, setOrderBy] = React.useState<string>("id");
   const [selected, setSelected] = React.useState<string[]>([]);
-  const rowsPerPage = props.rowsPerPage;
-  const page = props.page;
-  const projectName = props.projectName;
-  const entityCollection = props.entityCollection;
-  const setPage = props.setPage;
   const properties = entityCollection?.properties;
   const rows = convertData(entityCollection?.entities || []);
   const [t, i18n] = useTranslation();
 
   React.useEffect(() => {
-    i18n.changeLanguage(props.lang);
-  }, [props.lang, i18n]);
+    i18n.changeLanguage(lang);
+  }, [lang, i18n]);
 
   React.useEffect(() => {
     setSelected([]);
-  }, [props.kindObj]);
+  }, [kindObj]);
 
-  const headCellIds: HeadCell[] = [ { id: 'id', label: `${t('EntityList.EntityListBody.HeadCell.nameId')}`, index: true } ];
+  const headCellIds: HeadCell[] = [
+    {
+      id: "id",
+      label: `${t("EntityList.EntityListBody.HeadCell.nameId")}`,
+      index: true,
+    },
+  ];
   const headCellProperties: HeadCell[] = [];
-  if(rows.length && rows[0].parent) {
-    headCellIds.push({ id: 'parent', label: `${t('EntityList.EntityListBody.HeadCell.parent')}`, index: true });
+  if (rows.length && rows[0].parent) {
+    headCellIds.push({
+      id: "parent",
+      label: `${t("EntityList.EntityListBody.HeadCell.parent")}`,
+      index: true,
+    });
   }
-  if(properties?.length) {
-    properties.forEach( (property) => {
-      headCellProperties.push({ id: property.name, label: property.name, index: property.index });
+  if (properties?.length) {
+    properties.forEach((property) => {
+      headCellProperties.push({
+        id: property.name,
+        label: property.name,
+        index: property.index,
+      });
     });
   }
 
   const stableSort = (order: Order) => {
-    if(order === 'asc') {
-      if(orderBy !== 'name_id') {
-        return _.sortBy(rows, (row) => {return row.properties[orderBy]});
-      }else {
-        return _.sortBy(rows, (row) => {return row[orderBy]});
+    if (order === "asc") {
+      if (orderBy !== "name_id") {
+        return _.sortBy(rows, (row) => {
+          return row.properties[orderBy];
+        });
+      } else {
+        return _.sortBy(rows, (row) => {
+          return row[orderBy];
+        });
       }
     } else {
-      if(orderBy !== 'name_id') {
-        return _.sortBy(rows, (row) => {return row.properties[orderBy]}).reverse();
-      }else {
-        return _.sortBy(rows, (row) => {return row[orderBy]}).reverse();
+      if (orderBy !== "name_id") {
+        return _.sortBy(rows, (row) => {
+          return row.properties[orderBy];
+        }).reverse();
+      } else {
+        return _.sortBy(rows, (row) => {
+          return row[orderBy];
+        }).reverse();
       }
     }
   };
 
-  const handleRequestSort = (event: React.MouseEvent<unknown>, property: string) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
+  const handleRequestSort = (
+    event: React.MouseEvent<unknown>,
+    property: string
+  ) => {
+    const isAsc = orderBy === property && order === "asc";
+    setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelecteds = rows.map(n => n.urlSafeKey);
+      const newSelecteds = rows.map((n) => n.urlSafeKey);
       setSelected(newSelecteds);
       return;
     }
@@ -301,7 +342,7 @@ export default function EnhancedTable(props: Props) {
     } else if (selectedIndex > 0) {
       newSelected = newSelected.concat(
         selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1),
+        selected.slice(selectedIndex + 1)
       );
     }
 
@@ -345,7 +386,7 @@ export default function EnhancedTable(props: Props) {
                   return (
                     <TableRow
                       hover
-                      onClick={event => handleClick(event, row.urlSafeKey)}
+                      onClick={(event) => handleClick(event, row.urlSafeKey)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
@@ -355,22 +396,54 @@ export default function EnhancedTable(props: Props) {
                       <TableCell padding="checkbox">
                         <Checkbox
                           checked={isItemSelected}
-                          inputProps={{ 'aria-labelledby': labelId }}
+                          inputProps={{ "aria-labelledby": labelId }}
                         />
                       </TableCell>
-                      <TableCell component="th" id={labelId} scope="row" padding="none">
-                        <NavLink className={classes.link} to={`/datastore_viewer/edit/update/${projectName}/${row.kind}/${row.urlSafeKey}`} >{row.name_id}</NavLink>
+                      <TableCell
+                        component="th"
+                        id={labelId}
+                        scope="row"
+                        padding="none"
+                      >
+                        <NavLink
+                          className={classes.link}
+                          to={`/datastore_viewer/edit/update/${projectName}/${row.kind}/${row.urlSafeKey}`}
+                        >
+                          {row.name_id}
+                        </NavLink>
                       </TableCell>
-                      {row.parent && <TableCell className={classes.cell} key={row.parent} align="left">{ row.parent }</TableCell>}
-                      {
-                        headCellProperties.map((property) => {
-                          if(row.properties[property.id]) {
-                            return <TableCell className={classes.cell} key={property.id} align="left">{ row.properties[property.id].value }</TableCell>
-                          }else{
-                            return <TableCell className={classes.cell} key={property.id} align="left">{''}</TableCell>
-                          }
-                        })
-                      }
+                      {row.parent && (
+                        <TableCell
+                          className={classes.cell}
+                          key={row.parent}
+                          align="left"
+                        >
+                          {row.parent}
+                        </TableCell>
+                      )}
+                      {headCellProperties.map((property) => {
+                        if (row.properties[property.id]) {
+                          return (
+                            <TableCell
+                              className={classes.cell}
+                              key={property.id}
+                              align="left"
+                            >
+                              {row.properties[property.id].value}
+                            </TableCell>
+                          );
+                        } else {
+                          return (
+                            <TableCell
+                              className={classes.cell}
+                              key={property.id}
+                              align="left"
+                            >
+                              {""}
+                            </TableCell>
+                          );
+                        }
+                      })}
                     </TableRow>
                   );
                 })}
@@ -388,4 +461,4 @@ export default function EnhancedTable(props: Props) {
       </Paper>
     </div>
   );
-}
+};
