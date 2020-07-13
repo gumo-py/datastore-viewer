@@ -2,19 +2,15 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface Props {
-    lang: string;
+  lang: string;
 }
 
 export default function NotFound(props: Props) {
-    const [t, i18n] = useTranslation();
+  const [t, i18n] = useTranslation();
 
-    React.useEffect(() => {
-        i18n.changeLanguage(props.lang);
-    }, [props.lang, i18n]);
+  React.useEffect(() => {
+    i18n.changeLanguage(props.lang);
+  }, [props.lang, i18n]);
 
-    return (
-        <div className={'NotFound'}>
-            {t('EntityList.NotFound.message')}
-        </div>
-    )
+  return <div className="NotFound">{t('EntityList.NotFound.message')}</div>;
 }

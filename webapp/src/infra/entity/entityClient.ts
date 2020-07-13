@@ -1,20 +1,22 @@
-import axios from "axios";
-import { Entity, entityFactory, EntityCollection } from "../../domain/Entity";
-import { Response, Request } from "../../api-types";
+import axios from 'axios';
+import { Entity, entityFactory, EntityCollection } from '../../domain/Entity';
+import { Response, Request } from '../../api-types';
 
 export type FetchEntitiesParams = Request.Entity.FetchAll;
 export type FetchEntitiesResponse = Response.Entity.FetchAll;
 
-export async function fetchEntities(params: FetchEntitiesParams) {
+export async function fetchEntities(
+  params: FetchEntitiesParams,
+): Promise<EntityCollection> {
   const defaultRowsPerPage = 25;
   const urlParams = new URLSearchParams();
   if (params.pageNumber) {
-    urlParams.append("page", `${params.pageNumber + 1}`);
+    urlParams.append('page', `${params.pageNumber + 1}`);
   }
   if (params.rowsPerPage) {
-    urlParams.append("perPage", `${params.rowsPerPage}`);
+    urlParams.append('perPage', `${params.rowsPerPage}`);
   } else {
-    urlParams.append("perPage", `${defaultRowsPerPage}`);
+    urlParams.append('perPage', `${defaultRowsPerPage}`);
   }
 
   const url = `/datastore_viewer/api/projects/${params.projectName}/kinds/${
@@ -31,7 +33,7 @@ export async function fetchEntities(params: FetchEntitiesParams) {
     entities,
     data.totalCount,
     data.pageNumber,
-    data.properties
+    data.properties,
   );
 
   return entityCollection;
@@ -40,7 +42,7 @@ export async function fetchEntities(params: FetchEntitiesParams) {
 export type FetchEntityParams = Request.Entity.Fetch;
 export type FetchEntityResponse = Response.Entity.Fetch;
 
-export async function fetchEntity(params: FetchEntityParams) {
+export async function fetchEntity(params: FetchEntityParams): Promise<Entity> {
   const url = `/datastore_viewer/api/projects/${params.projectName}/kinds/${params.kind}/entities/${params.urlSafeKey}`;
   const { data } = await axios.get<FetchEntityResponse>(url);
   return entityFactory(data.entityResult);

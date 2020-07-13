@@ -1,1 +1,1 @@
-export { EntityListHeader } from "./EntityListHeader";
+export { EntityListHeader } from './EntityListHeader';

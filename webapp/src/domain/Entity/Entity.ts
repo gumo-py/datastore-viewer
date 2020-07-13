@@ -1,6 +1,6 @@
-import { Domain } from "../../api-types";
-import { KeyObject } from "../Key";
-import { PropertyObject } from "../Property";
+import { Domain } from '../../api-types';
+import { KeyObject } from '../Key';
+import { PropertyObject } from '../Property';
 
 export interface EntityObject extends Domain.Entity {
   projectId: string;
@@ -10,15 +10,18 @@ export interface EntityObject extends Domain.Entity {
 }
 export class Entity implements EntityObject {
   readonly projectId: string;
+
   readonly URLSafeKey: Domain.URLSafeKey;
+
   readonly key: KeyObject;
+
   properties: PropertyObject[];
 
   constructor(
     projectId: string,
     URLSafeKey: Domain.URLSafeKey,
     key: KeyObject,
-    properties: PropertyObject[]
+    properties: PropertyObject[],
   ) {
     this.projectId = projectId;
     this.URLSafeKey = URLSafeKey;

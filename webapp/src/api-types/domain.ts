@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 export namespace Domain {
   export type URLSafeKey = string;
   export interface Entity {
@@ -24,7 +25,7 @@ export namespace Domain {
   }
 
   export interface IndexedProperty {
-    property_name: Exclude<Domain.Property, "index" | "value" | "value_type">;
+    property_name: Exclude<Domain.Property, 'index' | 'value' | 'value_type'>;
   }
 
   export interface Project {

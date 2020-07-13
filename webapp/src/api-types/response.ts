@@ -1,4 +1,4 @@
-import { Domain } from "./domain";
+import { Domain } from './domain';
 
 export namespace Response {
   export namespace Entity {

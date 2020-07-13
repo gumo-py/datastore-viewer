@@ -1,45 +1,42 @@
-import React from "react";
-import { Route, useHistory } from "react-router-dom";
-import { useCookies } from "react-cookie";
-import i18n from "i18next";
-import { initReactI18next } from "react-i18next";
-import { Header } from "./components/Header";
-import { EntityList } from "./components/pages/EntityList";
-import { EntityEdit } from "./components/pages/EntityEdit";
-import { NewEntityEdit } from "./components/pages/NewEntityEdit";
+import React from 'react';
+import { Route, useHistory } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
+import { ParsedQuery } from 'query-string';
+import { Header } from './components/Header';
+import { EntityList } from './components/pages/EntityList';
+import { EntityEdit } from './components/pages/EntityEdit';
+import { NewEntityEdit } from './components/pages/NewEntityEdit';
 
-import enJson from "./locales/en.json";
-import jaJson from "./locales/ja.json";
-import "./App.css";
-import { ParsedQuery } from "query-string";
+import enJson from './locales/en.json';
+import jaJson from './locales/ja.json';
+import './App.css';
 
 interface Props {
   qs: ParsedQuery;
 }
 
-const pageValidator = function (page: number): number {
+const pageValidator = (page: number): number => {
   if (!Number.isInteger(page) || page < 0) {
     return 0;
-  } else {
-    return page;
   }
+  return page;
 };
 
-const App = (props: Props) => {
-  const [cookies, setCookie] = useCookies(["lang"]);
-  const [projectName, setProjectName] = React.useState(
-    props.qs.projectName ? props.qs.projectName : ""
+export const App: React.FunctionComponent<Props> = ({ qs }) => {
+  const [cookies, setCookie] = useCookies(['lang']);
+  const [projectNameStatus, setProjectNameStatus] = React.useState(
+    qs.projectName ? qs.projectName : '',
   );
-  const [kind, setKind] = React.useState(props.qs.kind ? props.qs.kind : "");
-  const [page, setPage] = React.useState(
-    props.qs.page ? pageValidator(Number(props.qs.page)) : 0
+  const [kindStatus, setKindStatus] = React.useState(qs.kind ? qs.kind : '');
+  const [pageStatus, setPageStatus] = React.useState(
+    qs.page ? pageValidator(Number(qs.page)) : 0,
   );
-  const [lang, setLang] = React.useState<string>(
-    cookies["lang"] ? cookies["lang"] : "en"
+  const [langStatus, setLangStatus] = React.useState<string>(
+    cookies.lang ? cookies.lang : 'en',
   );
-  const beforeProjectName = React.useRef(
-    props.qs.projectName ? props.qs.projectName : ""
-  );
+  const beforeProjectName = React.useRef(qs.projectName ? qs.projectName : '');
   const history = useHistory();
 
   i18n.use(initReactI18next).init({
@@ -51,46 +48,46 @@ const App = (props: Props) => {
         translation: jaJson,
       },
     },
-    lng: lang,
-    fallbackLng: "en",
+    lng: langStatus,
+    fallbackLng: 'en',
     interpolation: { escapeValue: false },
   });
 
   React.useEffect(() => {
-    setCookie("lang", lang);
-  }, [lang]);
+    setCookie('lang', langStatus);
+  }, [langStatus]);
 
   React.useEffect(() => {
-    setProjectName(props.qs.projectName ? props.qs.projectName : "");
-    setKind(props.qs.kind ? props.qs.kind : "");
-    setPage(props.qs.page ? pageValidator(Number(props.qs.page)) : 0);
-  }, [props.qs.kind, props.qs.page, props.qs.projectName]);
+    setProjectNameStatus(qs.projectName ? qs.projectName : '');
+    setKindStatus(qs.kind ? qs.kind : '');
+    setPageStatus(qs.page ? pageValidator(Number(qs.page)) : 0);
+  }, [qs.kind, qs.page, qs.projectName]);
 
   React.useEffect(() => {
-    if (history.location.pathname === "/datastore_viewer/") {
-      if (projectName === beforeProjectName.current) {
-        let queryPath = `/datastore_viewer/?projectName=${projectName}`;
-        if (kind) queryPath += `&kind=${kind}`;
-        if (page) queryPath += `&page=${page}`;
-        if (queryPath !== `/datastore_viewer/?projectName=${projectName}`)
+    if (history.location.pathname === '/datastore_viewer/') {
+      if (projectNameStatus === beforeProjectName.current) {
+        let queryPath = `/datastore_viewer/?projectName=${projectNameStatus}`;
+        if (kindStatus) queryPath += `&kind=${kindStatus}`;
+        if (pageStatus) queryPath += `&page=${pageStatus}`;
+        if (queryPath !== `/datastore_viewer/?projectName=${projectNameStatus}`)
           history.push(queryPath);
       } else {
-        beforeProjectName.current = projectName;
-        setKind("");
-        setPage(0);
-        history.push(`/datastore_viewer/?projectName=${projectName}`);
+        beforeProjectName.current = projectNameStatus;
+        setKindStatus('');
+        setPageStatus(0);
+        history.push(`/datastore_viewer/?projectName=${projectNameStatus}`);
         window.location.reload();
       }
     }
-  }, [kind, page, projectName]);
+  }, [kindStatus, pageStatus, projectNameStatus]);
 
   return (
     <div className="App">
       <Header
-        setProjectName={setProjectName}
-        projectName={projectName}
-        setLang={setLang}
-        lang={lang}
+        setProjectName={setProjectNameStatus}
+        projectName={projectNameStatus}
+        setLang={setLangStatus}
+        lang={langStatus}
       />
       <div className="Content">
         <Route
@@ -98,26 +95,24 @@ const App = (props: Props) => {
           path="/datastore_viewer/"
           render={() => (
             <EntityList
-              setKind={setKind}
-              kind={kind}
-              setCurrentPage={setPage}
-              currentPage={page}
-              projectName={projectName}
-              lang={lang}
+              setKind={setKindStatus}
+              kind={kindStatus}
+              setCurrentPage={setPageStatus}
+              currentPage={pageStatus}
+              projectName={projectNameStatus}
+              lang={langStatus}
             />
           )}
         />
         <Route
           path="/datastore_viewer/edit/update/:projectName/:kind/:urlSafeKey"
-          render={() => <EntityEdit lang={lang} />}
+          render={() => <EntityEdit lang={langStatus} />}
         />
         <Route
           path="/datastore_viewer/edit/new"
-          render={() => <NewEntityEdit lang={lang} />}
+          render={() => <NewEntityEdit lang={langStatus} />}
         />
       </div>
     </div>
   );
 };
-
-export default App;

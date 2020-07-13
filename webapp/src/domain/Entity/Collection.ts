@@ -1,12 +1,17 @@
-import { EntityObject } from "./Entity";
+import { EntityObject } from './Entity';
 
 type PropertyIndex = { index: boolean; name: string };
 export class EntityCollection {
   readonly projectId: string;
+
   readonly kind: string;
+
   readonly entities: EntityObject[];
+
   readonly totalCount: number;
+
   readonly pageNumber: number;
+
   readonly properties: PropertyIndex[];
 
   constructor(
@@ -15,7 +20,7 @@ export class EntityCollection {
     entities: EntityObject[],
     totalCount: number,
     pageNumber: number,
-    properties: PropertyIndex[]
+    properties: PropertyIndex[],
   ) {
     this.projectId = projectId;
     this.kind = kind;

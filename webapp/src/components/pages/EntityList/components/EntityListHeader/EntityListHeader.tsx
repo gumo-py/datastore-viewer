@@ -1,27 +1,27 @@
-import React from "react";
-import { useTranslation } from "react-i18next";
-import Button from "@material-ui/core/Button";
-import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import FilterListIcon from "@material-ui/icons/FilterList";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
-import OutlinedInput from "@material-ui/core/OutlinedInput";
-import { Domain } from "../../../../../api-types";
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import Button from '@material-ui/core/Button';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import FilterListIcon from '@material-ui/icons/FilterList';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import OutlinedInput from '@material-ui/core/OutlinedInput';
+import { Domain } from '../../../../../api-types';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       marginTop: theme.spacing(2),
       marginBottom: theme.spacing(3),
-      textAlign: "left",
-      display: "flex",
+      textAlign: 'left',
+      display: 'flex',
     },
     button: {
       marginRight: theme.spacing(1),
       marginLeft: theme.spacing(2),
       fontSize: 13,
-      color: "#4169e1",
+      color: '#4169e1',
     },
     formControl: {
       marginLeft: theme.spacing(2),
@@ -31,9 +31,9 @@ const useStyles = makeStyles((theme: Theme) =>
       fontSize: 13,
     },
     input: {
-      padding: "10px 14px",
+      padding: '10px 14px',
     },
-  })
+  }),
 );
 
 interface Props {
@@ -46,7 +46,7 @@ interface Props {
 
 export const EntityListHeader: React.FunctionComponent<Props> = ({
   setKind,
-  kind = "",
+  kind = '',
   kinds = [],
   kindHandler,
   lang,
@@ -76,7 +76,7 @@ export const EntityListHeader: React.FunctionComponent<Props> = ({
 
   React.useEffect(() => {
     const selectedKind = kinds.find(
-      (kind) => kind.kind === entity
+      (data) => data.kind === entity,
     ) as Domain.KindResult;
 
     if (selectedKind) {
@@ -93,27 +93,25 @@ export const EntityListHeader: React.FunctionComponent<Props> = ({
           onChange={handleChange}
           displayEmpty
           className={classes.listItem}
-          input={<OutlinedInput classes={{ input: classes.input }} />}
-        >
+          input={<OutlinedInput classes={{ input: classes.input }} />}>
           <MenuItem className={classes.listItem} value="" disabled>
-            {t("EntityList.EntityListHeader.kind")}
+            {t('EntityList.EntityListHeader.kind')}
           </MenuItem>
           {kinds.map((obj) => {
             return (
               <MenuItem
                 className={classes.listItem}
                 key={obj.kind}
-                value={obj.kind}
-              >
+                value={obj.kind}>
                 {obj.kind}
               </MenuItem>
             );
           })}
         </Select>
       </FormControl>
-      {/*<Button startIcon={<FilterListIcon/>} className={classes.button}>*/}
-      {/*    { t('EntityList.EntityListHeader.filter') }*/}
-      {/*</Button>*/}
+      {/* <Button startIcon={<FilterListIcon/>} className={classes.button}> */}
+      {/*    { t('EntityList.EntityListHeader.filter') } */}
+      {/* </Button> */}
     </div>
   );
 };

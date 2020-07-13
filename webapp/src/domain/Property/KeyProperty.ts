@@ -1,12 +1,12 @@
-import { Kind, KeyObject } from "../Key";
+import { Kind, KeyObject } from '../Key';
 
-type KeyProp = Omit<KeyObject, "partitionId">;
+type KeyProp = Omit<KeyObject, 'partitionId'>;
 
 export class KeyProperty implements KeyProp {
   readonly path: Kind[] = [];
 
   constructor(value: Kind[]) {
-    for (let path of value) {
+    for (const path of value) {
       this.path.push(new Kind(path));
     }
   }
@@ -33,12 +33,12 @@ export class KeyProperty implements KeyProp {
   }
 
   toLiteral(): string {
-    let keyLiterals = "";
+    let keyLiterals = '';
     if (this.path.length > 1) {
       const literals = this.path.map((path) => {
         return path.toLiteral();
       });
-      keyLiterals = literals.join(", ");
+      keyLiterals = literals.join(', ');
     } else {
       keyLiterals = this.path[0].toLiteral();
     }

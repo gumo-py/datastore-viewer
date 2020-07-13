@@ -1,17 +1,17 @@
-import React from "react";
-import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import AutorenewIcon from "@material-ui/icons/Autorenew";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import IconButton from "@material-ui/core/IconButton";
-import TextField from "@material-ui/core/TextField";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
-import Link from "@material-ui/core/Link";
-import { Domain } from "../../api-types";
-import { fetchProject } from "../../infra/project/projectClient";
+import React from 'react';
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import AutorenewIcon from '@material-ui/icons/Autorenew';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import IconButton from '@material-ui/core/IconButton';
+import TextField from '@material-ui/core/TextField';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import Link from '@material-ui/core/Link';
+import { Domain } from '../../api-types';
+import { fetchProject } from '../../infra/project/projectClient';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -22,39 +22,39 @@ const useStyles = makeStyles((theme: Theme) =>
       marginRight: theme.spacing(2),
     },
     title: {
-      display: "none",
+      display: 'none',
       marginRight: theme.spacing(2),
-      [theme.breakpoints.up("sm")]: {
-        display: "block",
+      [theme.breakpoints.up('sm')]: {
+        display: 'block',
       },
     },
     textField: {
       margin: theme.spacing(0.5),
       width: 250,
-      borderColor: "white",
+      borderColor: 'white',
     },
     notchedOutline: {
-      borderWidth: "1px",
-      borderColor: "white !important",
+      borderWidth: '1px',
+      borderColor: 'white !important',
     },
     input: {
       height: 5,
-      color: "white",
+      color: 'white',
     },
     langSelect: {
-      marginLeft: "auto",
+      marginLeft: 'auto',
       marginRight: -8,
-      "&:before": {
-        borderColor: "white",
+      '&:before': {
+        borderColor: 'white',
       },
-      "&:after": {
-        borderColor: "white",
+      '&:after': {
+        borderColor: 'white',
       },
     },
     icon: {
-      color: "white",
+      color: 'white',
     },
-  })
+  }),
 );
 
 interface Props {
@@ -64,35 +64,40 @@ interface Props {
   projectName: any;
 }
 
-export default function HeaderAppBar(props: Props) {
+export const Header: React.FunctionComponent<Props> = ({
+  setProjectName,
+  setLang,
+  lang,
+  projectName,
+}) => {
   const classes = useStyles();
-  const [project, setProject] = React.useState<Domain.Project>();
-  const [projectName, setProjectName] = React.useState<string>("");
-  const [lang, setLang] = React.useState<string>(props.lang);
+  const [projectStatus, setProjectStatus] = React.useState<Domain.Project>();
+  const [projectNameStatus, setProjectNameStatus] = React.useState<string>('');
+  const [langStatus, setLangStatus] = React.useState<string>(lang);
 
-  if (!project) {
-    fetchProject().then((data) => setProject(data.projectResult));
+  if (!projectStatus) {
+    fetchProject().then((data) => setProjectStatus(data.projectResult));
   }
 
   React.useEffect(() => {
-    if (!props.projectName && project) {
-      const defaultProjectName = project.project_name;
+    if (!projectName && projectStatus) {
+      const defaultProjectName = projectStatus.project_name;
+      setProjectNameStatus(defaultProjectName);
       setProjectName(defaultProjectName);
-      props.setProjectName(defaultProjectName);
-    } else if (props.projectName) {
-      setProjectName(props.projectName);
+    } else if (projectName) {
+      setProjectNameStatus(projectName);
     }
-  }, [project, props.projectName]);
+  }, [projectStatus, projectName]);
 
   React.useEffect(() => {
-    props.setLang(lang);
-  }, [lang, props]);
+    setLang(langStatus);
+  }, [langStatus, lang]);
 
   const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setProjectName(event.target.value);
+    setProjectNameStatus(event.target.value);
   };
   const handleChangeLang = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setLang(event.target.value as string);
+    setLangStatus(event.target.value as string);
   };
 
   return (
@@ -100,9 +105,8 @@ export default function HeaderAppBar(props: Props) {
       <AppBar position="fixed">
         <Toolbar variant="dense">
           <Link
-            href={"/datastore_viewer/"}
-            style={{ textDecoration: "none", color: "white" }}
-          >
+            href="/datastore_viewer/"
+            style={{ textDecoration: 'none', color: 'white' }}>
             <Typography className={classes.title} variant="h6" noWrap>
               Datastore-Viewer
             </Typography>
@@ -117,21 +121,20 @@ export default function HeaderAppBar(props: Props) {
               endAdornment: (
                 <InputAdornment position="end">
                   <div
-                    className={"project-name-refresh-icon"}
+                    className="project-name-refresh-icon"
                     onClick={() => {
-                      props.setProjectName(projectName);
-                    }}
-                  >
+                      setProjectName(projectNameStatus);
+                    }}>
                     <IconButton edge="end" color="inherit">
-                      <AutorenewIcon style={{ fill: "white" }} />
+                      <AutorenewIcon style={{ fill: 'white' }} />
                     </IconButton>
                   </div>
                 </InputAdornment>
               ),
             }}
             onChange={handleChangeName}
-            value={projectName}
-            variant={"outlined"}
+            value={projectNameStatus}
+            variant="outlined"
           />
           <Select
             className={classes.langSelect}
@@ -141,14 +144,13 @@ export default function HeaderAppBar(props: Props) {
                 root: classes.icon,
               },
             }}
-            value={lang}
-            onChange={handleChangeLang}
-          >
-            <MenuItem value={"ja"}>ja</MenuItem>
-            <MenuItem value={"en"}>en</MenuItem>
+            value={langStatus}
+            onChange={handleChangeLang}>
+            <MenuItem value="ja">ja</MenuItem>
+            <MenuItem value="en">en</MenuItem>
           </Select>
         </Toolbar>
       </AppBar>
     </div>
   );
-}
+};

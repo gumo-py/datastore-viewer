@@ -1,12 +1,12 @@
-import React from "react";
-import { MenuBar } from "./components/MenuBar";
-import { EntityListHeader } from "./components/EntityListHeader";
-import { EntityListBody } from "./components/EntityListBody";
-import { NotFound } from "./components/NotFound";
-import { fetchEntities } from "../../../infra/entity/entityClient";
-import { fetchKinds } from "../../../infra/kind/kindClient";
-import { Domain } from "../../../api-types";
-import { EntityCollection } from "../../../domain/Entity";
+import React from 'react';
+import { MenuBar } from './components/MenuBar';
+import { EntityListHeader } from './components/EntityListHeader';
+import { EntityListBody } from './components/EntityListBody';
+import { NotFound } from './components/NotFound';
+import { fetchEntities } from '../../../infra/entity/entityClient';
+import { fetchKinds } from '../../../infra/kind/kindClient';
+import { Domain } from '../../../api-types';
+import { EntityCollection } from '../../../domain/Entity';
 
 type Props = {
   setKind(kind: string): void;
@@ -33,9 +33,7 @@ export const EntityList: React.FunctionComponent<Props> = ({
 
   React.useEffect(() => {
     if (!kinds?.length && projectName) {
-      fetchKinds({ projectName: projectName }).then((data) =>
-        setKinds(data.kindResults)
-      );
+      fetchKinds({ projectName }).then((data) => setKinds(data.kindResults));
     } else {
       setKinds(undefined);
     }
@@ -43,17 +41,16 @@ export const EntityList: React.FunctionComponent<Props> = ({
 
   const updateEntities = React.useCallback(() => {
     if (kindObj) {
-      console.log("!");
       fetchEntities({
-        projectName: projectName,
+        projectName,
         kind: kindObj.kind,
         pageNumber: page,
-        rowsPerPage: rowsPerPage,
-      }).then((entityCollection) => {
-        const maxPage = Math.floor(entityCollection.totalCount / rowsPerPage);
+        rowsPerPage,
+      }).then((collection) => {
+        const maxPage = Math.floor(collection.totalCount / rowsPerPage);
         if (maxPage < page) setPage(maxPage);
-        console.log("updateEntities", entityCollection);
-        setEntities(entityCollection);
+        console.log('updateEntities', collection);
+        setEntities(collection);
       });
     }
     setCurrentPage(page);
@@ -64,11 +61,11 @@ export const EntityList: React.FunctionComponent<Props> = ({
   }, [kindObj, updateEntities]);
 
   React.useEffect(() => {
-    console.log("effect watch", entityCollection);
+    console.log('effect watch', entityCollection);
   }, [entityCollection]);
 
   return (
-    <div className={"EntityList"}>
+    <div className="EntityList">
       <MenuBar refreash={updateEntities} lang={lang} />
       <EntityListHeader
         kinds={kinds}

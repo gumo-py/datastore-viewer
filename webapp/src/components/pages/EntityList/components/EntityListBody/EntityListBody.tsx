@@ -1,20 +1,20 @@
-import React from "react";
-import * as _ from "underscore";
-import { useTranslation } from "react-i18next";
-import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TablePagination from "@material-ui/core/TablePagination";
-import TableRow from "@material-ui/core/TableRow";
-import TableSortLabel from "@material-ui/core/TableSortLabel";
-import Paper from "@material-ui/core/Paper";
-import Checkbox from "@material-ui/core/Checkbox";
-import { NavLink } from "react-router-dom";
-import { EntityCollection, EntityObject } from "../../../../../domain/Entity";
-import { Domain } from "../../../../../api-types";
+import React from 'react';
+import * as _ from 'underscore';
+import { useTranslation } from 'react-i18next';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TablePagination from '@material-ui/core/TablePagination';
+import TableRow from '@material-ui/core/TableRow';
+import TableSortLabel from '@material-ui/core/TableSortLabel';
+import Paper from '@material-ui/core/Paper';
+import Checkbox from '@material-ui/core/Checkbox';
+import { NavLink } from 'react-router-dom';
+import { EntityCollection, EntityObject } from '../../../../../domain/Entity';
+import { Domain } from '../../../../../api-types';
 
 type HeadCell = {
   id: string;
@@ -39,7 +39,7 @@ function createData(
   kind: string,
   parent: any,
   urlSafeKey: string,
-  properties: any
+  properties: any,
 ): Data {
   return { name_id, kind, parent, urlSafeKey, properties };
 }
@@ -47,14 +47,14 @@ function createData(
 function convertData(entities: EntityObject[]) {
   const rows: Data[] = [];
 
-  for (let entity of entities) {
-    const name_id: string = String(entity.key.getIdOrName());
+  for (const entity of entities) {
+    const name_id = String(entity.key.getIdOrName());
     const kind: string = entity.key.getKind();
     const parent: string = entity.key.getParent().toString();
     const urlSafeKey: string = entity.URLSafeKey;
     const properties: { [key: string]: any } = {};
 
-    for (let property of entity.properties) {
+    for (const property of entity.properties) {
       properties[property.property_name] = {
         value: property.toStr(),
         index: property.index,
@@ -65,7 +65,46 @@ function convertData(entities: EntityObject[]) {
   return rows;
 }
 
-type Order = "asc" | "desc";
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      width: '100%',
+    },
+    paper: {
+      width: '100%',
+      marginBottom: theme.spacing(2),
+    },
+    table: {
+      minWidth: 750,
+    },
+    visuallyHidden: {
+      border: 0,
+      clip: 'rect(0 0 0 0)',
+      height: 1,
+      margin: -1,
+      overflow: 'hidden',
+      padding: 0,
+      position: 'absolute',
+      top: 20,
+      width: 1,
+    },
+    link: {
+      color: 'black',
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      maxWidth: 200,
+    },
+    cell: {
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      maxWidth: 200,
+    },
+  }),
+);
+
+type Order = 'asc' | 'desc';
 
 type EnhancedTableProps = {
   classes: ReturnType<typeof useStyles>;
@@ -73,7 +112,7 @@ type EnhancedTableProps = {
   onRequestSort: (event: React.MouseEvent<unknown>, property: string) => void;
   onSelectAllClick: (
     event: React.ChangeEvent<HTMLInputElement>,
-    checked: boolean
+    checked: boolean,
   ) => void;
   order: Order;
   orderBy: string;
@@ -94,43 +133,42 @@ const EnhancedTableHead: React.FunctionComponent<EnhancedTableProps> = ({
   headCellProperties,
 }) => {
   const createSortHandler = (property: string) => (
-    event: React.MouseEvent<unknown>
+    event: React.MouseEvent<unknown>,
   ) => {
     onRequestSort(event, property);
   };
 
   return (
     <TableHead>
-      <TableRow style={{ backgroundColor: "lightgrey" }}>
+      <TableRow style={{ backgroundColor: 'lightgrey' }}>
         <TableCell padding="checkbox">
           <Checkbox
             indeterminate={numSelected > 0 && numSelected < rowCount}
             checked={rowCount > 0 && numSelected === rowCount}
             onChange={onSelectAllClick}
-            inputProps={{ "aria-label": "select all desserts" }}
+            inputProps={{ 'aria-label': 'select all desserts' }}
           />
         </TableCell>
         {headCellIds.map((headCell) => {
           return (
             <TableCell
               key={headCell.id}
-              align={"left"}
-              padding={"default"}
+              align="left"
+              padding="default"
               sortDirection={orderBy === headCell.id ? order : false}
-              style={{ fontWeight: "bolder" }}
-            >
-              {/*<TableSortLabel*/}
-              {/*  active={orderBy === headCell.id}*/}
-              {/*  direction={orderBy === headCell.id ? order : 'asc'}*/}
-              {/*  onClick={createSortHandler(headCell.id)}*/}
-              {/*>*/}
+              style={{ fontWeight: 'bolder' }}>
+              {/* <TableSortLabel */}
+              {/*  active={orderBy === headCell.id} */}
+              {/*  direction={orderBy === headCell.id ? order : 'asc'} */}
+              {/*  onClick={createSortHandler(headCell.id)} */}
+              {/* > */}
               {headCell.label}
-              {/*  {orderBy === headCell.id ? (*/}
-              {/*    <span className={classes.visuallyHidden}>*/}
-              {/*      {order === 'desc' ? 'sorted descending' : 'sorted ascending'}*/}
-              {/*    </span>*/}
-              {/*  ) : null}*/}
-              {/*</TableSortLabel>*/}
+              {/*  {orderBy === headCell.id ? ( */}
+              {/*    <span className={classes.visuallyHidden}> */}
+              {/*      {order === 'desc' ? 'sorted descending' : 'sorted ascending'} */}
+              {/*    </span> */}
+              {/*  ) : null} */}
+              {/* </TableSortLabel> */}
             </TableCell>
           );
         })}
@@ -139,93 +177,51 @@ const EnhancedTableHead: React.FunctionComponent<EnhancedTableProps> = ({
             return (
               <TableCell
                 key={headCell.id}
-                align={"left"}
-                padding={"default"}
+                align="left"
+                padding="default"
                 sortDirection={orderBy === headCell.id ? order : false}
-                style={{ fontWeight: "bolder" }}
-              >
-                {/*<TableSortLabel*/}
-                {/*  active={orderBy === headCell.id}*/}
-                {/*  direction={orderBy === headCell.id ? order : 'asc'}*/}
-                {/*  onClick={createSortHandler(headCell.id)}*/}
-                {/*>*/}
+                style={{ fontWeight: 'bolder' }}>
+                {/* <TableSortLabel */}
+                {/*  active={orderBy === headCell.id} */}
+                {/*  direction={orderBy === headCell.id ? order : 'asc'} */}
+                {/*  onClick={createSortHandler(headCell.id)} */}
+                {/* > */}
                 {headCell.label}
-                {/*  {orderBy === headCell.id ? (*/}
-                {/*    <span className={classes.visuallyHidden}>*/}
-                {/*      {order === 'desc' ? 'sorted descending' : 'sorted ascending'}*/}
-                {/*    </span>*/}
-                {/*  ) : null}*/}
-                {/*</TableSortLabel>*/}
-              </TableCell>
-            );
-          } else {
-            return (
-              <TableCell
-                key={headCell.id}
-                align={"left"}
-                padding={"default"}
-                sortDirection={orderBy === headCell.id ? order : false}
-                style={{ fontWeight: "bolder", color: "grey" }}
-              >
-                {/*<TableSortLabel*/}
-                {/*  active={orderBy === headCell.id}*/}
-                {/*  direction={orderBy === headCell.id ? order : 'asc'}*/}
-                {/*  onClick={createSortHandler(headCell.id)}*/}
-                {/*>*/}
-                {headCell.label}
-                {/*  {orderBy === headCell.id ? (*/}
-                {/*    <span className={classes.visuallyHidden}>*/}
-                {/*      {order === 'desc' ? 'sorted descending' : 'sorted ascending'}*/}
-                {/*    </span>*/}
-                {/*  ) : null}*/}
-                {/*</TableSortLabel>*/}
+                {/*  {orderBy === headCell.id ? ( */}
+                {/*    <span className={classes.visuallyHidden}> */}
+                {/*      {order === 'desc' ? 'sorted descending' : 'sorted ascending'} */}
+                {/*    </span> */}
+                {/*  ) : null} */}
+                {/* </TableSortLabel> */}
               </TableCell>
             );
           }
+          return (
+            <TableCell
+              key={headCell.id}
+              align="left"
+              padding="default"
+              sortDirection={orderBy === headCell.id ? order : false}
+              style={{ fontWeight: 'bolder', color: 'grey' }}>
+              {/* <TableSortLabel */}
+              {/*  active={orderBy === headCell.id} */}
+              {/*  direction={orderBy === headCell.id ? order : 'asc'} */}
+              {/*  onClick={createSortHandler(headCell.id)} */}
+              {/* > */}
+              {headCell.label}
+              {/*  {orderBy === headCell.id ? ( */}
+              {/*    <span className={classes.visuallyHidden}> */}
+              {/*      {order === 'desc' ? 'sorted descending' : 'sorted ascending'} */}
+              {/*    </span> */}
+              {/*  ) : null} */}
+              {/* </TableSortLabel> */}
+            </TableCell>
+          );
         })}
       </TableRow>
     </TableHead>
   );
 };
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      width: "100%",
-    },
-    paper: {
-      width: "100%",
-      marginBottom: theme.spacing(2),
-    },
-    table: {
-      minWidth: 750,
-    },
-    visuallyHidden: {
-      border: 0,
-      clip: "rect(0 0 0 0)",
-      height: 1,
-      margin: -1,
-      overflow: "hidden",
-      padding: 0,
-      position: "absolute",
-      top: 20,
-      width: 1,
-    },
-    link: {
-      color: "black",
-      whiteSpace: "nowrap",
-      overflow: "hidden",
-      textOverflow: "ellipsis",
-      maxWidth: 200,
-    },
-    cell: {
-      whiteSpace: "nowrap",
-      overflow: "hidden",
-      textOverflow: "ellipsis",
-      maxWidth: 200,
-    },
-  })
-);
 
 type Props = {
   entityCollection?: EntityCollection;
@@ -247,8 +243,8 @@ export const EntityListBody: React.FunctionComponent<Props> = ({
   setPage,
 }) => {
   const classes = useStyles();
-  const [order, setOrder] = React.useState<Order>("asc");
-  const [orderBy, setOrderBy] = React.useState<string>("id");
+  const [order, setOrder] = React.useState<Order>('asc');
+  const [orderBy, setOrderBy] = React.useState<string>('id');
   const [selected, setSelected] = React.useState<string[]>([]);
   const properties = entityCollection?.properties;
   const rows = convertData(entityCollection?.entities || []);
@@ -264,16 +260,16 @@ export const EntityListBody: React.FunctionComponent<Props> = ({
 
   const headCellIds: HeadCell[] = [
     {
-      id: "id",
-      label: `${t("EntityList.EntityListBody.HeadCell.nameId")}`,
+      id: 'id',
+      label: `${t('EntityList.EntityListBody.HeadCell.nameId')}`,
       index: true,
     },
   ];
   const headCellProperties: HeadCell[] = [];
   if (rows.length && rows[0].parent) {
     headCellIds.push({
-      id: "parent",
-      label: `${t("EntityList.EntityListBody.HeadCell.parent")}`,
+      id: 'parent',
+      label: `${t('EntityList.EntityListBody.HeadCell.parent')}`,
       index: true,
     });
   }
@@ -287,36 +283,33 @@ export const EntityListBody: React.FunctionComponent<Props> = ({
     });
   }
 
-  const stableSort = (order: Order) => {
-    if (order === "asc") {
-      if (orderBy !== "name_id") {
+  const stableSort = (orders: Order) => {
+    if (orders === 'asc') {
+      if (orderBy !== 'name_id') {
         return _.sortBy(rows, (row) => {
           return row.properties[orderBy];
         });
-      } else {
-        return _.sortBy(rows, (row) => {
-          return row[orderBy];
-        });
       }
-    } else {
-      if (orderBy !== "name_id") {
-        return _.sortBy(rows, (row) => {
-          return row.properties[orderBy];
-        }).reverse();
-      } else {
-        return _.sortBy(rows, (row) => {
-          return row[orderBy];
-        }).reverse();
-      }
+      return _.sortBy(rows, (row) => {
+        return row[orderBy];
+      });
     }
+    if (orderBy !== 'name_id') {
+      return _.sortBy(rows, (row) => {
+        return row.properties[orderBy];
+      }).reverse();
+    }
+    return _.sortBy(rows, (row) => {
+      return row[orderBy];
+    }).reverse();
   };
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
-    property: string
+    property: string,
   ) => {
-    const isAsc = orderBy === property && order === "asc";
-    setOrder(isAsc ? "desc" : "asc");
+    const isAsc = orderBy === property && order === 'asc';
+    setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
   };
 
@@ -342,7 +335,7 @@ export const EntityListBody: React.FunctionComponent<Props> = ({
     } else if (selectedIndex > 0) {
       newSelected = newSelected.concat(
         selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
+        selected.slice(selectedIndex + 1),
       );
     }
 
@@ -363,8 +356,7 @@ export const EntityListBody: React.FunctionComponent<Props> = ({
             className={classes.table}
             aria-labelledby="tableTitle"
             size="small"
-            aria-label="enhanced table"
-          >
+            aria-label="enhanced table">
             <EnhancedTableHead
               classes={classes}
               numSelected={selected.length}
@@ -391,24 +383,21 @@ export const EntityListBody: React.FunctionComponent<Props> = ({
                       aria-checked={isItemSelected}
                       tabIndex={-1}
                       key={row.urlSafeKey}
-                      selected={isItemSelected}
-                    >
+                      selected={isItemSelected}>
                       <TableCell padding="checkbox">
                         <Checkbox
                           checked={isItemSelected}
-                          inputProps={{ "aria-labelledby": labelId }}
+                          inputProps={{ 'aria-labelledby': labelId }}
                         />
                       </TableCell>
                       <TableCell
                         component="th"
                         id={labelId}
                         scope="row"
-                        padding="none"
-                      >
+                        padding="none">
                         <NavLink
                           className={classes.link}
-                          to={`/datastore_viewer/edit/update/${projectName}/${row.kind}/${row.urlSafeKey}`}
-                        >
+                          to={`/datastore_viewer/edit/update/${projectName}/${row.kind}/${row.urlSafeKey}`}>
                           {row.name_id}
                         </NavLink>
                       </TableCell>
@@ -416,8 +405,7 @@ export const EntityListBody: React.FunctionComponent<Props> = ({
                         <TableCell
                           className={classes.cell}
                           key={row.parent}
-                          align="left"
-                        >
+                          align="left">
                           {row.parent}
                         </TableCell>
                       )}
@@ -427,22 +415,18 @@ export const EntityListBody: React.FunctionComponent<Props> = ({
                             <TableCell
                               className={classes.cell}
                               key={property.id}
-                              align="left"
-                            >
+                              align="left">
                               {row.properties[property.id].value}
                             </TableCell>
                           );
-                        } else {
-                          return (
-                            <TableCell
-                              className={classes.cell}
-                              key={property.id}
-                              align="left"
-                            >
-                              {""}
-                            </TableCell>
-                          );
                         }
+                        return (
+                          <TableCell
+                            className={classes.cell}
+                            key={property.id}
+                            align="left"
+                          />
+                        );
                       })}
                     </TableRow>
                   );

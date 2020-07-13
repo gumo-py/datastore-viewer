@@ -1,1 +1,1 @@
-export { EntityListBody } from "./EntityListBody";
+export { EntityListBody } from './EntityListBody';
