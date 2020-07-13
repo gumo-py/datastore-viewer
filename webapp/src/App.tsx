@@ -3,10 +3,10 @@ import { Route, useHistory } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
-import { Header } from "./layout/Header";
-import { EntityList } from "./views/EntityList";
-import { EntityEdit } from "./views/EntityEdit";
-import { NewEntityEdit } from "./views/NewEntityEdit";
+import { Header } from "./components/Header";
+import { EntityList } from "./components/pages/EntityList";
+import { EntityEdit } from "./components/pages/EntityEdit";
+import { NewEntityEdit } from "./components/pages/NewEntityEdit";
 
 import enJson from "./locales/en.json";
 import jaJson from "./locales/ja.json";

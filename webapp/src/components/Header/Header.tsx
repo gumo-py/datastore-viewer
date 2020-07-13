@@ -10,8 +10,8 @@ import TextField from "@material-ui/core/TextField";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import Link from "@material-ui/core/Link";
-import { Domain } from "../../../api-types";
-import { fetchProject } from "../../../infra/project/projectClient";
+import { Domain } from "../../api-types";
+import { fetchProject } from "../../infra/project/projectClient";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
