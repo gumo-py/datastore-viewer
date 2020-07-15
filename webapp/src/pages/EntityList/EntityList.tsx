@@ -73,7 +73,9 @@ export const EntityList: React.FunctionComponent<Props> = ({
       projectName,
       kind,
       urlSafeKeys: selected,
-    }).then(() => updateEntities());
+    }).then(() => {
+      window.location.reload();
+    });
   };
 
   React.useEffect(() => {
