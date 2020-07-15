@@ -19,22 +19,22 @@ import Card from '@material-ui/core/Card';
 import Button from '@material-ui/core/Button';
 import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
-import { PropertyObject } from '../../../../../domain/Property';
+import { Typography } from '@material-ui/core';
+import { PropertyObject } from '../../../../domain/Property';
 
 const useMenuItemStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       outline: 'solid 1px lightgrey',
     },
-    itemName: {
-      fontSize: 14,
-    },
     inputFont: {
       fontSize: 13,
+      color: 'black',
     },
     inputSelect: {
       fontSize: 13,
       marginTop: theme.spacing(1),
+      color: 'black',
     },
     textField: {
       width: '100%',
@@ -114,31 +114,45 @@ const PropertyItem: React.FC<PropertyProps> = (props) => {
   const handleNameChange = (event: React.ChangeEvent<{ value: any }>) => {
     setName(event.target.value);
   };
+
   const makeTitle = () => {
     if (!name) {
       return t('EntityEdit.PropertyMenu.PropertyItem.empty');
     }
-    if (!value) {
-      if (type === 'Null') {
-        return `${name}`;
-      }
-      return `${name}: ${t('EntityEdit.PropertyMenu.PropertyItem.empty')}`;
+    switch (type) {
+      case 'Null':
+        return `${name}: ${value}`;
+      case 'Boolean':
+        return `${name}: ${value}`;
+      case 'Array':
+        return `${name}: ${JSON.stringify(value)}`;
+      case 'Embedded':
+        return `${name}: ${JSON.stringify(value)}`;
+      default:
+        if (!value) {
+          return `${name}: ${t('EntityEdit.PropertyMenu.PropertyItem.empty')}`;
+        }
+        return `${name}: ${value}`;
     }
-    return `${name}: ${value}`;
+  };
+
+  const checkIndexed = () => {
+    if (checkState) {
+      return t('EntityEdit.PropertyMenu.PropertyItem.indexed');
+    }
+    return null;
   };
 
   React.useEffect(() => {
-    if (type === 'Date') {
-      setValue(moment(value).format('YYYY-MM-DDThh:mm'));
-    }
+    if (type === 'Date') setValue(moment(value).format('YYYY-MM-DDThh:mm'));
   }, [value, type]);
 
-  const formAdjuster = (types: string) => {
-    switch (types) {
+  const formAdjuster = (typeString: string) => {
+    switch (typeString) {
       case 'String':
         return (
           <TextField
-            required
+            disabled
             value={value}
             onChange={handleFormValueChange}
             size="small"
@@ -154,7 +168,7 @@ const PropertyItem: React.FC<PropertyProps> = (props) => {
       case 'Date':
         return (
           <TextField
-            required
+            disabled
             value={value}
             onChange={handleFormValueChange}
             type="datetime-local"
@@ -170,7 +184,7 @@ const PropertyItem: React.FC<PropertyProps> = (props) => {
       case 'Integer':
         return (
           <TextField
-            required
+            disabled
             value={value}
             onChange={handleFormValueChange}
             size="small"
@@ -185,7 +199,7 @@ const PropertyItem: React.FC<PropertyProps> = (props) => {
       case 'Float':
         return (
           <TextField
-            required
+            disabled
             value={value}
             onChange={handleFormValueChange}
             size="small"
@@ -200,7 +214,7 @@ const PropertyItem: React.FC<PropertyProps> = (props) => {
       case 'Boolean':
         return (
           <TextField
-            required
+            disabled
             select
             className={classes.textField}
             SelectProps={{ classes: { select: classes.select } }}
@@ -222,7 +236,7 @@ const PropertyItem: React.FC<PropertyProps> = (props) => {
       case 'Key':
         return (
           <TextField
-            required
+            disabled
             value={value}
             onChange={handleFormValueChange}
             size="small"
@@ -234,8 +248,57 @@ const PropertyItem: React.FC<PropertyProps> = (props) => {
           />
         );
 
+      case 'Unknown':
+        return (
+          <TextField
+            disabled
+            value={value}
+            onChange={handleFormValueChange}
+            size="small"
+            multiline
+            InputLabelProps={{ shrink: true }}
+            InputProps={{ classes: { input: classes.inputFont } }}
+            className={classes.textField}
+            label={t('EntityEdit.PropertyMenu.PropertyItem.value')}
+            variant="outlined"
+          />
+        );
+
+      case 'Embedded':
+        return (
+          <TextField
+            disabled
+            value={JSON.stringify(value, null, 4)}
+            onChange={handleFormValueChange}
+            size="small"
+            multiline
+            InputLabelProps={{ shrink: true }}
+            InputProps={{ classes: { input: classes.inputFont } }}
+            className={classes.textField}
+            label={t('EntityEdit.PropertyMenu.PropertyItem.value')}
+            variant="outlined"
+          />
+        );
+
+      case 'Array':
+        return (
+          <TextField
+            disabled
+            value={JSON.stringify(value)}
+            onChange={handleFormValueChange}
+            size="small"
+            multiline
+            InputLabelProps={{ shrink: true }}
+            InputProps={{ classes: { input: classes.inputFont } }}
+            className={classes.textField}
+            label={t('EntityEdit.PropertyMenu.PropertyItem.value')}
+            variant="outlined"
+          />
+        );
+
       case 'Null':
         break;
+
       default:
         break;
     }
@@ -245,18 +308,33 @@ const PropertyItem: React.FC<PropertyProps> = (props) => {
     <div className={classes.root}>
       <ListItem button onClick={handleClick}>
         <ListItemText
-          classes={{
-            primary: classes.itemName,
-            secondary: classes.inputFont,
-          }}
-          primary={makeTitle()}
-          secondary={t('EntityEdit.PropertyMenu.PropertyItem.subTitle')}
+          disableTypography
+          primary={
+            <Typography
+              style={{
+                fontSize: 14,
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+              }}>
+              {makeTitle()}
+            </Typography>
+          }
+          secondary={
+            <Typography
+              style={{
+                color: 'grey',
+                fontSize: 13,
+              }}>
+              {checkIndexed()}
+            </Typography>
+          }
         />
-        {open && (
-          <IconButton onClick={handleDeleteButton} aria-label="delete">
-            <DeleteIcon fontSize="inherit" />
-          </IconButton>
-        )}
+        {/* {open && */}
+        {/*    <IconButton onClick={handleDeleteButton} aria-label="delete"> */}
+        {/*        <DeleteIcon fontSize="inherit" /> */}
+        {/*    </IconButton> */}
+        {/* } */}
         {open ? <ExpandLess /> : <ExpandMore />}
       </ListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
@@ -265,6 +343,7 @@ const PropertyItem: React.FC<PropertyProps> = (props) => {
             <List component="nav" aria-label="property area">
               <ListItem>
                 <TextField
+                  disabled
                   required
                   size="small"
                   value={name}
@@ -278,6 +357,7 @@ const PropertyItem: React.FC<PropertyProps> = (props) => {
               </ListItem>
               <ListItem>
                 <TextField
+                  disabled
                   select
                   className={classes.textField}
                   SelectProps={{ classes: { select: classes.select } }}
@@ -305,6 +385,17 @@ const PropertyItem: React.FC<PropertyProps> = (props) => {
                   <MenuItem className={classes.inputFont} value="Key">
                     {t('EntityEdit.PropertyMenu.PropertyItem.listItem.key')}
                   </MenuItem>
+                  <MenuItem className={classes.inputFont} value="Array">
+                    {t('EntityEdit.PropertyMenu.PropertyItem.listItem.array')}
+                  </MenuItem>
+                  <MenuItem className={classes.inputFont} value="Embedded">
+                    {t(
+                      'EntityEdit.PropertyMenu.PropertyItem.listItem.embedded',
+                    )}
+                  </MenuItem>
+                  <MenuItem className={classes.inputFont} value="Unknown">
+                    {t('EntityEdit.PropertyMenu.PropertyItem.listItem.unknown')}
+                  </MenuItem>
                   <MenuItem className={classes.inputFont} value="Null">
                     {t('EntityEdit.PropertyMenu.PropertyItem.listItem.null')}
                   </MenuItem>
@@ -315,6 +406,7 @@ const PropertyItem: React.FC<PropertyProps> = (props) => {
                 <FormControlLabel
                   control={
                     <Checkbox
+                      disabled
                       checked={checkState}
                       onChange={handleCheckBoxChange}
                       value="checked"
@@ -329,14 +421,14 @@ const PropertyItem: React.FC<PropertyProps> = (props) => {
               </ListItem>
             </List>
           </CardContent>
-          <CardActions>
-            <Button onClick={handleSave} size="small" color="primary">
-              {t('EntityEdit.PropertyMenu.Button.save')}
-            </Button>
-            <Button onClick={handleCancel} size="small" color="primary">
-              {t('EntityEdit.PropertyMenu.Button.cancel')}
-            </Button>
-          </CardActions>
+          {/* <CardActions> */}
+          {/*    <Button onClick={handleSave} size="small" color="primary"> */}
+          {/*        {t('EntityEdit.PropertyMenu.Button.save')} */}
+          {/*    </Button> */}
+          {/*    <Button onClick={handleCancel} size="small" color="primary"> */}
+          {/*        {t('EntityEdit.PropertyMenu.Button.cancel')} */}
+          {/*    </Button> */}
+          {/* </CardActions> */}
         </Card>
       </Collapse>
     </div>
@@ -351,7 +443,7 @@ const useStyles = makeStyles((theme: Theme) =>
     list: {
       margin: theme.spacing(2),
       width: '100%',
-      maxWidth: 360,
+      maxWidth: 450,
       backgroundColor: theme.palette.background.paper,
     },
     title: {
@@ -437,15 +529,12 @@ export default function PropertyMenu(props: MenuProps) {
             lang={props.lang}
           />
         ))}
-        <ListItem
-          button
-          onClick={handleClickAddProperty}
-          className={classes.addPropertyButton}>
-          <ListItemText
-            classes={{ primary: classes.addProperty }}
-            primary={t('EntityEdit.PropertyMenu.addProperty')}
-          />
-        </ListItem>
+        {/* <ListItem button onClick={handleClickAddProperty} className={classes.addPropertyButton}> */}
+        {/*    <ListItemText */}
+        {/*        classes={{ primary: classes.addProperty }} */}
+        {/*        primary={t('EntityEdit.PropertyMenu.addProperty')} */}
+        {/*    /> */}
+        {/* </ListItem> */}
       </List>
     </div>
   );

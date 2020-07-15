@@ -12,6 +12,18 @@ export namespace Request {
       kind: string;
       urlSafeKey: string;
     }
+
+    export interface Delete {
+      projectName: string;
+      kind: string;
+      urlSafeKey: string;
+    }
+
+    export interface DeleteMulti {
+      projectName: string;
+      kind: string;
+      urlSafeKeys: string[];
+    }
   }
 
   export namespace Kind {

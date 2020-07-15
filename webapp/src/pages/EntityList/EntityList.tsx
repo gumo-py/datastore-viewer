@@ -1,12 +1,12 @@
 import React from 'react';
-import { MenuBar } from './components/MenuBar';
-import { EntityListHeader } from './components/EntityListHeader';
-import { EntityListBody } from './components/EntityListBody';
-import { NotFound } from './components/NotFound';
-import { fetchEntities } from '../../../infra/entity/entityClient';
-import { fetchKinds } from '../../../infra/kind/kindClient';
-import { Domain } from '../../../api-types';
-import { EntityCollection } from '../../../domain/Entity';
+import { MenuBar } from './internal/MenuBar';
+import { EntityListHeader } from './internal/EntityListHeader';
+import { EntityListBody } from './internal/EntityListBody';
+import { NotFound } from './internal/NotFound';
+import { fetchEntities, deleteEntities } from '../../infra/entity/entityClient';
+import { fetchKinds } from '../../infra/kind/kindClient';
+import { Domain } from '../../api-types';
+import { EntityCollection } from '../../domain/Entity';
 
 type Props = {
   setKind(kind: string): void;
@@ -27,7 +27,11 @@ export const EntityList: React.FunctionComponent<Props> = ({
 }) => {
   const [kinds, setKinds] = React.useState<Domain.KindResult[] | undefined>();
   const [kindObj, setKindObj] = React.useState<Domain.KindResult>();
-  const [page, setPage] = React.useState(currentPage);
+  const [page, setPage] = React.useState<number>(currentPage);
+  const [selected, setSelected] = React.useState<string[]>([]);
+  const [ableDeleteButton, setAbleDeleteButton] = React.useState<boolean>(
+    false,
+  );
   const rowsPerPage = 25;
   const [entityCollection, setEntities] = React.useState<EntityCollection>();
 
@@ -38,6 +42,14 @@ export const EntityList: React.FunctionComponent<Props> = ({
       setKinds(undefined);
     }
   }, [projectName]);
+
+  React.useEffect(() => {
+    if (selected.length) {
+      setAbleDeleteButton(false);
+    } else {
+      setAbleDeleteButton(true);
+    }
+  }, [selected]);
 
   const updateEntities = React.useCallback(() => {
     if (kindObj) {
@@ -56,6 +68,14 @@ export const EntityList: React.FunctionComponent<Props> = ({
     setCurrentPage(page);
   }, [kindObj, projectName, page]);
 
+  const removeEntities = () => {
+    deleteEntities({
+      projectName,
+      kind,
+      urlSafeKeys: selected,
+    }).then(() => updateEntities());
+  };
+
   React.useEffect(() => {
     updateEntities();
   }, [kindObj, updateEntities]);
@@ -66,7 +86,12 @@ export const EntityList: React.FunctionComponent<Props> = ({
 
   return (
     <div className="EntityList">
-      <MenuBar refreash={updateEntities} lang={lang} />
+      <MenuBar
+        refreash={updateEntities}
+        delete={removeEntities}
+        ableDeleteButton={ableDeleteButton}
+        lang={lang}
+      />
       <EntityListHeader
         kinds={kinds}
         kind={kind}
@@ -82,6 +107,7 @@ export const EntityList: React.FunctionComponent<Props> = ({
           page={page}
           rowsPerPage={rowsPerPage}
           setPage={setPage}
+          setSelectedItems={setSelected}
           lang={lang}
           projectName={projectName}
         />

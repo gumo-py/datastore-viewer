@@ -13,8 +13,8 @@ import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
 import { NavLink } from 'react-router-dom';
-import { EntityCollection, EntityObject } from '../../../../../domain/Entity';
-import { Domain } from '../../../../../api-types';
+import { EntityCollection, EntityObject } from '../../../../domain/Entity';
+import { Domain } from '../../../../api-types';
 
 type HeadCell = {
   id: string;
@@ -231,6 +231,7 @@ type Props = {
   page: number;
   rowsPerPage: number;
   setPage: (pageNumber: number) => void;
+  setSelectedItems: (selected: string[]) => void;
 };
 
 export const EntityListBody: React.FunctionComponent<Props> = ({
@@ -241,6 +242,7 @@ export const EntityListBody: React.FunctionComponent<Props> = ({
   page,
   rowsPerPage,
   setPage,
+  setSelectedItems,
 }) => {
   const classes = useStyles();
   const [order, setOrder] = React.useState<Order>('asc');
@@ -257,6 +259,10 @@ export const EntityListBody: React.FunctionComponent<Props> = ({
   React.useEffect(() => {
     setSelected([]);
   }, [kindObj]);
+
+  React.useEffect(() => {
+    setSelectedItems(selected);
+  }, [selected]);
 
   const headCellIds: HeadCell[] = [
     {

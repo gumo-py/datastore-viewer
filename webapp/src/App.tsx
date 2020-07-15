@@ -5,9 +5,9 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import { ParsedQuery } from 'query-string';
 import { Header } from './components/Header';
-import { EntityList } from './components/pages/EntityList';
-import { EntityEdit } from './components/pages/EntityEdit';
-import { NewEntityEdit } from './components/pages/NewEntityEdit';
+import { EntityList } from './pages/EntityList';
+import { EntityEdit } from './pages/EntityEdit';
+import { NewEntityEdit } from './pages/NewEntityEdit';
 
 import enJson from './locales/en.json';
 import jaJson from './locales/ja.json';

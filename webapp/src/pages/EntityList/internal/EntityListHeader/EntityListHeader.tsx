@@ -7,7 +7,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
-import { Domain } from '../../../../../api-types';
+import { Domain } from '../../../../api-types';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

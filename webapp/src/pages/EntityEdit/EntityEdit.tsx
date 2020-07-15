@@ -1,13 +1,13 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { NavLink, useParams } from 'react-router-dom';
+import { NavLink, useParams, useHistory } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import { MenuBar } from './components/MenuBar';
-import { EntityInfo } from './components/EntityInfo';
-import { PropertyMenu } from './components/PropertyMenu';
-import { EntityObject } from '../../../domain/Entity';
-import { fetchEntity } from '../../../infra/entity/entityClient';
+import { MenuBar } from './internal/MenuBar';
+import { EntityInfo } from './internal/EntityInfo';
+import { PropertyMenu } from './internal/PropertyMenu';
+import { EntityObject } from '../../domain/Entity';
+import { fetchEntity, deleteEntity } from '../../infra/entity/entityClient';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -31,6 +31,7 @@ interface Props {
 
 export default function EntityEdit(props: Props) {
   const { kind, urlSafeKey, projectName } = useParams();
+  const history = useHistory();
   const [entity, setEntity] = React.useState<EntityObject>();
   const [t, i18n] = useTranslation();
 
@@ -48,6 +49,20 @@ export default function EntityEdit(props: Props) {
     }
   };
 
+  const removeEntity = () => {
+    if (kind && urlSafeKey && projectName) {
+      deleteEntity({
+        projectName,
+        kind,
+        urlSafeKey,
+      }).then(() =>
+        history.push(
+          `/datastore_viewer/?projectName=${projectName}&kind=${kind}`,
+        ),
+      );
+    }
+  };
+
   if (!entity) {
     updateEntity();
   }
@@ -55,7 +70,11 @@ export default function EntityEdit(props: Props) {
   const classes = useStyles();
   return (
     <div className="Entity">
-      <MenuBar refreash={updateEntity} lang={props.lang} />
+      <MenuBar
+        refreash={updateEntity}
+        delete={removeEntity}
+        lang={props.lang}
+      />
       {entity && (
         <EntityInfo
           kind={entity.key.getKind()}

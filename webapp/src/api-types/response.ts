@@ -13,6 +13,14 @@ export namespace Response {
     export interface Fetch {
       entityResult: Domain.EntityResult;
     }
+
+    export interface Delete {
+      deleteResult: Domain.URLSafeKey;
+    }
+
+    export interface DeleteMulti {
+      deleteResults: Domain.URLSafeKey[];
+    }
   }
 
   export namespace Kind {

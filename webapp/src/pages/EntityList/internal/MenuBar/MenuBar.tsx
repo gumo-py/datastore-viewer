@@ -38,6 +38,8 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface Props {
   refreash(): void;
+  delete(): void;
+  ableDeleteButton: boolean;
   lang: string;
 }
 
@@ -49,8 +51,12 @@ export default function MenuBar(props: Props) {
     i18n.changeLanguage(props.lang);
   }, [props.lang, i18n]);
 
-  const handleClickRefreashEntity = () => {
+  const handleClickRefreashEntities = () => {
     props.refreash();
+  };
+
+  const handleClickDeleteEntities = () => {
+    props.delete();
   };
 
   return (
@@ -65,12 +71,16 @@ export default function MenuBar(props: Props) {
       {/* <Button startIcon={<PublishIcon/>} className={classes.button}> */}
       {/*    { t('EntityList.MenuBar.export') } */}
       {/* </Button> */}
-      {/* <Button startIcon={<DeleteIcon/>} className={classes.button} disabled> */}
-      {/*    { t('EntityList.MenuBar.delete') } */}
-      {/* </Button> */}
+      <Button
+        startIcon={<DeleteIcon />}
+        className={classes.button}
+        onClick={handleClickDeleteEntities}
+        disabled={props.ableDeleteButton}>
+        {t('EntityList.MenuBar.delete')}
+      </Button>
       <IconButton
         aria-label="refreash"
-        onClick={handleClickRefreashEntity}
+        onClick={handleClickRefreashEntities}
         className={classes.iconButton}>
         <RefreshIcon fontSize="inherit" />
       </IconButton>

@@ -37,6 +37,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface Props {
   refreash(): void;
+  delete(): void;
   lang: string;
 }
 
@@ -51,6 +52,10 @@ export default function MenuBar(props: Props) {
 
   const handleClickRefreashEntity = () => {
     props.refreash();
+  };
+
+  const handleClickDeleteEntity = () => {
+    props.delete();
   };
 
   return (
@@ -68,9 +73,12 @@ export default function MenuBar(props: Props) {
         className={classes.button}>
         {t('EntityEdit.MenuBar.refresh')}
       </Button>
-      {/* <Button startIcon={<DeleteIcon/>} className={classes.button}> */}
-      {/*    {t('EntityEdit.MenuBar.delete')} */}
-      {/* </Button> */}
+      <Button
+        startIcon={<DeleteIcon />}
+        onClick={handleClickDeleteEntity}
+        className={classes.button}>
+        {t('EntityEdit.MenuBar.delete')}
+      </Button>
     </div>
   );
 }

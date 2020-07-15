@@ -2,9 +2,9 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import Button from '@material-ui/core/Button';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import { MenuBar } from './components/MenuBar';
-import { EntityInfoEdit } from './components/EntityInfoEdit';
-import { PropertyMenu } from './components/PropertyMenu';
+import { MenuBar } from './internal/MenuBar';
+import { EntityInfoEdit } from './internal/EntityInfoEdit';
+import { PropertyMenu } from './internal/PropertyMenu';
 
 const testEntity = {
   namespace: '[デフォルト]',
