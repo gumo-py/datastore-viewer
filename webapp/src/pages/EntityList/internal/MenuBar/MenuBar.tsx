@@ -82,6 +82,7 @@ export default function MenuBar(props: Props) {
 
   const handleClickDeleteEntities = () => {
     props.delete();
+    setModalOpen(false);
   };
 
   const handleOpenModal = () => {

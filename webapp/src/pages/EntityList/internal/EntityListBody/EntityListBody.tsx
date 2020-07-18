@@ -258,7 +258,7 @@ export const EntityListBody: React.FunctionComponent<Props> = ({
 
   React.useEffect(() => {
     setSelected([]);
-  }, [kindObj]);
+  }, [kindObj, entityCollection]);
 
   React.useEffect(() => {
     setSelectedItems(selected);
