@@ -36,6 +36,7 @@ class ProjectAPIView(flask.views.MethodView):
     def get(self, project_name: str, kind: str):
         per_page = int(flask.request.args.get('perPage', '25'))
         page_number = int(flask.request.args.get('page', '1'))
+        order = flask.request.args.get('order', '')
 
         encoder = DataStoreEntityJSONEncoder()
         repository = DatastoreViewerRepository(project_name=project_name)
@@ -48,6 +49,7 @@ class ProjectAPIView(flask.views.MethodView):
             kind=current_kind,
             per_page=per_page,
             page_number=page_number,
+            orderBy=order,
         )
 
         entities_array = []

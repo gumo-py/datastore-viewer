@@ -28,6 +28,7 @@ export const EntityList: React.FunctionComponent<Props> = ({
   const [kinds, setKinds] = React.useState<Domain.KindResult[] | undefined>();
   const [kindObj, setKindObj] = React.useState<Domain.KindResult>();
   const [page, setPage] = React.useState<number>(currentPage);
+  const [order, setOrder] = React.useState<string>('');
   const [selected, setSelected] = React.useState<string[]>([]);
   const [ableDeleteButton, setAbleDeleteButton] = React.useState<boolean>(
     false,
@@ -51,22 +52,27 @@ export const EntityList: React.FunctionComponent<Props> = ({
     }
   }, [selected]);
 
-  const updateEntities = React.useCallback(() => {
-    if (kindObj) {
-      fetchEntities({
-        projectName,
-        kind: kindObj.kind,
-        pageNumber: page,
-        rowsPerPage,
-      }).then((collection) => {
-        const maxPage = Math.floor(collection.totalCount / rowsPerPage);
-        if (maxPage < page) setPage(maxPage);
-        console.log('updateEntities', collection);
-        setEntities(collection);
-      });
-    }
-    setCurrentPage(page);
-  }, [kindObj, projectName, page]);
+  const updateEntities = React.useCallback(
+    (isKindChanged?: boolean) => {
+      if (kindObj) {
+        const selectedOrder = isKindChanged ? '' : order;
+        fetchEntities({
+          projectName,
+          kind: kindObj.kind,
+          pageNumber: page,
+          rowsPerPage,
+          order: selectedOrder,
+        }).then((collection) => {
+          const maxPage = Math.floor(collection.totalCount / rowsPerPage);
+          if (maxPage < page) setPage(maxPage);
+          console.log('updateEntities', collection);
+          setEntities(collection);
+        });
+      }
+      setCurrentPage(page);
+    },
+    [kindObj, projectName, page, order],
+  );
 
   const removeEntities = () => {
     deleteEntities({
@@ -79,8 +85,12 @@ export const EntityList: React.FunctionComponent<Props> = ({
   };
 
   React.useEffect(() => {
-    updateEntities();
-  }, [kindObj, updateEntities]);
+    updateEntities(true);
+  }, [kindObj]);
+
+  React.useEffect(() => {
+    updateEntities(false);
+  }, [order]);
 
   React.useEffect(() => {
     console.log('effect watch', entityCollection);
@@ -110,6 +120,7 @@ export const EntityList: React.FunctionComponent<Props> = ({
           rowsPerPage={rowsPerPage}
           setPage={setPage}
           setSelectedItems={setSelected}
+          setSortOrder={setOrder}
           lang={lang}
           projectName={projectName}
         />

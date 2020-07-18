@@ -18,6 +18,9 @@ export async function fetchEntities(
   } else {
     urlParams.append('perPage', `${defaultRowsPerPage}`);
   }
+  if (params.order) {
+    urlParams.append('order', params.order);
+  }
 
   const url = `/datastore_viewer/api/projects/${params.projectName}/kinds/${
     params.kind
