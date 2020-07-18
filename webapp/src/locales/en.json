@@ -15,7 +15,15 @@
       "makeEntity": "Make New Entity",
       "import": "Import",
       "export": "Export",
-      "delete": "Delete"
+      "delete": "Delete",
+      "deleteModal": {
+        "title": "Delete Entities",
+        "content": "Are you sure you want to delete the selected entities?",
+        "button": {
+          "delete": "Delete",
+          "cancel": "cancel"
+        }
+      }
     },
     "NotFound": {
       "message": "No entities matched this query."
@@ -35,7 +43,15 @@
     "MenuBar": {
       "title": "Edit Entity",
       "refresh": "REFRESH",
-      "delete": "Delete"
+      "delete": "Delete",
+      "deleteModal": {
+        "title": "Delete Entity",
+        "content": "Are you sure you want to delete this entity?",
+        "button": {
+          "delete": "Delete",
+          "cancel": "cancel"
+        }
+      }
     },
     "PropertyMenu": {
       "title": "Properties",

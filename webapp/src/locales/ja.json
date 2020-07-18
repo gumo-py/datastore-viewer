@@ -15,7 +15,15 @@
       "makeEntity": "エンティティを作成",
       "import": "インポート",
       "export": "エクスポート",
-      "delete": "削除"
+      "delete": "削除",
+      "deleteModal": {
+        "title": "エンティティの削除",
+        "content": "選択したエンティティを削除してもよろしいですか？",
+        "button": {
+          "delete": "削除する",
+          "cancel": "キャンセル"
+        }
+      }
     },
     "NotFound": {
       "message": "このクエリに一致するエンティティがありません。"
@@ -35,7 +43,15 @@
     "MenuBar": {
       "title": "エンティティの編集",
       "refresh": "更新",
-      "delete": "削除"
+      "delete": "削除",
+      "deleteModal": {
+        "title": "エンティティの削除",
+        "content": "エンティティを削除してもよろしいですか？",
+        "button": {
+          "delete": "削除する",
+          "cancel": "キャンセル"
+        }
+      }
     },
     "PropertyMenu": {
       "title": "プロパティ",
