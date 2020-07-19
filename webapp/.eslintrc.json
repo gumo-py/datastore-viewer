@@ -1,0 +1,51 @@
+{
+  "extends": [
+    "airbnb",
+    "plugin:prettier/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier/@typescript-eslint",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:import/typescript",
+    "plugin:react/recommended"
+  ],
+  "plugins": ["prettier", "react", "import"],
+  "env": {
+    "es6": true,
+    "node": true
+  },
+  "rules": {
+    "prettier/prettier": ["error",
+      {
+        "singleQuote": true,
+        "tabWidth": 2,
+        "semi": true,
+        "jsxBracketSameLine": true,
+        "trailingComma": "all"
+      }
+    ],
+    "@typescript-eslint/no-namespace": "off",
+    "import/prefer-default-export": "off",
+    "import/extensions": "off",
+    "react/jsx-filename-extension": "off",
+    "react/destructuring-assignment": "off",
+    "react/jsx-closing-bracket-location": "off",
+    "react/prop-types": "off",
+    "react/jsx-wrap-multilines": ["error",
+      {
+        "declaration": "parens",
+        "assignment": "parens",
+        "return": "parens",
+        "arrow": "parens",
+        "condition": "ignore",
+        "logical": "ignore",
+        "prop": "ignore"
+      }
+    ],
+    "jsx-a11y/click-events-have-key-events": "off",
+    "jsx-a11y/no-static-element-interactions": "off",
+    "no-restricted-syntax": "off",
+    "camelcase": "off",
+    "consistent-return": "off"
+  }
+}

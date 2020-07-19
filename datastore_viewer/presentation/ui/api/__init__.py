@@ -84,6 +84,21 @@ class ProjectAPIView(flask.views.MethodView):
         })
 
 
+    def delete(self, project_name: str, kind: str):
+        data = flask.request.get_json()
+        repository = DatastoreViewerRepository(project_name=project_name)
+        keys = []
+        for key in data["url_safe_key"]:
+            key_path = json.loads(base64.b64decode(key))
+            keys.append(repository.build_key_by_flat_path(key_path=key_path))
+
+        repository.delete_multi(keys=keys)
+
+        return flask.jsonify({
+            'deleteResults': data["url_safe_key"]
+        })
+
+
 class EntityAPIView(flask.views.MethodView):
     def get(self, project_name: str, kind: str, url_safe_key: str):
         encoder = DataStoreEntityJSONEncoder()
@@ -102,6 +117,17 @@ class EntityAPIView(flask.views.MethodView):
                     entity=entity,
                     property_names=current_kind_properties
                 )
+        })
+
+    def delete(self, project_name: str, kind: str, url_safe_key: str):
+        encoder = DataStoreEntityJSONEncoder()
+        repository = DatastoreViewerRepository(project_name=project_name)
+        key_path = json.loads(base64.b64decode(url_safe_key))
+        key = repository.build_key_by_flat_path(key_path=key_path)
+        repository.delete(key=key)
+
+        return flask.jsonify({
+            "deleteResult": f'{url_safe_key}'
         })
 
 
