@@ -5,6 +5,7 @@ export namespace Request {
       kind: string;
       pageNumber?: number;
       rowsPerPage?: number;
+      order?: string;
     }
 
     export interface Fetch {

@@ -113,9 +113,12 @@ class DatastoreViewerRepository:
 
         return properties_by_kind
 
-    def fetch_entities(self, kind: str, per_page: int = 25, page_number: int = 1) -> Tuple[List[datastore.Entity], int]:
+    def fetch_entities(self, kind: str, per_page: int = 25, page_number: int = 1, orderBy: str = "") -> Tuple[List[datastore.Entity], int]:
         offset = per_page * (page_number - 1)
         query: datastore.Query = self.datastore_client.query(kind=kind)
+
+        if orderBy != "":
+            query.order = orderBy
 
         entities = []
         for entity in query.fetch(limit=per_page, offset=offset):
