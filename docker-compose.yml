@@ -49,6 +49,7 @@ services:
     environment:
       HOST: "0.0.0.0"
       PORT: "3000"
+      CHOKIDAR_USEPOLLING: "true"
       # PROXY_URL: http://datastore_viewer:18081  # TODO: Configure in webapp/package.json
     command: |
       bash -ex -c "
@@ -58,8 +59,6 @@ services:
       yarn run start
       "
     stdin_open: true
-    environment:
-      - CHOKIDAR_USEPOLLING=true
 
 volumes:
   datastore-emulator-storage:
