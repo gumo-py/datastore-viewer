@@ -2,7 +2,7 @@ import setuptools
 import os
 
 name = 'datastore-viewer'
-version = '0.3.0'
+version = '0.3.1'
 description = 'Datastore Viewer for emulator'
 dependencies = [
     'google-cloud-datastore >=1.7.0, >= 1.8.0',
