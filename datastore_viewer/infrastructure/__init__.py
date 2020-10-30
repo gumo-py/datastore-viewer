@@ -28,19 +28,29 @@ class EmulatorCreds(google.auth.credentials.Credentials):
 
 
 def get_client(project_name: str, namespace: Optional[str] = None):
-    if 'DATASTORE_EMULATOR_HOST' in os.environ:
-        emulator_credentials = EmulatorCreds()
-        return datastore.Client(
-            project=project_name,
-            namespace=namespace,
-            credentials=emulator_credentials,
-            _http=requests.Session(),
-        )
-    else:
+    if 'DATASTORE_EMULATOR_HOST' not in os.environ:
         return datastore.Client(
             project=project_name,
             namespace=namespace
         )
+
+    try:
+        from google.auth.credentials import AnonymousCredentials
+
+        return datastore.Client(
+            project=project_name,
+            namespace=namespace
+        )
+    except ImportError:
+        pass
+
+    emulator_credentials = EmulatorCreds()
+    return datastore.Client(
+        project=project_name,
+        namespace=namespace,
+        credentials=emulator_credentials,
+        _http=requests.Session(),
+    )
 
 
 class DatastoreViewerRepository:
